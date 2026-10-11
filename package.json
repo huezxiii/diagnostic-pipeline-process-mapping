@@ -4,7 +4,7 @@
   "private": true,
   "description": "Sovereign Health diagnostic pipeline process mapping case study and dashboard (synthetic data)",
   "scripts": {
-    "test": "node --test tests/",
+    "test": "node --test tests/*.test.js",
     "deck": "node deck/build_deck.js"
   },
   "devDependencies": {

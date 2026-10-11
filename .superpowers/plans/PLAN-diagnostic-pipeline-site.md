@@ -3,7 +3,7 @@
 Spec: `docs/superpowers/specs/2026-10-12-diagnostic-pipeline-site-design.md`
 Mode: superpowers-autonomous (TDD, atomic commits, recommended options auto-selected)
 
-Commands: `python -m pytest -q` · `node --test tests/` · `python data/generate_event_log.py` · `python analysis/process_mining_analysis.py` · `python analysis/run_sql.py` · `node deck/build_deck.js`
+Commands: `python -m pytest -q` · `node --test tests/*.test.js` · `python data/generate_event_log.py` · `python analysis/process_mining_analysis.py` · `python analysis/run_sql.py` · `node deck/build_deck.js`
 
 ## Task 1 — Scaffold
 - [ ] `netlify.toml` (publish ".", security headers, cache for /js /css), `.gitignore`, `requirements.txt` (numpy, pandas, pytest, duckdb), `package.json` (test script, pptxgenjs dev dep), `.claude/launch.json` (python -m http.server 8080).

@@ -188,7 +188,7 @@ Case-study figures come from `metrics.json` where a computed equivalent exists (
 - **node:test — deck:** output .pptx contains 10 slides; key figures equal `metrics.json` values.
 - **Browser verification:** load all three pages in the in-app browser; zero console errors; check 375 px and desktop layouts; toggle scenario and filters on dashboard.
 
-Commands: `python -m pytest`, `node --test tests/`.
+Commands: `python -m pytest`, `node --test tests/*.test.js`.
 
 ## 9. Build order
 
