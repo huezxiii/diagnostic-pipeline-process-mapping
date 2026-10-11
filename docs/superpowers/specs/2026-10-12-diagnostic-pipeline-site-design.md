@@ -52,32 +52,39 @@ README.md, PROJECT_META.md, requirements.txt, package.json, .gitignore
 generate_event_log.py --seed 42 --> data/event_log.csv
 process_mining_analysis.py      --> data/metrics.json  (deck, methods page)
                                 --> js/data.js         (dashboard per-order rows + metrics)
-sql/*.sql run in DuckDB over event_log.csv --> data/sql_results.json (methods page tables)
+analysis/run_sql.py: sql/*.sql in DuckDB over event_log.csv --> data/sql_results.json + js/sql-results.js (methods page)
 ```
 
 `event_log.csv` and generated outputs are committed so Netlify serves them without running Python.
 
 ## 4. Data model and calibration
 
-### Order record (one row per order per scenario)
+### Order record (one row per order per scenario) — LIS timestamp log
+
+Stage durations are **not stored**; they are mined from event timestamps (true process-mining input).
 
 | Field | Type | Notes |
 |---|---|---|
-| `order_id` | string | `AS-00001` / `TB-00001` |
+| `order_id` | string | `AS-00001` / `TB-00001` (same number = same order population) |
 | `scenario` | enum | `as_is`, `to_be` |
 | `source` | enum | `ED` 12%, `inpatient` 28%, `outpatient` 60% |
 | `facility` | string | `H01`–`H12` (ED/inpatient), `C01`–`C45` (outpatient) |
-| `priority` | enum | `stat_true`, `stat_flagged`, `routine` |
-| `collected_hour` | int 0–23 | collection time of day |
-| `arrival_hour` | int 0–23 | arrival at central accessioning |
-| `t_order_to_draw` … `t_verify_sync` | float min | six stage durations (below) |
-| `t_value_added` | float min | VA portion of testing stage (≈42) |
-| `t_exception` | float min | 0 unless `exception` = 1 |
-| `exception`, `rekey_error`, `rejected`, `critical` | 0/1 | defect/event flags |
-| `critical_lag` | float min | only when `critical` = 1 |
-| `tat` | float min | sum of six stages + `t_exception` |
+| `priority` | enum | `stat_true` (7%, both scenarios), `stat_flagged` (31% As-Is, 1% To-Be), `routine` |
+| `ts_ordered` | timestamp | physician order in EHR |
+| `ts_drawn` | timestamp | specimen collected |
+| `ts_dispatched` | timestamp | courier pickup |
+| `ts_received` | timestamp | arrival at central dock |
+| `ts_exception_cleared` | timestamp | = `ts_received` unless `exception` = 1 |
+| `ts_accessioned` | timestamp | accessioning complete |
+| `ts_resulted` | timestamp | analyzer result |
+| `ts_verified` | timestamp | verified + written to EHR |
+| `va_min` | float | value-added portion of testing stage (≈42) |
+| `exception`, `rekey_error`, `rejected`, `critical` | 0/1 | defect/event flags; `rejected` ⊂ `exception` |
+| `critical_lag_min` | float | blank unless `critical` = 1 |
 
-`stat_true` = ED orders with an objective trigger; `stat_flagged` = STAT tag without trigger.
+Derived stages: order→draw = drawn−ordered; clinic hold = dispatched−drawn; transport = received−dispatched; exception hold = exception_cleared−received; accessioning = accessioned−exception_cleared; testing = resulted−accessioned; verify/sync = verified−resulted; TAT = verified−ordered.
+
+Generation is backward for arrival: the arrival time at the dock is sampled first (As-Is outpatient: exactly 60% in 16:00–17:59), then earlier timestamps are subtracted and later ones added. Stage samples are gamma-distributed with source/priority/arrival-hour multipliers, then each stage is rescaled to its target mean. Rates are assigned by exact counts. Order population (source, facility, `stat_true`, `critical`) is shared across scenarios so Compare is like-for-like.
 
 10,000 orders per scenario (20,000 rows). Seeded (`--seed 42`), so output is deterministic.
 
@@ -114,12 +121,12 @@ Tolerance: ±2% relative for means; ±0.5 percentage points for rates.
 | Mean accessioning queue | 270 min (4.5 h) | 12 min |
 | Mean exception resolution (exception orders only) | ~1,080 min (18 h) | 22 min |
 | Outpatient arrivals 16:00–17:59 | 60% | < 25% |
-| `stat_true` testing stage (To-Be) | — | ≤ 30 min |
+| Mean `stat_true` testing wait, excl. VA (To-Be) | — | ≤ 30 min |
 | Priority inversion (As-Is) | median `stat_true` testing wait ≥ median `stat_flagged` testing wait | — |
 
 ## 5. Pages
 
-Shared: sticky top nav (Case Study / Dashboard / Methods), footer disclaimer: *"Sovereign Health System is a fictional organization. All data is synthetic and generated for portfolio demonstration."* Light theme; clinical palette (deep navy primary, teal accent, amber/red reserved for queues and waste, green for value-added). Responsive to 375 px. Pinned CDNs: Tailwind CDN, Chart.js 4.4.x, Mermaid 11.x, Prism 1.29.
+Shared: sticky top nav (Case Study / Dashboard / Methods), footer disclaimer: *"Sovereign Health System is a fictional organization. All data is synthetic and generated for portfolio demonstration."* Light theme; clinical palette (deep navy primary, teal accent, amber/red reserved for queues and waste, green for value-added). Responsive to 375 px. Hand-written CSS with design tokens (no Tailwind play-CDN, which logs a production warning). Pinned CDNs: Chart.js 4.4.x, Mermaid 11.x, Prism 1.29; Google Fonts IBM Plex Sans/Serif/Mono. Generated data ships as `window` globals (`js/data.js`, `js/sql-results.js`) so pages also work from `file://`.
 
 ### `index.html` — Case Study
 

@@ -1,0 +1,13 @@
+{
+  "name": "diagnostic-pipeline-process-mapping",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Sovereign Health diagnostic pipeline process mapping case study and dashboard (synthetic data)",
+  "scripts": {
+    "test": "node --test tests/",
+    "deck": "node deck/build_deck.js"
+  },
+  "devDependencies": {
+    "pptxgenjs": "^3.12.0"
+  }
+}
