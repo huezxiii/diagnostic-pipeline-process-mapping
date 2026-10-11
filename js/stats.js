@@ -170,8 +170,25 @@
     return rows;
   }
 
+  const VARIANTS = ['Clean path', 'Re-key correction', 'Exception resolved', 'Rejected, re-collected'];
+
+  /** Process path variants (same rules as the Python mining script and SQL suite). */
+  function variantBreakdown(orders) {
+    const groups = VARIANTS.map(() => []);
+    for (const o of orders) {
+      const i = o.rejected ? 3 : o.exception ? 2 : o.rekey ? 1 : 0;
+      groups[i].push(o.tat);
+    }
+    return VARIANTS.map((variant, i) => ({
+      variant,
+      n: groups[i].length,
+      share: orders.length ? groups[i].length / orders.length : null,
+      meanTat: mean(groups[i]),
+    }));
+  }
+
   return {
-    STAGE_KEYS, PRIORITIES, decode, filterOrders, mean, percentile, summarize,
-    compare, histogram, arrivalsByHour, priorityBreakdown, wastePareto,
+    STAGE_KEYS, PRIORITIES, VARIANTS, decode, filterOrders, mean, percentile, summarize,
+    compare, histogram, arrivalsByHour, priorityBreakdown, wastePareto, variantBreakdown,
   };
 });

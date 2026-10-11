@@ -147,3 +147,12 @@ test('summarize on the real bundle matches metrics.json', () => {
     assert.ok(Math.abs(s.p90Tat - m.p90_tat) < 1);
   }
 });
+
+test('variantBreakdown classifies exception paths', () => {
+  const v = S.variantBreakdown(S.filterOrders(orders, { scenario: 'as_is' }));
+  assert.deepEqual(v.map((r) => r.variant), ['Clean path', 'Re-key correction', 'Exception resolved', 'Rejected, re-collected']);
+  assert.deepEqual(v.map((r) => r.n), [0, 1, 0, 1]);
+  assert.equal(v[3].meanTat, 1200);
+  assert.equal(v[0].meanTat, null);
+  assert.equal(v[1].share, 0.5);
+});
