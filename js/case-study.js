@@ -9,26 +9,13 @@
   const C = window.PipelineCharts;
   const metrics = window.PIPELINE_DATA && window.PIPELINE_DATA.metrics;
 
-  // Plan financials (section 7 of the project plan): not derivable from the event log.
-  const CAPEX = 520000;
-  const SAVINGS = [
-    { label: 'ED bed-blockage & penalty reduction', value: 2400000 },
-    { label: 'Preventable inpatient length of stay', value: 680000 },
-    { label: 'Lab & courier overtime elimination', value: 850000 },
-    { label: 'Re-collection & rework avoidance', value: 420000 },
-  ].sort((a, b) => b.value - a.value);
-  const TOTAL_SAVINGS = SAVINGS.reduce((a, s) => a + s.value, 0);
-
-  const PHASES = [
-    { name: 'Charter & baseline VSM', start: 1, end: 2 },
-    { name: 'Process mining & LIS log analysis', start: 3, end: 5 },
-    { name: 'Root cause (fishbone & FMEA)', start: 6, end: 7 },
-    { name: 'To-Be architecture & pilot', start: 8, end: 10 },
-    { name: 'Central hub & ED deployment', start: 11, end: 13 },
-    { name: 'System-wide rollout & SOP training', start: 14, end: 15 },
-    { name: 'Audit & control plan', start: 16, end: 16 },
-  ];
-  const WEEKS = 16;
+  // Plan financials and roadmap live in js/financials.js (shared with the deck).
+  const F = window.PipelineFinancials;
+  const CAPEX = F.CAPEX;
+  const SAVINGS = F.SAVINGS.slice().sort((a, b) => b.value - a.value);
+  const TOTAL_SAVINGS = F.totalSavings();
+  const PHASES = F.PHASES;
+  const WEEKS = F.WEEKS;
 
   const FORMATS = {
     hours: (x) => `${(x / 60).toFixed(1)} h`,
@@ -53,8 +40,8 @@
   }
 
   function bindRoi() {
-    const roi = ((TOTAL_SAVINGS - CAPEX) / CAPEX) * 100;
-    const paybackMonths = CAPEX / (TOTAL_SAVINGS / 12);
+    const roi = F.roiPct();
+    const paybackMonths = F.paybackMonths();
     const values = {
       savings: C.fmt.money(TOTAL_SAVINGS),
       capex: C.fmt.money(CAPEX),
