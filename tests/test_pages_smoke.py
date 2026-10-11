@@ -16,7 +16,7 @@ sync_api = pytest.importorskip("playwright.sync_api")
 
 ROOT = Path(__file__).resolve().parents[1]
 PAGES = {
-    "index.html": ["#vsm", "#as-is-map svg, #as-is-map .lane-fallback"],
+    "index.html": ["#vsm .vsm-bar span", "#as-is-map svg", "#to-be-map svg", "#c-roi"],
     "dashboard.html": ["#kpis .kpi", "#c-stages"],
     "methods.html": ["#sql-blocks .method-block", "#mining-table table"],
 }

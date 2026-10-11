@@ -1,0 +1,178 @@
+/*
+ * case-study.js: page controller for index.html.
+ * Binds [data-metric] spans to metrics.json values (static text is the fallback),
+ * draws the value-stream bars, roadmap and ROI chart, and renders the Mermaid swimlanes.
+ */
+(function () {
+  'use strict';
+
+  const C = window.PipelineCharts;
+  const metrics = window.PIPELINE_DATA && window.PIPELINE_DATA.metrics;
+
+  // Plan financials (section 7 of the project plan): not derivable from the event log.
+  const CAPEX = 520000;
+  const SAVINGS = [
+    { label: 'ED bed-blockage & penalty reduction', value: 2400000 },
+    { label: 'Preventable inpatient length of stay', value: 680000 },
+    { label: 'Lab & courier overtime elimination', value: 850000 },
+    { label: 'Re-collection & rework avoidance', value: 420000 },
+  ].sort((a, b) => b.value - a.value);
+  const TOTAL_SAVINGS = SAVINGS.reduce((a, s) => a + s.value, 0);
+
+  const PHASES = [
+    { name: 'Charter & baseline VSM', start: 1, end: 2 },
+    { name: 'Process mining & LIS log analysis', start: 3, end: 5 },
+    { name: 'Root cause (fishbone & FMEA)', start: 6, end: 7 },
+    { name: 'To-Be architecture & pilot', start: 8, end: 10 },
+    { name: 'Central hub & ED deployment', start: 11, end: 13 },
+    { name: 'System-wide rollout & SOP training', start: 14, end: 15 },
+    { name: 'Audit & control plan', start: 16, end: 16 },
+  ];
+  const WEEKS = 16;
+
+  const FORMATS = {
+    hours: (x) => `${(x / 60).toFixed(1)} h`,
+    min: (x) => `${Math.round(x).toLocaleString('en-US')} min`,
+    pct: (x) => `${(x * 100).toFixed(1)}%`,
+    pct0: (x) => `${Math.round(x * 100)}%`,
+    pct2: (x) => `${(x * 100).toFixed(2)}%`,
+    pctPoints: (x) => `${x.toFixed(1)}%`,
+  };
+
+  function lookup(path) {
+    return path.split('.').reduce((obj, key) => (obj == null ? undefined : obj[key]), metrics);
+  }
+
+  function bindMetrics() {
+    if (!metrics) return;
+    document.querySelectorAll('[data-metric]').forEach((el) => {
+      const value = lookup(el.dataset.metric);
+      const format = FORMATS[el.dataset.fmt];
+      if (typeof value === 'number' && format) el.textContent = format(value);
+    });
+  }
+
+  function bindRoi() {
+    const roi = ((TOTAL_SAVINGS - CAPEX) / CAPEX) * 100;
+    const paybackMonths = CAPEX / (TOTAL_SAVINGS / 12);
+    const values = {
+      savings: C.fmt.money(TOTAL_SAVINGS),
+      capex: C.fmt.money(CAPEX),
+      roi: `${roi.toFixed(1)}%`,
+      payback: `${paybackMonths.toFixed(1)} mo`,
+    };
+    document.querySelectorAll('[data-roi]').forEach((el) => { el.textContent = values[el.dataset.roi]; });
+  }
+
+  function drawValueStream() {
+    if (!metrics) return;
+    const scale = metrics.scenarios.as_is.mean_tat;
+    document.querySelectorAll('[data-vsm]').forEach((bar) => {
+      const sc = metrics.scenarios[bar.dataset.vsm];
+      const m = sc.stage_means;
+      const before = m.order_to_draw + m.clinic_hold + m.transport + m.exception_hold + m.accessioning + (m.testing - sc.mean_va);
+      const color = bar.dataset.vsm === 'as_is' ? 'var(--series-as-is)' : 'var(--series-to-be)';
+      const segments = [
+        { minutes: before, color, title: `Waiting before analysis: ${Math.round(before)} min` },
+        { minutes: sc.mean_va, color: 'var(--series-va)', title: `Value-added: ${Math.round(sc.mean_va)} min` },
+        { minutes: m.verify_sync, color, title: `Verification & EHR sync: ${Math.round(m.verify_sync)} min` },
+      ];
+      bar.replaceChildren(...segments.map((s) => {
+        const span = document.createElement('span');
+        span.style.width = `${(s.minutes / scale) * 100}%`;
+        span.style.background = s.color;
+        span.title = s.title;
+        return span;
+      }));
+      bar.setAttribute('aria-label', `${bar.dataset.vsm === 'as_is' ? 'As-Is' : 'To-Be'}: ${Math.round(sc.mean_va)} value-added minutes out of ${Math.round(sc.mean_tat).toLocaleString('en-US')}`);
+    });
+  }
+
+  function drawRoadmap() {
+    const host = document.getElementById('roadmap-chart');
+    const rows = PHASES.map((p, i) => {
+      const row = document.createElement('div');
+      row.className = 'roadmap-row';
+      row.setAttribute('role', 'listitem');
+      const label = document.createElement('span');
+      label.textContent = `Phase ${i + 1} · ${p.name}`;
+      const track = document.createElement('div');
+      track.className = 'roadmap-track';
+      const bar = document.createElement('span');
+      bar.className = 'roadmap-bar';
+      bar.style.left = `${((p.start - 1) / WEEKS) * 100}%`;
+      if (p.end === WEEKS) { bar.style.left = 'auto'; bar.style.right = '0'; } // keep the label inside the track
+      bar.style.width = `${((p.end - p.start + 1) / WEEKS) * 100}%`;
+      bar.textContent = p.start === p.end ? `Wk ${p.start}` : `Wk ${p.start}–${p.end}`;
+      track.appendChild(bar);
+      row.append(label, track);
+      return row;
+    });
+    const scale = document.createElement('div');
+    scale.className = 'roadmap-scale';
+    scale.setAttribute('aria-hidden', 'true');
+    scale.innerHTML = '<span class="label-col"></span><span class="ticks"><span>Week 1</span><span>Week 8</span><span>Week 16</span></span>';
+    host.replaceChildren(...rows, scale);
+  }
+
+  function drawRoiChart() {
+    C.render('c-roi', {
+      type: 'bar',
+      data: {
+        labels: SAVINGS.map((s) => s.label),
+        datasets: [{ label: 'Annual savings', data: SAVINGS.map((s) => s.value), backgroundColor: C.COLORS.toBe }],
+      },
+      options: {
+        indexAxis: 'y',
+        scales: C.axes({ horizontal: true, tickFormat: (v) => C.fmt.money(v) }),
+        plugins: { legend: { display: false } },
+      },
+    }, (x) => C.fmt.money(x));
+  }
+
+  function showLaneFallbacks() {
+    document.querySelectorAll('.swimlane').forEach((fig) => {
+      const pre = fig.querySelector('pre.mermaid');
+      if (pre) pre.hidden = true;
+      fig.querySelector('.lane-fallback').hidden = false;
+    });
+  }
+
+  async function renderSwimlanes() {
+    if (!window.mermaid) return showLaneFallbacks();
+    try {
+      // Configure synchronously so Mermaid's own on-load pass never renders with default settings.
+      window.mermaid.initialize({
+        startOnLoad: false,
+        securityLevel: 'strict',
+        theme: 'base',
+        themeVariables: {
+          fontFamily: '"IBM Plex Sans", system-ui, sans-serif',
+          fontSize: '14px',
+          primaryColor: '#ffffff',
+          primaryBorderColor: '#c9c7bd',
+          primaryTextColor: '#0f1d30',
+          lineColor: '#7a7e86',
+          clusterBkg: '#f6f6f3',
+          clusterBorder: '#e3e2dc',
+          edgeLabelBackground: '#ffffff',
+        },
+        flowchart: { htmlLabels: true, curve: 'basis', nodeSpacing: 28, rankSpacing: 36, wrappingWidth: 420 },
+      });
+      // Mermaid sizes nodes from measured text, so wait for IBM Plex or labels get clipped.
+      if (document.fonts && document.fonts.ready) await document.fonts.ready;
+      await window.mermaid.run({ querySelector: 'pre.mermaid' });
+    } catch (err) {
+      console.warn('Mermaid render failed; showing step lists instead.', err);
+      showLaneFallbacks();
+    }
+  }
+
+  bindMetrics();
+  bindRoi();
+  drawValueStream();
+  drawRoadmap();
+  drawRoiChart();
+  C.wireTableToggles();
+  renderSwimlanes();
+})();

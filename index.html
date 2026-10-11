@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Diagnostic Pipeline Case Study | Process Mapping & Throughput Optimization</title>
+  <meta name="description" content="Process mapping and value stream case study: cutting lab time-to-result from 18.6 to 4.6 hours by removing queues, not buying hardware. Synthetic data, fictional organization.">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%2314365d'/%3E%3Cpath d='M8 22h4l3-10 3 14 3-8h3' fill='none' stroke='white' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Serif:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <header class="site-nav">
+    <div class="container">
+      <a class="brand" href="index.html">
+        <span class="brand-mark" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 15h3l2.5-8 3 11 2.5-6h3l1.5 3H21"/></svg></span>
+        <span>Diagnostic Pipeline<small>Process mapping case study</small></span>
+      </a>
+      <nav aria-label="Primary">
+        <ul class="nav-links">
+          <li><a href="index.html" aria-current="page">Case Study</a></li>
+          <li><a href="dashboard.html">Dashboard</a></li>
+          <li><a href="methods.html">Methods</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main">
+    <!-- Hero -->
+    <section class="hero container">
+      <p class="eyebrow">Process mapping &amp; throughput optimization · Sovereign Health System</p>
+      <h1>A $6.5M analyzer couldn't fix a queueing problem</h1>
+      <p class="lede">Sovereign Health's 12 hospitals and 45 diagnostic hubs process 1.2 million lab orders a year. After a hardware upgrade, average time-to-result rose from 4.2 to 18.6 hours. The analyzer itself accounted for 42 minutes of that.</p>
+      <div class="hero-figure">
+        <span class="from" data-metric="scenarios.as_is.mean_tat" data-fmt="hours">18.6 h</span>
+        <span class="to" data-metric="scenarios.to_be.mean_tat" data-fmt="hours">4.6 h</span>
+        <span class="caption">Mean time-to-result, As-Is vs redesigned process: <strong><span data-metric="comparison.tat_reduction_pct" data-fmt="pctPoints">75.3%</span> faster</strong>, with the same analyzers.</span>
+      </div>
+      <div class="kpi-grid">
+        <div class="kpi"><p class="kpi-label">Process cycle efficiency</p><p class="kpi-value"><span data-metric="scenarios.as_is.pce" data-fmt="pct">3.8%</span> → <span data-metric="scenarios.to_be.pce" data-fmt="pct">15.2%</span></p><p class="kpi-note">Benchmark above 15%</p></div>
+        <div class="kpi"><p class="kpi-label">STAT order share</p><p class="kpi-value"><span data-metric="scenarios.as_is.stat_ratio" data-fmt="pct0">38%</span> → <span data-metric="scenarios.to_be.stat_ratio" data-fmt="pct0">8%</span></p><p class="kpi-note">Priority inversion removed</p></div>
+        <div class="kpi"><p class="kpi-label">Annual operating savings</p><p class="kpi-value" data-roi="savings">$4.35M</p><p class="kpi-note">On $520K capital outlay</p></div>
+        <div class="kpi"><p class="kpi-label">Payback period</p><p class="kpi-value" data-roi="payback">1.4 mo</p><p class="kpi-note">First-year ROI <span data-roi="roi">736.5%</span></p></div>
+      </div>
+      <div class="cta-row">
+        <a class="btn primary" href="dashboard.html">Explore the dashboard
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+        <a class="btn secondary" href="methods.html">See the methods</a>
+      </div>
+    </section>
+
+    <!-- 01 Problem -->
+    <section class="section" id="problem">
+      <div class="container">
+        <p class="section-num">01 · The problem</p>
+        <h2>17.9 hours of every result was waiting, not testing</h2>
+        <p class="lede">Queues, manual re-keying, batch courier runs and paper exception handling across five departments made up 96% of the cycle. That cost the network in three places.</p>
+        <div class="grid-3">
+          <div class="card impact-card">
+            <p class="figure">$4.8M</p>
+            <p><strong>ED congestion.</strong> Emergency length of stay grew 3.4 hours per patient while urgent panels waited, triggering penalties, bed blockage and walk-outs.</p>
+          </div>
+          <div class="card impact-card">
+            <p class="figure">14.2%</p>
+            <p><strong>Rework.</strong> Share of daily orders needing manual intervention or re-collection: label mismatches, missing clinical data, degraded samples.</p>
+          </div>
+          <div class="card impact-card">
+            <p class="figure">$1.2M</p>
+            <p><strong>Overtime and freight.</strong> Unbudgeted annual spend as uncoordinated batch arrivals forced the central lab into continuous emergency overtime.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 02 SIPOC -->
+    <section class="section" id="scope">
+      <div class="container">
+        <p class="section-num">02 · Scope</p>
+        <h2>One pipeline, physician order to billed result</h2>
+        <p class="lede">A SIPOC frame fixed the boundaries before any mapping started, so clinical, logistics and IT teams argued about the same process.</p>
+        <div class="boundary">
+          <div><strong>Start point</strong>Physician submits a lab requisition in the EHR.</div>
+          <div><strong>End point</strong>Verified result is written to the patient chart and billed to insurance.</div>
+        </div>
+        <div class="sipoc">
+          <div class="sipoc-col">
+            <h3><span class="letter">S</span>Suppliers</h3>
+            <ul><li>Ordering physicians</li><li>Phlebotomy &amp; nursing staff</li><li>Courier fleet (third-party &amp; internal)</li><li>Registration &amp; intake</li></ul>
+          </div>
+          <div class="sipoc-col">
+            <h3><span class="letter">I</span>Inputs</h3>
+            <ul><li>EHR order (HL7 / FHIR)</li><li>Biological specimens</li><li>Barcode labels &amp; kits</li><li>Insurance &amp; demographic data</li></ul>
+          </div>
+          <div class="sipoc-col">
+            <h3><span class="letter">P</span>Process</h3>
+            <ol><li>Order intake</li><li>Collection &amp; local dispatch</li><li>Transport &amp; accessioning</li><li>Sorting &amp; testing</li><li>Verification &amp; EHR sync</li></ol>
+          </div>
+          <div class="sipoc-col">
+            <h3><span class="letter">O</span>Outputs</h3>
+            <ul><li>Verified result panels</li><li>Critical-value alerts</li><li>Cleared billing requisitions</li><li>QC &amp; specimen audit logs</li></ul>
+          </div>
+          <div class="sipoc-col">
+            <h3><span class="letter">C</span>Customers</h3>
+            <ul><li>Attending physicians</li><li>Inpatient &amp; ED staff</li><li>Patients (portal)</li><li>Revenue cycle &amp; billing</li></ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 03 As-Is map -->
+    <section class="section" id="as-is">
+      <div class="container">
+        <p class="section-num">03 · As-Is process map</p>
+        <h2>Five lanes, 18 steps, four queues</h2>
+        <p class="lede">The current pipeline crosses 5 functional lanes with 18 mapped steps, 9 departmental handoffs and 4 manual approval checkpoints. Queue times are mined means from the event log.</p>
+        <figure class="swimlane" id="as-is-map">
+          <pre class="mermaid" aria-label="As-Is cross-functional swimlane diagram">
+flowchart TB
+  subgraph L1["Lane 1 · Order &amp; Phlebotomy"]
+    direction LR
+    A1["1 · Order entered in EHR"] --&gt; A2["2 · Print paper label"] --&gt; A3["3 · Draw specimen"] --&gt; A4["4 · Stage in holding bin&lt;br/&gt;Q1 · 2.8 h"]
+  end
+  subgraph L2["Lane 2 · Logistics &amp; Dispatch"]
+    direction LR
+    A5["5 · Fixed courier pickup&lt;br/&gt;every 3 h"] --&gt; A6["6 · Transit to hub"] --&gt; A7["7 · Unload at dock&lt;br/&gt;Q2 · 1.8 h"]
+  end
+  subgraph L3["Lane 3 · Central Accessioning"]
+    direction LR
+    A8["8 · Unpack coolers"] --&gt; A9["9 · Manual barcode rescan"] --&gt; A10["10 · Re-key missing EHR data"] --&gt; A11["11 · Sort tubes&lt;br/&gt;Q3 · 4.5 h"]
+    A10 -. "label mismatch" .-&gt; X["Paper rejection ticket&lt;br/&gt;12–24 h"]
+  end
+  subgraph L4["Lane 4 · Testing &amp; Pathology"]
+    direction LR
+    A12["12 · Load centrifuge"] --&gt; A13["13 · Analyzer run&lt;br/&gt;42 min value-added"] --&gt; A14["14 · Manual outlier review&lt;br/&gt;Q4 · 2.0 h"]
+  end
+  subgraph L5["Lane 5 · EHR Sync &amp; Billing"]
+    direction LR
+    A15["15 · Manual result validation"] --&gt; A16["16 · Batch file export"] --&gt; A17["17 · EHR chart sync"] --&gt; A18["18 · Billing trigger"]
+  end
+  L1 --&gt; L2 --&gt; L3 --&gt; L4 --&gt; L5
+  classDef queue fill:#fde9df,stroke:#eb6834,stroke-width:2px,color:#0f1d30
+  classDef va fill:#dcf5ea,stroke:#1baf7a,stroke-width:2px,color:#0f1d30
+  classDef exc fill:#fdf1f0,stroke:#d03b3b,stroke-width:1.5px,stroke-dasharray:4 3,color:#0f1d30
+  class A4,A7,A11,A14 queue
+  class A13 va
+  class X exc
+</pre>
+          <div class="lane-fallback" hidden>
+            <h4>Lane 1 · Order &amp; Phlebotomy</h4><ol><li>Order entered in EHR</li><li>Print paper label</li><li>Draw specimen</li><li>Stage in holding bin (Q1, 2.8 h)</li></ol>
+            <h4>Lane 2 · Logistics &amp; Dispatch</h4><ol start="5"><li>Fixed courier pickup every 3 h</li><li>Transit to hub</li><li>Unload at dock (Q2, 1.8 h)</li></ol>
+            <h4>Lane 3 · Central Accessioning</h4><ol start="8"><li>Unpack coolers</li><li>Manual barcode rescan</li><li>Re-key missing EHR data</li><li>Sort tubes (Q3, 4.5 h)</li></ol>
+            <h4>Lane 4 · Testing &amp; Pathology</h4><ol start="12"><li>Load centrifuge</li><li>Analyzer run (42 min value-added)</li><li>Manual outlier review (Q4, 2.0 h)</li></ol>
+            <h4>Lane 5 · EHR Sync &amp; Billing</h4><ol start="15"><li>Manual result validation</li><li>Batch file export</li><li>EHR chart sync</li><li>Billing trigger</li></ol>
+          </div>
+          <figcaption class="swimlane-meta">
+            <span><span class="swatch" style="display:inline-block;background:#fde9df;border:2px solid var(--series-as-is)"></span> Queue</span>
+            <span><span class="swatch" style="display:inline-block;background:#dcf5ea;border:2px solid var(--series-va)"></span> Value-added</span>
+            <span><span class="swatch" style="display:inline-block;background:#fdf1f0;border:2px dashed var(--critical)"></span> Exception path</span>
+            <span>Scroll sideways on small screens.</span>
+          </figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <!-- 04 Bottlenecks -->
+    <section class="section" id="bottlenecks">
+      <div class="container">
+        <p class="section-num">04 · Root causes</p>
+        <h2>Four bottlenecks did most of the damage</h2>
+        <p class="lede">Event-log mining ranked every stage by non-value-added minutes. Central accessioning alone held a quarter of the waste.</p>
+        <div class="grid-2">
+          <article class="card bottleneck">
+            <h3>1. Central accessioning (Queue 3)</h3>
+            <p class="stat"><span data-metric="scenarios.as_is.stage_means.accessioning" data-fmt="hours">4.5 h</span> mean queue</p>
+            <dl>
+              <dt>Mechanism</dt><dd>60% of clinic specimens arrive in one wave between 4 and 6 PM. Staff rescan every tube and cross-check IDs in a legacy terminal while evening staffing drops 30%.</dd>
+              <dt>Impact</dt><dd>A 4.5-hour backlog and an 8.4% re-key error rate.</dd>
+            </dl>
+          </article>
+          <article class="card bottleneck">
+            <h3>2. STAT priority inversion</h3>
+            <p class="stat"><span data-metric="scenarios.as_is.stat_ratio" data-fmt="pct0">38%</span> of orders tagged STAT</p>
+            <dl>
+              <dt>Mechanism</dt><dd>Clinicians tag routine work as STAT to jump slow queues, flooding the express centrifuges.</dd>
+              <dt>Impact</dt><dd>True ED emergencies wait <span data-metric="scenarios.as_is.priority.stat_true.mean_testing_wait" data-fmt="min">152 min</span> in the testing queue, longer than tagged-but-routine STATs at <span data-metric="scenarios.as_is.priority.stat_flagged.mean_testing_wait" data-fmt="min">119 min</span>.</dd>
+            </dl>
+          </article>
+          <article class="card bottleneck">
+            <h3>3. Fixed courier schedules</h3>
+            <p class="stat"><span data-metric="scenarios.as_is.stage_means.clinic_hold" data-fmt="hours">2.8 h</span> in holding bins</p>
+            <dl>
+              <dt>Mechanism</dt><dd>Couriers run at 9, 12 and 3 regardless of whether a clinic has 2 tubes or 200 waiting.</dd>
+              <dt>Impact</dt><dd>Room-temperature storage drives a 3.2% hemolysis and rejection rate.</dd>
+            </dl>
+          </article>
+          <article class="card bottleneck">
+            <h3>4. Paper exception tickets</h3>
+            <p class="stat"><span data-metric="scenarios.as_is.mean_exception_resolution" data-fmt="hours">18.0 h</span> to resolve</p>
+            <dl>
+              <dt>Mechanism</dt><dd>Unreadable barcodes or demographic mismatches generate paper rejection tickets routed by inter-department mail.</dd>
+              <dt>Impact</dt><dd>Samples expire while tickets sit for 12 to 24 hours, forcing re-draws.</dd>
+            </dl>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- 05 Value stream -->
+    <section class="section" id="value-stream">
+      <div class="container">
+        <p class="section-num">05 · Value stream</p>
+        <h2>3.8% of the cycle added value</h2>
+        <p class="lede">Process cycle efficiency is value-added time divided by total cycle time. World-class healthcare processes run above 15%.</p>
+        <div id="vsm">
+          <div class="vsm-row">
+            <h3>As-Is <span><span data-metric="scenarios.as_is.mean_tat" data-fmt="min">1,116 min</span> total · PCE <span data-metric="scenarios.as_is.pce" data-fmt="pct2">3.76%</span></span></h3>
+            <div class="vsm-bar" data-vsm="as_is" role="img" aria-label="As-Is: 42 value-added minutes out of 1,116"></div>
+          </div>
+          <div class="vsm-row">
+            <h3>To-Be <span><span data-metric="scenarios.to_be.mean_tat" data-fmt="min">276 min</span> total · PCE <span data-metric="scenarios.to_be.pce" data-fmt="pct2">15.22%</span></span></h3>
+            <div class="vsm-bar" data-vsm="to_be" role="img" aria-label="To-Be: 42 value-added minutes out of 276"></div>
+          </div>
+          <div class="vsm-legend">
+            <span><span class="swatch" style="display:inline-block;background:var(--series-va)"></span> Value-added (centrifuge, analyzer)</span>
+            <span><span class="swatch" style="display:inline-block;background:var(--series-as-is)"></span> As-Is waiting, transit, rework</span>
+            <span><span class="swatch" style="display:inline-block;background:var(--series-to-be)"></span> To-Be waiting, transit, rework</span>
+          </div>
+          <p class="kpi-note">Bars share one scale: To-Be is drawn at its true length relative to As-Is.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 06 To-Be map -->
+    <section class="section" id="to-be">
+      <div class="container">
+        <p class="section-num">06 · To-Be process map</p>
+        <h2>12 steps, automated handoffs</h2>
+        <p class="lede">The redesign removes manual re-keying and batch logistics. Routing is dynamic and exceptions resolve digitally.</p>
+        <figure class="swimlane" id="to-be-map">
+          <pre class="mermaid" aria-label="To-Be cross-functional swimlane diagram">
+flowchart TB
+  subgraph L1["Lane 1 · Clinical Order Entry"]
+    direction LR
+    B1["1 · EHR order with auto-barcoding"] --&gt; B2["2 · Smart phlebotomy scan"] --&gt; B3["3 · Scan into smart courier bag&lt;br/&gt;hold · 35 min"]
+  end
+  subgraph L2["Lane 2 · Dynamic Logistics"]
+    direction LR
+    B4["4 · Volume-triggered pickup&lt;br/&gt;at 25 tubes"] --&gt; B5["5 · Direct transit to hub"]
+  end
+  subgraph L3["Lane 3 · Robotic Accessioning"]
+    direction LR
+    B6["6 · Robotic cooler unloading"] --&gt; B7["7 · Optical accessioning sorter&lt;br/&gt;queue · 12 min"]
+    B7 -. "label mismatch" .-&gt; Y["Digital exception portal&lt;br/&gt;22 min"]
+  end
+  subgraph L4["Lane 4 · Optimized Analytics"]
+    direction LR
+    B8["8 · Rule-engine auto-triage"] --&gt; B9["9 · Analyzer run&lt;br/&gt;42 min value-added"] --&gt; B10["10 · Auto-verification · 92%"]
+  end
+  subgraph L5["Lane 5 · EHR Instant Sync"]
+    direction LR
+    B11["11 · FHIR API writeback to EHR"] --&gt; B12["12 · Critical-value push alert&lt;br/&gt;4 min"]
+  end
+  L1 --&gt; L2 --&gt; L3 --&gt; L4 --&gt; L5
+  classDef queue fill:#e3eefb,stroke:#2a78d6,stroke-width:2px,color:#0f1d30
+  classDef va fill:#dcf5ea,stroke:#1baf7a,stroke-width:2px,color:#0f1d30
+  classDef exc fill:#f1f0eb,stroke:#7a7e86,stroke-width:1.5px,stroke-dasharray:4 3,color:#0f1d30
+  class B3,B7 queue
+  class B9 va
+  class Y exc
+</pre>
+          <div class="lane-fallback" hidden>
+            <h4>Lane 1 · Clinical Order Entry</h4><ol><li>EHR order with auto-barcoding</li><li>Smart phlebotomy scan</li><li>Scan into smart courier bag (35 min hold)</li></ol>
+            <h4>Lane 2 · Dynamic Logistics</h4><ol start="4"><li>Volume-triggered pickup at 25 tubes</li><li>Direct transit to hub</li></ol>
+            <h4>Lane 3 · Robotic Accessioning</h4><ol start="6"><li>Robotic cooler unloading</li><li>Optical accessioning sorter (12 min queue)</li></ol>
+            <h4>Lane 4 · Optimized Analytics</h4><ol start="8"><li>Rule-engine auto-triage</li><li>Analyzer run (42 min value-added)</li><li>Auto-verification (92%)</li></ol>
+            <h4>Lane 5 · EHR Instant Sync</h4><ol start="11"><li>FHIR API writeback to EHR</li><li>Critical-value push alert (4 min)</li></ol>
+          </div>
+          <figcaption class="swimlane-meta">
+            <span><span class="swatch" style="display:inline-block;background:#e3eefb;border:2px solid var(--series-to-be)"></span> Residual queue</span>
+            <span><span class="swatch" style="display:inline-block;background:#dcf5ea;border:2px solid var(--series-va)"></span> Value-added</span>
+            <span><span class="swatch" style="display:inline-block;background:#f1f0eb;border:2px dashed var(--muted)"></span> Exception path</span>
+          </figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <!-- 07 Levers -->
+    <section class="section" id="levers">
+      <div class="container">
+        <p class="section-num">07 · Re-engineering levers</p>
+        <h2>Four changes, each aimed at one queue</h2>
+        <div class="grid-2">
+          <article class="card lever">
+            <p class="tag">Queue 3 · Accessioning</p>
+            <h3>Optical accessioning sorters</h3>
+            <p>Robotic sorters scan, uncap and centrifuge 1,200 tubes an hour with no manual re-keying.</p>
+            <p class="before-after"><span class="before">4.5 h</span> → <span class="after" data-metric="scenarios.to_be.stage_means.accessioning" data-fmt="min">12 min</span></p>
+          </article>
+          <article class="card lever">
+            <p class="tag">Queue 1 · Clinic hold</p>
+            <h3>Volume-triggered dispatch</h3>
+            <p>When 25 tubes are scanned into a smart box, the nearest courier is dispatched through a logistics API.</p>
+            <p class="before-after"><span class="before">2.8 h</span> → <span class="after" data-metric="scenarios.to_be.stage_means.clinic_hold" data-fmt="min">35 min</span></p>
+          </article>
+          <article class="card lever">
+            <p class="tag">Queue 4 · Priority</p>
+            <h3>STAT governance in the EHR</h3>
+            <p>STAT needs an objective trigger such as active ED status or acute vitals. Overrides need medical-director approval.</p>
+            <p class="before-after"><span class="before">38% STAT</span> → <span class="after"><span data-metric="scenarios.to_be.stat_ratio" data-fmt="pct0">8%</span> STAT</span></p>
+          </article>
+          <article class="card lever">
+            <p class="tag">Exceptions</p>
+            <h3>Digital exception portal</h3>
+            <p>Label mismatches push a notification to the drawing clinic's tablet for photo verification instead of a paper ticket.</p>
+            <p class="before-after"><span class="before">18 h</span> → <span class="after" data-metric="scenarios.to_be.mean_exception_resolution" data-fmt="min">22 min</span></p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- 08 Roadmap -->
+    <section class="section" id="roadmap">
+      <div class="container">
+        <p class="section-num">08 · Roadmap</p>
+        <h2>16 weeks from charter to control plan</h2>
+        <div class="roadmap" id="roadmap-chart" role="list"></div>
+      </div>
+    </section>
+
+    <!-- 09 Impact -->
+    <section class="section" id="impact">
+      <div class="container">
+        <p class="section-num">09 · Projected impact</p>
+        <h2>Every quality metric moves, not just speed</h2>
+        <p class="lede">Values below are recomputed from the synthetic event log, calibrated to the project's baseline study of 10,000 historical orders.</p>
+        <div class="card table-wrap">
+          <table class="data" id="impact-table">
+            <thead><tr><th>Metric</th><th class="num">As-Is</th><th class="num">To-Be</th><th class="num">Improvement</th></tr></thead>
+            <tbody>
+              <tr><td>Mean time-to-result</td><td class="num" data-metric="scenarios.as_is.mean_tat" data-fmt="hours">18.6 h</td><td class="num" data-metric="scenarios.to_be.mean_tat" data-fmt="hours">4.6 h</td><td class="num" data-metric="comparison.tat_reduction_pct" data-fmt="pctPoints">75.3%</td></tr>
+              <tr><td>Process cycle efficiency</td><td class="num" data-metric="scenarios.as_is.pce" data-fmt="pct2">3.76%</td><td class="num" data-metric="scenarios.to_be.pce" data-fmt="pct2">15.22%</td><td class="num">+<span data-metric="comparison.pce_increase_pct" data-fmt="pctPoints">304.5%</span></td></tr>
+              <tr><td>Accessioning re-key error rate</td><td class="num" data-metric="scenarios.as_is.rekey_error_rate" data-fmt="pct">8.4%</td><td class="num" data-metric="scenarios.to_be.rekey_error_rate" data-fmt="pct">0.1%</td><td class="num" data-metric="comparison.rekey_reduction_pct" data-fmt="pctPoints">98.8%</td></tr>
+              <tr><td>Specimen rejection rate</td><td class="num" data-metric="scenarios.as_is.rejection_rate" data-fmt="pct">3.2%</td><td class="num" data-metric="scenarios.to_be.rejection_rate" data-fmt="pct">0.4%</td><td class="num" data-metric="comparison.rejection_reduction_pct" data-fmt="pctPoints">87.5%</td></tr>
+              <tr><td>STAT order share</td><td class="num" data-metric="scenarios.as_is.stat_ratio" data-fmt="pct">38.0%</td><td class="num" data-metric="scenarios.to_be.stat_ratio" data-fmt="pct">8.0%</td><td class="num" data-metric="comparison.stat_reduction_pct" data-fmt="pctPoints">78.9%</td></tr>
+              <tr><td>Critical-value notification lag</td><td class="num" data-metric="scenarios.as_is.mean_critical_lag" data-fmt="min">48 min</td><td class="num" data-metric="scenarios.to_be.mean_critical_lag" data-fmt="min">4 min</td><td class="num" data-metric="comparison.critical_lag_reduction_pct" data-fmt="pctPoints">91.7%</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- 10 ROI -->
+    <section class="section" id="roi">
+      <div class="container">
+        <p class="section-num">10 · Return on investment</p>
+        <h2>$520K in, $4.35M a year back</h2>
+        <div class="roi-figures">
+          <div class="kpi"><p class="kpi-label">Capital expenditure</p><p class="kpi-value" data-roi="capex">$520K</p><p class="kpi-note">Software, optical sorters, implementation</p></div>
+          <div class="kpi"><p class="kpi-label">First-year net ROI</p><p class="kpi-value" data-roi="roi">736.5%</p><p class="kpi-note">(Savings − capex) ÷ capex</p></div>
+          <div class="kpi"><p class="kpi-label">Payback period</p><p class="kpi-value" data-roi="payback">1.4 mo</p><p class="kpi-note">Capex ÷ monthly savings</p></div>
+        </div>
+        <article class="card chart-card">
+          <div class="chart-head">
+            <div>
+              <h3>Annual savings by category</h3>
+              <p>Total <span data-roi="savings">$4.35M</span> a year in operating savings.</p>
+            </div>
+            <button type="button" class="table-toggle" aria-pressed="false">Table</button>
+          </div>
+          <div class="chart-box"><canvas id="c-roi" role="img" aria-label="Bar chart of annual savings by category"></canvas></div>
+          <div class="chart-table table-wrap" hidden></div>
+        </article>
+      </div>
+    </section>
+
+    <!-- 11 Conclusion -->
+    <section class="section" id="conclusion">
+      <div class="container">
+        <p class="section-num">11 · Takeaway</p>
+        <h2>Throughput is a flow problem before it is a hardware problem</h2>
+        <p class="lede">The analyzer was never the constraint. Mapping the full pipeline, measuring every queue from event timestamps and governing order priority turned a $6.5M hardware disappointment into a 75% faster service and $4.35M a year in recovered value.</p>
+        <div class="cta-row">
+          <a class="btn primary" href="dashboard.html">Explore the dashboard
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+          <a class="btn secondary" href="methods.html">Python, SQL &amp; deck</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <p>Sovereign Health System is a fictional organization. All data is synthetic and generated for portfolio demonstration.</p>
+      <p><a href="methods.html">How this was built</a></p>
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@11.4.1/dist/mermaid.min.js"></script>
+  <script src="js/data.js"></script>
+  <script src="js/charts.js"></script>
+  <script src="js/case-study.js"></script>
+</body>
+</html>

@@ -245,7 +245,8 @@ table.data tbody tr:hover { background: #fafaf7; }
 .boundary strong { display: block; font-size: 12px; text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted); }
 
 .swimlane {
-  margin-top: 24px; background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius);
+  margin: 24px 0 0;
+  background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius);
   padding: 16px; overflow-x: auto; -webkit-overflow-scrolling: touch;
 }
 .swimlane .mermaid { min-width: 720px; }
@@ -281,6 +282,7 @@ table.data tbody tr:hover { background: #fafaf7; }
 .roadmap-bar {
   position: absolute; top: 3px; bottom: 3px; border-radius: 4px; background: var(--brand);
   color: var(--brand-ink); font-size: 12px; display: flex; align-items: center; padding: 0 8px; white-space: nowrap;
+  min-width: max-content;
 }
 .roadmap-scale { display: grid; grid-template-columns: 220px 1fr; gap: 12px; font-size: 12px; color: var(--muted); }
 .roadmap-scale .ticks { display: flex; justify-content: space-between; }

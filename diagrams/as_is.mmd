@@ -1,0 +1,29 @@
+flowchart TB
+  subgraph L1["Lane 1 · Order & Phlebotomy"]
+    direction LR
+    A1["1 · Order entered in EHR"] --> A2["2 · Print paper label"] --> A3["3 · Draw specimen"] --> A4["4 · Stage in holding bin<br/>Q1 · 2.8 h"]
+  end
+  subgraph L2["Lane 2 · Logistics & Dispatch"]
+    direction LR
+    A5["5 · Fixed courier pickup<br/>every 3 h"] --> A6["6 · Transit to hub"] --> A7["7 · Unload at dock<br/>Q2 · 1.8 h"]
+  end
+  subgraph L3["Lane 3 · Central Accessioning"]
+    direction LR
+    A8["8 · Unpack coolers"] --> A9["9 · Manual barcode rescan"] --> A10["10 · Re-key missing EHR data"] --> A11["11 · Sort tubes<br/>Q3 · 4.5 h"]
+    A10 -. "label mismatch" .-> X["Paper rejection ticket<br/>12–24 h"]
+  end
+  subgraph L4["Lane 4 · Testing & Pathology"]
+    direction LR
+    A12["12 · Load centrifuge"] --> A13["13 · Analyzer run<br/>42 min value-added"] --> A14["14 · Manual outlier review<br/>Q4 · 2.0 h"]
+  end
+  subgraph L5["Lane 5 · EHR Sync & Billing"]
+    direction LR
+    A15["15 · Manual result validation"] --> A16["16 · Batch file export"] --> A17["17 · EHR chart sync"] --> A18["18 · Billing trigger"]
+  end
+  L1 --> L2 --> L3 --> L4 --> L5
+  classDef queue fill:#fde9df,stroke:#eb6834,stroke-width:2px,color:#0f1d30
+  classDef va fill:#dcf5ea,stroke:#1baf7a,stroke-width:2px,color:#0f1d30
+  classDef exc fill:#fdf1f0,stroke:#d03b3b,stroke-width:1.5px,stroke-dasharray:4 3,color:#0f1d30
+  class A4,A7,A11,A14 queue
+  class A13 va
+  class X exc

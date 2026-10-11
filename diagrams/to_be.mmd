@@ -1,0 +1,29 @@
+flowchart TB
+  subgraph L1["Lane 1 · Clinical Order Entry"]
+    direction LR
+    B1["1 · EHR order with auto-barcoding"] --> B2["2 · Smart phlebotomy scan"] --> B3["3 · Scan into smart courier bag<br/>hold · 35 min"]
+  end
+  subgraph L2["Lane 2 · Dynamic Logistics"]
+    direction LR
+    B4["4 · Volume-triggered pickup<br/>at 25 tubes"] --> B5["5 · Direct transit to hub"]
+  end
+  subgraph L3["Lane 3 · Robotic Accessioning"]
+    direction LR
+    B6["6 · Robotic cooler unloading"] --> B7["7 · Optical accessioning sorter<br/>queue · 12 min"]
+    B7 -. "label mismatch" .-> Y["Digital exception portal<br/>22 min"]
+  end
+  subgraph L4["Lane 4 · Optimized Analytics"]
+    direction LR
+    B8["8 · Rule-engine auto-triage"] --> B9["9 · Analyzer run<br/>42 min value-added"] --> B10["10 · Auto-verification · 92%"]
+  end
+  subgraph L5["Lane 5 · EHR Instant Sync"]
+    direction LR
+    B11["11 · FHIR API writeback to EHR"] --> B12["12 · Critical-value push alert<br/>4 min"]
+  end
+  L1 --> L2 --> L3 --> L4 --> L5
+  classDef queue fill:#e3eefb,stroke:#2a78d6,stroke-width:2px,color:#0f1d30
+  classDef va fill:#dcf5ea,stroke:#1baf7a,stroke-width:2px,color:#0f1d30
+  classDef exc fill:#f1f0eb,stroke:#7a7e86,stroke-width:1.5px,stroke-dasharray:4 3,color:#0f1d30
+  class B3,B7 queue
+  class B9 va
+  class Y exc
