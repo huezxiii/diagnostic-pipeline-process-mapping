@@ -1,0 +1,376 @@
+{
+  "meta": {
+    "seed": 42,
+    "orders_per_scenario": 10000,
+    "window_start": "2026-01-05",
+    "window_end": "2026-03-29"
+  },
+  "stages": [
+    {
+      "key": "order_to_draw",
+      "label": "Order to Draw",
+      "lane": "Clinical Order Entry & Phlebotomy",
+      "queue": null
+    },
+    {
+      "key": "clinic_hold",
+      "label": "Clinic Holding Bin",
+      "lane": "Clinical Order Entry & Phlebotomy",
+      "queue": "Q1"
+    },
+    {
+      "key": "transport",
+      "label": "Courier Transport & Dock",
+      "lane": "Logistics & Dispatch",
+      "queue": "Q2"
+    },
+    {
+      "key": "exception_hold",
+      "label": "Exception Resolution",
+      "lane": "Quality & Governance",
+      "queue": null
+    },
+    {
+      "key": "accessioning",
+      "label": "Central Accessioning",
+      "lane": "Central Accessioning",
+      "queue": "Q3"
+    },
+    {
+      "key": "testing",
+      "label": "Sort & Testing",
+      "lane": "Testing & Pathology",
+      "queue": "Q4"
+    },
+    {
+      "key": "verify_sync",
+      "label": "Verification & EHR Sync",
+      "lane": "EHR Integration & Billing",
+      "queue": null
+    }
+  ],
+  "scenarios": {
+    "as_is": {
+      "n": 10000,
+      "mean_tat": 1116.36,
+      "median_tat": 976.86,
+      "p90_tat": 1901.12,
+      "mean_va": 42.001,
+      "pce": 0.037623,
+      "stat_ratio": 0.38,
+      "rekey_error_rate": 0.084,
+      "rejection_rate": 0.032,
+      "exception_rate": 0.142,
+      "mean_critical_lag": 48.0,
+      "mean_exception_resolution": 1080.0,
+      "outpatient_peak_arrival_share": 0.6,
+      "stage_means": {
+        "order_to_draw": 95.0,
+        "clinic_hold": 168.0,
+        "transport": 110.0,
+        "exception_hold": 153.36,
+        "accessioning": 270.0,
+        "testing": 162.0,
+        "verify_sync": 158.0
+      },
+      "bottlenecks": [
+        {
+          "stage": "accessioning",
+          "mean_wait": 270.0,
+          "share_of_nva": 0.2513,
+          "rank": 1
+        },
+        {
+          "stage": "clinic_hold",
+          "mean_wait": 168.0,
+          "share_of_nva": 0.1564,
+          "rank": 2
+        },
+        {
+          "stage": "verify_sync",
+          "mean_wait": 158.0,
+          "share_of_nva": 0.1471,
+          "rank": 3
+        },
+        {
+          "stage": "exception_hold",
+          "mean_wait": 153.36,
+          "share_of_nva": 0.1427,
+          "rank": 4
+        },
+        {
+          "stage": "testing",
+          "mean_wait": 119.999,
+          "share_of_nva": 0.1117,
+          "rank": 5
+        },
+        {
+          "stage": "transport",
+          "mean_wait": 110.0,
+          "share_of_nva": 0.1024,
+          "rank": 6
+        },
+        {
+          "stage": "order_to_draw",
+          "mean_wait": 95.0,
+          "share_of_nva": 0.0884,
+          "rank": 7
+        }
+      ],
+      "priority": {
+        "stat_true": {
+          "n": 700,
+          "share": 0.07,
+          "mean_tat": 860.47,
+          "mean_testing_wait": 152.34,
+          "median_testing_wait": 131.17
+        },
+        "stat_flagged": {
+          "n": 3100,
+          "share": 0.31,
+          "mean_tat": 1132.43,
+          "mean_testing_wait": 118.64,
+          "median_testing_wait": 100.29
+        },
+        "routine": {
+          "n": 6200,
+          "share": 0.62,
+          "mean_tat": 1137.22,
+          "mean_testing_wait": 117.03,
+          "median_testing_wait": 97.21
+        }
+      },
+      "source": {
+        "ED": {
+          "n": 1200,
+          "mean_tat": 830.15
+        },
+        "inpatient": {
+          "n": 2800,
+          "mean_tat": 908.7
+        },
+        "outpatient": {
+          "n": 6000,
+          "mean_tat": 1270.51
+        }
+      },
+      "arrivals_by_hour": [
+        109,
+        95,
+        73,
+        110,
+        97,
+        87,
+        185,
+        201,
+        195,
+        203,
+        649,
+        635,
+        187,
+        639,
+        730,
+        683,
+        2017,
+        1966,
+        205,
+        202,
+        203,
+        198,
+        222,
+        109
+      ],
+      "variants": [
+        {
+          "variant": "Clean path",
+          "n": 8160,
+          "share": 0.816,
+          "mean_tat": 961.78
+        },
+        {
+          "variant": "Re-key correction",
+          "n": 420,
+          "share": 0.042,
+          "mean_tat": 972.6
+        },
+        {
+          "variant": "Exception resolved",
+          "n": 1100,
+          "share": 0.11,
+          "mean_tat": 2052.06
+        },
+        {
+          "variant": "Rejected, re-collected",
+          "n": 320,
+          "share": 0.032,
+          "mean_tat": 2030.29
+        }
+      ]
+    },
+    "to_be": {
+      "n": 10000,
+      "mean_tat": 275.996,
+      "median_tat": 256.37,
+      "p90_tat": 387.54,
+      "mean_va": 42.001,
+      "pce": 0.152178,
+      "stat_ratio": 0.08,
+      "rekey_error_rate": 0.001,
+      "rejection_rate": 0.004,
+      "exception_rate": 0.018,
+      "mean_critical_lag": 4.0,
+      "mean_exception_resolution": 22.0,
+      "outpatient_peak_arrival_share": 0.1672,
+      "stage_means": {
+        "order_to_draw": 45.0,
+        "clinic_hold": 35.0,
+        "transport": 50.0,
+        "exception_hold": 0.396,
+        "accessioning": 12.0,
+        "testing": 60.0,
+        "verify_sync": 73.6
+      },
+      "bottlenecks": [
+        {
+          "stage": "verify_sync",
+          "mean_wait": 73.6,
+          "share_of_nva": 0.3145,
+          "rank": 1
+        },
+        {
+          "stage": "transport",
+          "mean_wait": 50.0,
+          "share_of_nva": 0.2137,
+          "rank": 2
+        },
+        {
+          "stage": "order_to_draw",
+          "mean_wait": 45.0,
+          "share_of_nva": 0.1923,
+          "rank": 3
+        },
+        {
+          "stage": "clinic_hold",
+          "mean_wait": 35.0,
+          "share_of_nva": 0.1496,
+          "rank": 4
+        },
+        {
+          "stage": "testing",
+          "mean_wait": 17.999,
+          "share_of_nva": 0.0769,
+          "rank": 5
+        },
+        {
+          "stage": "accessioning",
+          "mean_wait": 12.0,
+          "share_of_nva": 0.0513,
+          "rank": 6
+        },
+        {
+          "stage": "exception_hold",
+          "mean_wait": 0.396,
+          "share_of_nva": 0.0017,
+          "rank": 7
+        }
+      ],
+      "priority": {
+        "stat_true": {
+          "n": 700,
+          "share": 0.07,
+          "mean_tat": 183.55,
+          "mean_testing_wait": 5.23,
+          "median_testing_wait": 4.34
+        },
+        "stat_flagged": {
+          "n": 100,
+          "share": 0.01,
+          "mean_tat": 267.29,
+          "mean_testing_wait": 9.27,
+          "median_testing_wait": 6.94
+        },
+        "routine": {
+          "n": 9200,
+          "share": 0.92,
+          "mean_tat": 283.12,
+          "mean_testing_wait": 19.07,
+          "median_testing_wait": 16.22
+        }
+      },
+      "source": {
+        "ED": {
+          "n": 1200,
+          "mean_tat": 193.14
+        },
+        "inpatient": {
+          "n": 2800,
+          "mean_tat": 236.35
+        },
+        "outpatient": {
+          "n": 6000,
+          "mean_tat": 311.07
+        }
+      },
+      "arrivals_by_hour": [
+        88,
+        96,
+        112,
+        122,
+        97,
+        84,
+        202,
+        194,
+        678,
+        738,
+        709,
+        658,
+        733,
+        718,
+        664,
+        683,
+        690,
+        697,
+        648,
+        712,
+        204,
+        180,
+        193,
+        100
+      ],
+      "variants": [
+        {
+          "variant": "Clean path",
+          "n": 9810,
+          "share": 0.981,
+          "mean_tat": 275.41
+        },
+        {
+          "variant": "Re-key correction",
+          "n": 10,
+          "share": 0.001,
+          "mean_tat": 269.77
+        },
+        {
+          "variant": "Exception resolved",
+          "n": 140,
+          "share": 0.014,
+          "mean_tat": 315.73
+        },
+        {
+          "variant": "Rejected, re-collected",
+          "n": 40,
+          "share": 0.004,
+          "mean_tat": 282.03
+        }
+      ]
+    }
+  },
+  "comparison": {
+    "tat_reduction_pct": 75.3,
+    "pce_increase_pct": 304.5,
+    "rekey_reduction_pct": 98.8,
+    "rejection_reduction_pct": 87.5,
+    "stat_reduction_pct": 78.9,
+    "critical_lag_reduction_pct": 91.7
+  }
+}
