@@ -121,7 +121,7 @@ pres.addSection({ title: section });
   const s = contentSlide('What? · Situation', `Testing takes 42 minutes of an ${hoursNb(A.mean_tat)} wait`,
     'The analyzer upgrade did its job. Everything around it did not scale: 96% of the cycle is queueing, transit, re-keying and exception handling.');
   const items = [
-    [hours(A.mean_tat), 'Mean time-to-result today, up from 4.200A0h before the expansion', AS_IS],
+    [hours(A.mean_tat), 'Mean time-to-result today, up from 4.2 h before the expansion', AS_IS],
     [mins(A.mean_va), 'Value-added analyzer and centrifuge time per order', VA],
     ['$6.5M', 'Spent on high-throughput analyzers that now sit idle between batch waves', INK],
   ];
