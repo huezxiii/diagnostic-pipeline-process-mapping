@@ -255,7 +255,6 @@ table.data tbody tr:hover { background: #fafaf7; }
 .lane-fallback ol { margin: 0 0 12px; font-size: 14px; }
 .lane-fallback h4 { font-size: 13px; margin: 12px 0 4px; }
 
-.bottleneck { border-left: 3px solid var(--series-as-is); }
 .bottleneck h3 { font-size: 17px; }
 .bottleneck dl { margin: 0; font-size: 14px; }
 .bottleneck dt { font-size: 12px; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: 0.05em; margin-top: 10px; }

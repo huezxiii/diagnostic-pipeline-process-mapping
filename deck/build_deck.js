@@ -185,7 +185,7 @@ pres.addSection({ title: section });
 // ===================== Slide 5: value stream =====================
 {
   const s = contentSlide('So What? · Value stream', `Only ${pct(A.pce, 2)} of the cycle adds value`,
-    'Process cycle efficiency = value-added time / total cycle time. World-class healthcare processes exceed 15%.');
+    'Process cycle efficiency = value-added time / total cycle time. The healthcare benchmark is above 15%.');
   s.addChart(pres.charts.BAR, [
     { name: 'Value-added', labels: ['As-Is', 'To-Be'], values: [Math.round(A.mean_va), Math.round(B.mean_va)] },
     { name: 'Waiting, transit, rework', labels: ['As-Is', 'To-Be'], values: [Math.round(A.mean_tat - A.mean_va), Math.round(B.mean_tat - B.mean_va)] },
