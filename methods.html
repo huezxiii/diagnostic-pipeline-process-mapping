@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Methods | Diagnostic Pipeline Process Mapping</title>
+  <meta name="description" content="How the diagnostic pipeline case study was built: seeded synthetic LIS event log, pandas process mining, PostgreSQL query suite validated in DuckDB, Mermaid swimlanes and an executive deck.">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%2314365d'/%3E%3Cpath d='M8 22h4l3-10 3 14 3-8h3' fill='none' stroke='white' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Serif:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <header class="site-nav">
+    <div class="container">
+      <a class="brand" href="index.html">
+        <span class="brand-mark" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 15h3l2.5-8 3 11 2.5-6h3l1.5 3H21"/></svg></span>
+        <span>Diagnostic Pipeline<small>Process mapping case study</small></span>
+      </a>
+      <nav aria-label="Primary">
+        <ul class="nav-links">
+          <li><a href="index.html">Case Study</a></li>
+          <li><a href="dashboard.html">Dashboard</a></li>
+          <li><a href="methods.html" aria-current="page">Methods</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main" class="container">
+    <section class="page-head">
+      <p class="eyebrow">Methods &amp; deliverables</p>
+      <h1>How the numbers were made</h1>
+      <p class="lede">A seeded Python generator writes an LIS-style event log. A pandas script mines it, a PostgreSQL query suite re-derives the same figures, and the dashboard, case study and deck all read the result.</p>
+      <nav class="toc" aria-label="On this page">
+        <a href="#data">Event log</a><a href="#mining">Process mining</a><a href="#sql">SQL suite</a><a href="#diagrams">Swimlanes</a><a href="#downloads">Downloads</a>
+      </nav>
+    </section>
+
+    <!-- Event log -->
+    <section class="section" id="data">
+      <p class="section-num">01 · Synthetic event log</p>
+      <h2>20,000 orders, eight timestamps each</h2>
+      <p class="lede">Each row is one lab order in one scenario. Stage durations are never stored; they are mined from the timestamps, the same way a real LIS export would be analysed.</p>
+      <div class="grid-2">
+        <div class="card">
+          <h3>Generation</h3>
+          <ul>
+            <li>Seed 42, 10,000 orders per scenario over a 12-week window. The same order population (source, facility, true STAT, critical flag) runs through both scenarios, so comparisons are like-for-like.</li>
+            <li>Dock arrival is sampled first: in the As-Is scenario exactly 60% of clinic specimens arrive between 16:00 and 17:59. Earlier timestamps are subtracted from it and later ones added.</li>
+            <li>Stage times are gamma-distributed with multipliers for source, priority and arrival hour, then rescaled to the plan's baseline means. Rates (STAT, re-key, rejection, exceptions) are assigned by exact counts.</li>
+          </ul>
+        </div>
+        <div class="card">
+          <h3>Timestamps per order</h3>
+          <ol>
+            <li><code>ts_ordered</code> → <code>ts_drawn</code>: order to draw</li>
+            <li><code>ts_drawn</code> → <code>ts_dispatched</code>: clinic holding bin</li>
+            <li><code>ts_dispatched</code> → <code>ts_received</code>: courier transport</li>
+            <li><code>ts_received</code> → <code>ts_exception_cleared</code>: exception hold</li>
+            <li><code>ts_exception_cleared</code> → <code>ts_accessioned</code>: accessioning</li>
+            <li><code>ts_accessioned</code> → <code>ts_resulted</code>: sort and testing</li>
+            <li><code>ts_resulted</code> → <code>ts_verified</code>: verification and EHR sync</li>
+          </ol>
+        </div>
+      </div>
+      <p class="assumption"><strong>Assumption.</strong> The project plan reports totals only, so the 1,116-minute As-Is cycle was allocated across stages: order to draw 95, clinic hold 168, transport 110, exception hold 153, accessioning 270, testing 162 (42 value-added), verification and sync 158. The To-Be cycle (276 minutes) is allocated the same way.</p>
+      <div class="card table-wrap">
+        <table class="data" id="calibration-table">
+          <thead><tr><th>Calibration target</th><th class="num">Plan As-Is</th><th class="num">Log As-Is</th><th class="num">Plan To-Be</th><th class="num">Log To-Be</th></tr></thead>
+          <tbody>
+            <tr><td>Mean time-to-result</td><td class="num">18.6 h</td><td class="num" data-metric="scenarios.as_is.mean_tat" data-fmt="hours2">—</td><td class="num">4.6 h</td><td class="num" data-metric="scenarios.to_be.mean_tat" data-fmt="hours2">—</td></tr>
+            <tr><td>Process cycle efficiency</td><td class="num">3.76%</td><td class="num" data-metric="scenarios.as_is.pce" data-fmt="pct2">—</td><td class="num">15.2%</td><td class="num" data-metric="scenarios.to_be.pce" data-fmt="pct2">—</td></tr>
+            <tr><td>STAT order share</td><td class="num">38%</td><td class="num" data-metric="scenarios.as_is.stat_ratio" data-fmt="pct">—</td><td class="num">8%</td><td class="num" data-metric="scenarios.to_be.stat_ratio" data-fmt="pct">—</td></tr>
+            <tr><td>Re-key error rate</td><td class="num">8.4%</td><td class="num" data-metric="scenarios.as_is.rekey_error_rate" data-fmt="pct">—</td><td class="num">0.1%</td><td class="num" data-metric="scenarios.to_be.rekey_error_rate" data-fmt="pct">—</td></tr>
+            <tr><td>Specimen rejection rate</td><td class="num">3.2%</td><td class="num" data-metric="scenarios.as_is.rejection_rate" data-fmt="pct">—</td><td class="num">0.4%</td><td class="num" data-metric="scenarios.to_be.rejection_rate" data-fmt="pct">—</td></tr>
+            <tr><td>Critical-value lag</td><td class="num">48 min</td><td class="num" data-metric="scenarios.as_is.mean_critical_lag" data-fmt="min1">—</td><td class="num">4 min</td><td class="num" data-metric="scenarios.to_be.mean_critical_lag" data-fmt="min1">—</td></tr>
+            <tr><td>Exception resolution</td><td class="num">12–24 h</td><td class="num" data-metric="scenarios.as_is.mean_exception_resolution" data-fmt="hours2">—</td><td class="num">22 min</td><td class="num" data-metric="scenarios.to_be.mean_exception_resolution" data-fmt="min1">—</td></tr>
+            <tr><td>Clinic arrivals 16:00–17:59</td><td class="num">60%</td><td class="num" data-metric="scenarios.as_is.outpatient_peak_arrival_share" data-fmt="pct">—</td><td class="num">spread</td><td class="num" data-metric="scenarios.to_be.outpatient_peak_arrival_share" data-fmt="pct">—</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="result-meta">Every target is asserted by <code>tests/test_generator.py</code> (±2% relative for means, ±0.5 percentage points for rates).</p>
+    </section>
+
+    <!-- Mining -->
+    <section class="section" id="mining">
+      <p class="section-num">02 · Process mining</p>
+      <h2>Stage latency mined from timestamps</h2>
+      <p class="lede"><code>analysis/process_mining_analysis.py</code> derives every stage duration from consecutive events, ranks stages by non-value-added minutes and classifies path variants. Its output, <code>metrics.json</code>, feeds the case study and the deck.</p>
+      <div class="code-result">
+        <div>
+          <pre class="code" data-source="data/generate_event_log.py"><code class="language-python">def stage_durations(df: pd.DataFrame) -&gt; pd.DataFrame:
+    """Mine per-stage durations (minutes) from event timestamps."""
+    def mins(a, b):
+        return (df[b] - df[a]).dt.total_seconds() / 60.0
+
+    return pd.DataFrame({
+        "scenario": df["scenario"],
+        "order_to_draw": mins("ts_ordered", "ts_drawn"),
+        "clinic_hold": mins("ts_drawn", "ts_dispatched"),
+        "transport": mins("ts_dispatched", "ts_received"),
+        "exception_hold": mins("ts_received", "ts_exception_cleared"),
+        "accessioning": mins("ts_exception_cleared", "ts_accessioned"),
+        "testing": mins("ts_accessioned", "ts_resulted"),
+        "verify_sync": mins("ts_resulted", "ts_verified"),
+        "tat": mins("ts_ordered", "ts_verified"),
+    }, index=df.index)</code></pre>
+          <p class="result-meta">Stage durations: <code>data/generate_event_log.py</code></p>
+          <pre class="code" data-source="analysis/process_mining_analysis.py" style="margin-top:12px"><code class="language-python">waits = {k: st[k].mean() for k in STAGE_KEYS}
+waits["testing"] = testing_wait.mean()
+nva = sum(waits.values())
+ranked = sorted(waits.items(), key=lambda kv: kv[1], reverse=True)
+bottlenecks = [
+    {"stage": k, "mean_wait": _r(v, 3), "share_of_nva": _r(v / nva, 4), "rank": i + 1}
+    for i, (k, v) in enumerate(ranked)
+]</code></pre>
+          <p class="result-meta">Bottleneck ranking: <code>analysis/process_mining_analysis.py</code></p>
+        </div>
+        <div>
+          <div class="card table-wrap" id="mining-table"></div>
+          <p class="result-meta">Mean non-value-added minutes per order, ranked. Testing excludes the 42-minute analyzer run.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- SQL -->
+    <section class="section" id="sql">
+      <p class="section-num">03 · SQL suite</p>
+      <h2>The same answers, in PostgreSQL</h2>
+      <p class="lede"><code>sql/diagnostic_pipeline_analytics.sql</code> re-derives the metrics with CTEs, <code>EXTRACT(EPOCH …)</code> interval math, <code>PERCENTILE_CONT</code>, <code>RANK() OVER</code> and a rolling <code>AVG() OVER</code>. Results below were captured by running the file; <code>tests/test_sql.py</code> checks they match the Python output.</p>
+      <p class="result-meta" id="sql-engine"></p>
+      <div id="sql-blocks"></div>
+    </section>
+
+    <!-- Diagrams -->
+    <section class="section" id="diagrams">
+      <p class="section-num">04 · Swimlanes</p>
+      <h2>Process maps as code</h2>
+      <p class="lede">The As-Is (18 steps) and To-Be (12 steps) cross-functional maps are Mermaid flowcharts with one subgraph per lane, kept in <code>diagrams/</code> and embedded in the case study. A test keeps the embedded copies identical to the source files.</p>
+      <div class="cta-row">
+        <a class="btn secondary" href="index.html#as-is">View As-Is map</a>
+        <a class="btn secondary" href="index.html#to-be">View To-Be map</a>
+      </div>
+    </section>
+
+    <!-- Downloads -->
+    <section class="section" id="downloads">
+      <p class="section-num">05 · Deliverables</p>
+      <h2>Downloads</h2>
+      <ul class="download-list">
+        <li><a href="deck/sovereign-health-exec-briefing.pptx" download><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="4" width="18" height="13" rx="2"/><path d="M8 21h8M12 17v4"/></svg><span>Executive briefing deck<small>10 slides · PowerPoint</small></span></a></li>
+        <li><a href="data/event_log.csv" download><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 4h16v16H4zM4 10h16M4 15h16M10 4v16"/></svg><span>event_log.csv<small>20,000 orders · 4.1 MB</small></span></a></li>
+        <li><a href="sql/diagnostic_pipeline_analytics.sql" download><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><ellipse cx="12" cy="5" rx="8" ry="3"/><path d="M4 5v14c0 1.7 3.6 3 8 3s8-1.3 8-3V5M4 12c0 1.7 3.6 3 8 3s8-1.3 8-3"/></svg><span>diagnostic_pipeline_analytics.sql<small>8 queries · PostgreSQL</small></span></a></li>
+        <li><a href="sql/schema.sql" download><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><ellipse cx="12" cy="5" rx="8" ry="3"/><path d="M4 5v14c0 1.7 3.6 3 8 3s8-1.3 8-3V5"/></svg><span>schema.sql<small>Table + stage_durations view</small></span></a></li>
+        <li><a href="analysis/process_mining_analysis.py" download><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="m8 9-4 3 4 3M16 9l4 3-4 3M14 5l-4 14"/></svg><span>process_mining_analysis.py<small>pandas mining script</small></span></a></li>
+        <li><a href="data/generate_event_log.py" download><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="m8 9-4 3 4 3M16 9l4 3-4 3M14 5l-4 14"/></svg><span>generate_event_log.py<small>Seeded generator</small></span></a></li>
+        <li><a href="data/metrics.json" download><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M8 3H6a2 2 0 0 0-2 2v4l-2 3 2 3v4a2 2 0 0 0 2 2h2M16 3h2a2 2 0 0 1 2 2v4l2 3-2 3v4a2 2 0 0 1-2 2h-2"/></svg><span>metrics.json<small>Mined summary metrics</small></span></a></li>
+      </ul>
+      <h3 style="margin-top:32px">Reproduce</h3>
+      <pre class="code"><code>pip install -r requirements.txt
+python data/generate_event_log.py
+python analysis/process_mining_analysis.py
+python analysis/run_sql.py
+npm install &amp;&amp; npm run deck
+python -m pytest -q &amp;&amp; npm test</code></pre>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <p>Sovereign Health System is a fictional organization. All data is synthetic and generated for portfolio demonstration.</p>
+      <p><a href="index.html">Back to the case study</a></p>
+    </div>
+  </footer>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-sql.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js"></script>
+  <script src="js/data.js"></script>
+  <script src="js/sql-results.js"></script>
+  <script src="js/methods.js"></script>
+</body>
+</html>
