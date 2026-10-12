@@ -152,3 +152,32 @@ def test_every_fix_links_to_its_problem():
         assert fixed_by[problem] == lever, f"{lever} and {problem} do not point at each other"
     lever_order = re.findall(r'<article class="card lever" id="([^"]+)"', html)
     assert lever_order == ["l-sorters", "l-stat", "l-dispatch", "l-portal"]
+
+
+def test_every_chart_explains_how_to_read_it(open_page):
+    page = open_page("dashboard.html")
+    cards = page.locator(".chart-card")
+    assert cards.count() == 7
+    for i in range(7):
+        text = cards.nth(i).locator(".how-to-read").inner_text()
+        assert text.startswith("How to read this:") and len(text.split()) >= 10, text
+
+
+def test_charts_call_out_the_key_point(open_page):
+    page = open_page("dashboard.html")
+    assert page.evaluate("Chart.getChart('c-stages').options.plugins.callout.text") == "Biggest queue"
+    assert page.inner_text("#stages-takeaway").startswith("Biggest queue: Central Accessioning")
+    assert page.evaluate("Chart.getChart('c-priority').options.plugins.callout.text") == "Longest wait"
+    assert "upside down" in page.inner_text("#priority-takeaway")
+    assert "within 6 hours" in page.inner_text("#hist-takeaway")
+    assert "capacity" in page.inner_text("#arrivals-takeaway")
+    page.click("[data-view=to_be]")
+    assert "upside down" not in page.inner_text("#priority-takeaway")
+
+
+def test_takeaways_clear_when_no_orders_match(open_page):
+    page = open_page("dashboard.html")
+    page.select_option("#f-source", "ED")
+    page.select_option("#f-facility", "C01")
+    assert all(t.strip() == "" for t in page.locator(".chart-takeaway").all_inner_texts())
+    assert "NaN" not in page.inner_text("main")

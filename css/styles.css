@@ -169,6 +169,10 @@ select {
 .chart-head { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; margin-bottom: 12px; }
 .chart-head h2, .chart-head h3 { font-size: 16px; font-weight: 600; margin: 0 0 2px; }
 .chart-head p { font-size: 13px; color: var(--ink-2); margin: 0; }
+.how-to-read { margin: -4px 0 12px; max-width: 70ch; font-size: 13px; color: var(--ink-2); }
+.how-to-read strong { color: var(--ink); font-weight: 600; }
+.chart-takeaway { margin: 12px 0 0; padding: 10px 14px; border-radius: var(--radius-sm); background: var(--brand-soft); font-size: 14px; color: var(--ink); }
+.chart-takeaway:empty { display: none; }
 .table-toggle {
   flex: none; font: inherit; font-size: 12px; font-weight: 500; color: var(--ink-2);
   border: 1px solid var(--line); background: var(--surface); border-radius: var(--radius-sm);

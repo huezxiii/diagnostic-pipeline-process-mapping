@@ -39,8 +39,46 @@
   const available = () => typeof root.Chart === 'function';
   const registry = new Map(); // canvas id -> { chart, format }
 
+  /** Chart.js plugin: writes a short label next to one bar (options.plugins.callout). */
+  const calloutPlugin = {
+    id: 'callout',
+    afterDatasetsDraw(chart, _args, opts) {
+      if (!opts || !opts.text) return;
+      const meta = chart.getDatasetMeta(opts.datasetIndex || 0);
+      const el = meta && !meta.hidden && meta.data[opts.index];
+      if (!el) return;
+      const horizontal = chart.options.indexAxis === 'y';
+      const valueScale = horizontal ? chart.scales.x : chart.scales.y;
+      let { x, y } = el;
+      if (valueScale.options.stacked) {
+        // Label the end of the whole stack, not just this dataset's segment.
+        for (const m of chart.getSortedVisibleDatasetMetas()) {
+          const seg = m.data[opts.index];
+          if (!seg) continue;
+          if (horizontal) x = Math.max(x, seg.x);
+          else y = Math.min(y, seg.y);
+        }
+      }
+      const { ctx } = chart;
+      ctx.save();
+      ctx.font = '600 12px "IBM Plex Sans", system-ui, sans-serif';
+      ctx.fillStyle = COLORS.ink;
+      if (horizontal) {
+        ctx.textAlign = 'left';
+        ctx.textBaseline = 'middle';
+        ctx.fillText(opts.text, x + 8, y);
+      } else {
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'bottom';
+        ctx.fillText(opts.text, x, y - 6);
+      }
+      ctx.restore();
+    },
+  };
+
   function applyDefaults() {
     if (!available()) return;
+    root.Chart.register(calloutPlugin);
     const d = root.Chart.defaults;
     d.font.family = '"IBM Plex Sans", system-ui, -apple-system, "Segoe UI", sans-serif';
     d.font.size = 12;
@@ -69,11 +107,12 @@
   }
 
   /** Value axis + category axis styling: hairline grid on the value axis only. */
-  function axes({ horizontal = false, stacked = false, valueTitle = '', tickFormat, max } = {}) {
+  function axes({ horizontal = false, stacked = false, valueTitle = '', tickFormat, max, grace } = {}) {
     const value = {
       beginAtZero: true,
       stacked,
       max,
+      grace,
       grid: { color: COLORS.grid, drawTicks: false },
       border: { display: false },
       ticks: { color: COLORS.muted, padding: 6, callback: tickFormat },

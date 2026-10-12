@@ -34,7 +34,7 @@
     <section class="page-head">
       <p class="eyebrow">Interactive dashboard</p>
       <h1>Where the 18.6 hours go</h1>
-      <p class="lede">10,000 lab orders per scenario, mined from LIS event timestamps. Every tile and chart recomputes from the orders that match your filters.</p>
+      <p class="lede">Each scenario holds 10,000 lab orders, with every step timed from the lab system's records. Switch between the old process (As-Is), the redesign (To-Be) or both, then filter by where the order came from. Every number and chart updates to match.</p>
     </section>
 
     <div class="banner" id="data-banner" role="alert" hidden>
@@ -87,37 +87,43 @@
       <article class="card chart-card wide">
         <div class="chart-head">
           <div>
-            <h2>Stage-by-stage latency</h2>
+            <h2>Waiting time at each step</h2>
             <p id="stage-sub">Mean minutes per stage. Only the analyzer run inside testing adds value.</p>
           </div>
           <button type="button" class="table-toggle" aria-pressed="false">Table</button>
         </div>
+        <p class="how-to-read"><strong>How to read this:</strong> Each bar is one step of the journey. Longer bars mean samples waited there longer. Green is the only time a sample is being tested.</p>
         <div class="chart-box"><canvas id="c-stages" role="img" aria-label="Horizontal bar chart of mean minutes per pipeline stage"></canvas></div>
         <div class="chart-table table-wrap" hidden></div>
+        <p class="chart-takeaway" id="stages-takeaway" aria-live="polite"></p>
       </article>
 
       <article class="card chart-card">
         <div class="chart-head">
           <div>
-            <h2>Time-to-result distribution</h2>
+            <h2>How long orders take</h2>
             <p>Share of orders by hours from order entry to verified result.</p>
           </div>
           <button type="button" class="table-toggle" aria-pressed="false">Table</button>
         </div>
+        <p class="how-to-read"><strong>How to read this:</strong> Each bar shows the share of orders that got a result after that many hours. Bars bunched on the left mean fast, predictable results.</p>
         <div class="chart-box"><canvas id="c-hist" role="img" aria-label="Histogram of time-to-result in hours"></canvas></div>
         <div class="chart-table table-wrap" hidden></div>
+        <p class="chart-takeaway" id="hist-takeaway" aria-live="polite"></p>
       </article>
 
       <article class="card chart-card">
         <div class="chart-head">
           <div>
-            <h2>Arrival wave vs accessioning capacity</h2>
+            <h2>Sample arrivals vs intake capacity</h2>
             <p id="arrival-sub">Specimens reaching the central dock per hour on a typical day (3,288 orders/day).</p>
           </div>
           <button type="button" class="table-toggle" aria-pressed="false">Table</button>
         </div>
+        <p class="how-to-read"><strong>How to read this:</strong> Bars show how many samples reach the lab each hour. The line shows how many the intake desk can log. Bars above the line build a queue.</p>
         <div class="chart-box"><canvas id="c-arrivals" role="img" aria-label="Column chart of specimen arrivals by hour with capacity line"></canvas></div>
         <div class="chart-table table-wrap" hidden></div>
+        <p class="chart-takeaway" id="arrivals-takeaway" aria-live="polite"></p>
       </article>
 
       <article class="card chart-card">
@@ -128,18 +134,21 @@
           </div>
           <button type="button" class="table-toggle" aria-pressed="false">Table</button>
         </div>
+        <p class="how-to-read"><strong>How to read this:</strong> Average minutes each type of order waits for testing. Real emergencies should wait the least.</p>
         <div class="chart-box"><canvas id="c-priority" role="img" aria-label="Column chart of testing queue wait by priority"></canvas></div>
         <div class="chart-table table-wrap" hidden></div>
+        <p class="chart-takeaway" id="priority-takeaway" aria-live="polite"></p>
       </article>
 
       <article class="card chart-card">
         <div class="chart-head">
           <div>
-            <h2>Waste Pareto</h2>
+            <h2>Wasted minutes, biggest first</h2>
             <p>Non-value-added minutes per stage, largest first. Hover for cumulative share.</p>
           </div>
           <button type="button" class="table-toggle" aria-pressed="false">Table</button>
         </div>
+        <p class="how-to-read"><strong>How to read this:</strong> Steps ranked by minutes lost to waiting. Fixing the top few removes most of the delay.</p>
         <div class="chart-box"><canvas id="c-pareto" role="img" aria-label="Bar chart of waste minutes per stage sorted descending"></canvas></div>
         <div class="chart-table table-wrap" hidden></div>
       </article>
@@ -147,11 +156,12 @@
       <article class="card chart-card">
         <div class="chart-head">
           <div>
-            <h2>Defect rates</h2>
+            <h2>Errors and repeat work</h2>
             <p>Share of orders needing re-keying, re-collection or manual exception handling.</p>
           </div>
           <button type="button" class="table-toggle" aria-pressed="false">Table</button>
         </div>
+        <p class="how-to-read"><strong>How to read this:</strong> Share of orders that needed retyping, a new sample or manual fixing. Lower is better.</p>
         <div class="chart-box"><canvas id="c-defects" role="img" aria-label="Column chart of defect rates"></canvas></div>
         <div class="chart-table table-wrap" hidden></div>
       </article>
@@ -159,10 +169,11 @@
       <article class="card chart-card">
         <div class="chart-head">
           <div>
-            <h2>Process path variants</h2>
+            <h2>Routes orders take</h2>
             <p>Orders grouped by the exception path they followed.</p>
           </div>
         </div>
+        <p class="how-to-read"><strong>How to read this:</strong> Each row is a route an order took through the lab. Detours from the normal path add hours.</p>
         <div class="table-wrap" id="variants"></div>
       </article>
     </div>

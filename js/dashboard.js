@@ -38,13 +38,13 @@
 
   // ---------- KPI tiles ----------
   const KPIS = [
-    { key: 'meanTat', label: 'Mean time-to-result', fmt: C.fmt.hours, good: 'down', note: 'Target under 5.0 h' },
-    { key: 'p90Tat', label: 'P90 time-to-result', fmt: C.fmt.hours, good: 'down', note: '9 in 10 orders finish within' },
-    { key: 'pce', label: 'Process cycle efficiency', fmt: (x) => C.fmt.pct(x, 1), good: 'up', note: 'Benchmark above 15%' },
-    { key: 'statRatio', label: 'STAT order share', fmt: (x) => C.fmt.pct(x, 1), good: 'down', note: 'Governed target 8%' },
-    { key: 'rekeyRate', label: 'Re-key error rate', fmt: (x) => C.fmt.pct(x, 1), good: 'down', note: 'Manual accessioning entries' },
-    { key: 'rejectionRate', label: 'Specimen rejection', fmt: (x) => C.fmt.pct(x, 1), good: 'down', note: 'Re-draw required' },
-    { key: 'meanCriticalLag', label: 'Critical value lag', fmt: fmtMin, good: 'down', note: 'Flag to physician alert' },
+    { key: 'meanTat', label: 'Average time to result', fmt: C.fmt.hours, good: 'down', note: 'Target under 5.0 h' },
+    { key: 'p90Tat', label: 'Time for 9 in 10 orders', fmt: C.fmt.hours, good: 'down', note: 'The slowest 10% take longer' },
+    { key: 'pce', label: 'Share of time doing real work', fmt: (x) => C.fmt.pct(x, 1), good: 'up', note: 'Hospitals aim for more than 15%' },
+    { key: 'statRatio', label: 'Orders marked urgent', fmt: (x) => C.fmt.pct(x, 1), good: 'down', note: 'Target 8%' },
+    { key: 'rekeyRate', label: 'Retyping errors', fmt: (x) => C.fmt.pct(x, 1), good: 'down', note: 'Mistakes at sample intake' },
+    { key: 'rejectionRate', label: 'Samples rejected', fmt: (x) => C.fmt.pct(x, 1), good: 'down', note: 'Blood has to be drawn again' },
+    { key: 'meanCriticalLag', label: 'Delay on dangerous results', fmt: fmtMin, good: 'down', note: 'From lab flag to doctor alert' },
   ];
 
   const ARROW_DOWN = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M12 5v14M5 12l7 7 7-7"/></svg>';
@@ -114,13 +114,20 @@
       ];
       $('#stage-sub').textContent = 'Mean minutes per stage. Only the analyzer run inside testing adds value.';
     }
+    const primary = state.view === 'to_be' ? 'to_be' : 'as_is';
+    const waits = sums[primary].stageWaits;
+    const top = S.STAGE_KEYS.reduce((a, k) => ((waits[k] ?? -1) > (waits[a] ?? -1) ? k : a), S.STAGE_KEYS[0]);
+    $('#stages-takeaway').textContent = `Biggest queue: ${STAGE_LABEL[top]}, ${fmtMin(waits[top])} on average${state.view === 'compare' ? ' before the redesign' : ''}.`;
     C.render('c-stages', {
       type: 'bar',
       data: { labels, datasets },
       options: {
         indexAxis: 'y',
-        scales: C.axes({ horizontal: true, stacked: state.view !== 'compare', valueTitle: 'Minutes' }),
-        plugins: { tooltip: { filter: (item) => item.raw !== 0 } },
+        scales: C.axes({ horizontal: true, stacked: state.view !== 'compare', valueTitle: 'Minutes', grace: '18%' }),
+        plugins: {
+          tooltip: { filter: (item) => item.raw !== 0 },
+          callout: { datasetIndex: 0, index: S.STAGE_KEYS.indexOf(top), text: 'Biggest queue' },
+        },
       },
     }, fmtMin);
   }
@@ -167,6 +174,14 @@
         },
       },
     }, (x) => C.fmt.pctPoints(x, 1));
+    const within6h = (sc) => {
+      const n = sets[sc].length;
+      return n ? sets[sc].filter((o) => o.tat <= 360).length / n : null;
+    };
+    const shown = shownScenarios();
+    $('#hist-takeaway').textContent = shown.length > 1
+      ? `Results within 6 hours: ${C.fmt.pct(within6h('as_is'), 0)} of orders before the redesign, ${C.fmt.pct(within6h('to_be'), 0)} after.`
+      : `${C.fmt.pct(within6h(shown[0]), 0)} of orders get a result within 6 hours.`;
   }
 
   function arrivalsChart(sets) {
@@ -208,6 +223,13 @@
         plugins: { tooltip: { callbacks: { title: (items) => `${items[0].label}:00–${items[0].label}:59` } } },
       },
     }, (x) => (x == null ? '—' : `${Math.round(x).toLocaleString('en-US')} / h`));
+    const capacity = hours.map(CAPACITY[capScenario]);
+    const arrivals = S.arrivalsByHour(sets[capScenario]).map((c) => (c / SCENARIO_N[capScenario]) * DAILY_VOLUME);
+    const over = hours.filter((h) => arrivals[h] > capacity[h]);
+    const peak = hours.reduce((a, h) => (arrivals[h] > arrivals[a] ? h : a), 0);
+    $('#arrivals-takeaway').textContent = over.length
+      ? `Arrivals outrun intake capacity in ${over.length} of 24 hours, peaking at ${Math.round(arrivals[peak]).toLocaleString('en-US')} samples an hour around ${String(peak).padStart(2, '0')}:00.`
+      : 'Arrivals stay below intake capacity in every hour of the day.';
   }
 
   function priorityChart(sets) {
@@ -220,12 +242,24 @@
         backgroundColor: C.SCENARIO[sc].color,
       };
     });
+    const primary = state.view === 'to_be' ? 'to_be' : 'as_is';
+    const pb = S.priorityBreakdown(sets[primary]);
+    const waitsBy = S.PRIORITIES.map((p) => pb[p].meanTestingWait);
+    const trueWait = pb.stat_true.meanTestingWait;
+    const flagged = pb.stat_flagged.meanTestingWait;
+    const inverted = trueWait != null && waitsBy.every((w) => w == null || w <= trueWait);
+    if (trueWait == null || flagged == null) $('#priority-takeaway').textContent = '';
+    else if (inverted) $('#priority-takeaway').textContent = `Priority is upside down: real emergencies wait ${fmtMin(trueWait)} for testing, longer than routine orders tagged urgent (${fmtMin(flagged)}).`;
+    else $('#priority-takeaway').textContent = `Real emergencies wait ${fmtMin(trueWait)} for testing; routine orders tagged urgent wait ${fmtMin(flagged)}.`;
     C.render('c-priority', {
       type: 'bar',
       data: { labels, datasets },
       options: {
-        scales: C.axes({ valueTitle: 'Testing-queue wait (min)' }),
-        plugins: { legend: { display: datasets.length > 1 } },
+        scales: C.axes({ valueTitle: 'Testing-queue wait (min)', grace: '15%' }),
+        plugins: {
+          legend: { display: datasets.length > 1 },
+          callout: inverted ? { datasetIndex: 0, index: S.PRIORITIES.indexOf('stat_true'), text: 'Longest wait' } : false,
+        },
       },
     }, fmtMin);
   }
@@ -315,6 +349,7 @@
 
     if (shown.every((sc) => sets[sc].length === 0)) {
       CHART_IDS.forEach((id) => C.setEmpty(id, true));
+      document.querySelectorAll('.chart-takeaway').forEach((p) => { p.textContent = ''; });
       return;
     }
     stageChart(sums);
