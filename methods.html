@@ -35,16 +35,23 @@
     <section class="page-head">
       <p class="eyebrow">Methods &amp; deliverables</p>
       <h1>How the numbers were made</h1>
-      <p class="lede">A seeded Python generator writes an LIS-style event log. A pandas script mines it, a PostgreSQL query suite re-derives the same figures, and the dashboard, case study and deck all read the result.</p>
+      <p class="lede">All the data here is synthetic. One Python script generates the orders, a second measures them, and a set of SQL queries checks the measurements. The case study, dashboard and deck all read the same results.</p>
       <nav class="toc" aria-label="On this page">
         <a href="#data">Event log</a><a href="#mining">Process mining</a><a href="#sql">SQL suite</a><a href="#diagrams">Swimlanes</a><a href="#downloads">Downloads</a>
       </nav>
+      <ol class="pipeline-strip" aria-label="How the numbers flow">
+        <li class="step"><p class="step-num">01</p><h3>Generate 20,000 orders</h3><p>A seeded script makes realistic lab orders with eight timestamps each.</p><code>data/generate_event_log.py</code></li>
+        <li class="step"><p class="step-num">02</p><h3>Measure each step in Python</h3><p>pandas works out how long every order waited at each step.</p><code>analysis/process_mining_analysis.py</code></li>
+        <li class="step"><p class="step-num">03</p><h3>Check every figure in SQL</h3><p>Separate SQL queries recompute the numbers, and a test fails if the two disagree.</p><code>sql/diagnostic_pipeline_analytics.sql</code></li>
+        <li class="step"><p class="step-num">04</p><h3>Build the site and deck</h3><p>The case study, dashboard and slides all read one results file.</p><code>data/metrics.json</code></li>
+      </ol>
     </section>
 
     <!-- Event log -->
     <section class="section" id="data">
       <p class="section-num">01 · Synthetic event log</p>
       <h2>20,000 orders, eight timestamps each</h2>
+      <p class="in-short">The orders are synthetic, but tuned to match the real project's numbers, and tests check every target.</p>
       <p class="lede">Each row is one lab order in one scenario. Stage durations are never stored; they are mined from the timestamps, the same way a real LIS export would be analysed.</p>
       <div class="grid-2">
         <div class="card">
@@ -90,7 +97,8 @@
     <!-- Mining -->
     <section class="section" id="mining">
       <p class="section-num">02 · Process mining</p>
-      <h2>Stage latency mined from timestamps</h2>
+      <h2>How long each step took, measured from timestamps</h2>
+      <p class="in-short">A Python script works out how long each order spent at every step and ranks the steps by wasted time.</p>
       <p class="lede"><code>analysis/process_mining_analysis.py</code> derives every stage duration from consecutive events, ranks stages by non-value-added minutes and classifies path variants. Its output, <code>metrics.json</code>, feeds the case study and the deck.</p>
       <div class="code-result">
         <div>
@@ -132,6 +140,7 @@ bottlenecks = [
     <section class="section" id="sql">
       <p class="section-num">03 · SQL suite</p>
       <h2>The same answers, in PostgreSQL</h2>
+      <p class="in-short">The same numbers are worked out a second time in SQL, and a test checks that both answers match.</p>
       <p class="lede"><code>sql/diagnostic_pipeline_analytics.sql</code> re-derives the metrics with CTEs, <code>EXTRACT(EPOCH …)</code> interval math, <code>PERCENTILE_CONT</code>, <code>RANK() OVER</code> and a rolling <code>AVG() OVER</code>. Results below were captured by running the file; <code>tests/test_sql.py</code> checks they match the Python output.</p>
       <p class="result-meta" id="sql-engine"></p>
       <div id="sql-blocks"></div>
@@ -141,6 +150,7 @@ bottlenecks = [
     <section class="section" id="diagrams">
       <p class="section-num">04 · Swimlanes</p>
       <h2>Process maps as code</h2>
+      <p class="in-short">The process maps are written as code, so a test can check the site shows exactly the same steps.</p>
       <p class="lede">The As-Is (18 steps) and To-Be (12 steps) cross-functional maps are Mermaid flowcharts with one subgraph per lane, kept in <code>diagrams/</code> and embedded in the case study. A test keeps the embedded copies identical to the source files.</p>
       <div class="cta-row">
         <a class="btn secondary" href="index.html#as-is">View As-Is map</a>
@@ -152,6 +162,7 @@ bottlenecks = [
     <section class="section" id="downloads">
       <p class="section-num">05 · Deliverables</p>
       <h2>Downloads</h2>
+      <p class="in-short">Everything used to build the site is here: the deck, the data and the scripts.</p>
       <ul class="download-list">
         <li><a href="deck/sovereign-health-exec-briefing.pptx" download><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="4" width="18" height="13" rx="2"/><path d="M8 21h8M12 17v4"/></svg><span>Executive briefing deck<small>10 slides · PowerPoint</small></span></a></li>
         <li><a href="data/event_log.csv" download><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 4h16v16H4zM4 10h16M4 15h16M10 4v16"/></svg><span>event_log.csv<small>20,000 orders · 4.1 MB</small></span></a></li>

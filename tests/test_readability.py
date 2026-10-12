@@ -181,3 +181,20 @@ def test_takeaways_clear_when_no_orders_match(open_page):
     page.select_option("#f-facility", "C01")
     assert all(t.strip() == "" for t in page.locator(".chart-takeaway").all_inner_texts())
     assert "NaN" not in page.inner_text("main")
+
+
+METHODS_SECTIONS = ["data", "mining", "sql", "diagrams", "downloads"]
+
+
+def test_methods_explains_the_pipeline_in_four_steps():
+    strip = re.search(r'<ol class="pipeline-strip".*?</ol>', read("methods.html"), re.S)
+    assert strip, "no pipeline strip"
+    assert len(re.findall(r'<li class="step">', strip.group(0))) == 4
+    for path in re.findall(r"<code>([^<]+)</code>", strip.group(0)):
+        assert (ROOT / path).exists(), path
+
+
+@pytest.mark.parametrize("section", METHODS_SECTIONS)
+def test_methods_sections_open_with_in_short(section):
+    lines = in_short_text(read("methods.html"), section)
+    assert len(lines) == 1 and 5 <= len(lines[0].split()) <= 25
