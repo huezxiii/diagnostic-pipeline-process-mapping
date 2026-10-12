@@ -156,6 +156,39 @@
     }
   }
 
+  // Sections that make up each stage of the story told by the progress rail.
+  const STORY = {
+    problem: ['problem', 'scope'],
+    cause: ['as-is', 'bottlenecks', 'value-stream'],
+    fix: ['to-be', 'levers', 'roadmap'],
+    result: ['impact', 'roi', 'conclusion'],
+  };
+
+  function initProgressRail() {
+    const rail = document.querySelector('.progress-rail');
+    if (!rail || !('IntersectionObserver' in window)) return;
+    const order = Object.keys(STORY);
+    const stageOf = {};
+    for (const [stage, ids] of Object.entries(STORY)) ids.forEach((id) => { stageOf[id] = stage; });
+    const setActive = (stage) => {
+      const at = order.indexOf(stage);
+      rail.querySelectorAll('[data-stage]').forEach((a) => {
+        const i = order.indexOf(a.dataset.stage);
+        a.classList.toggle('done', i < at);
+        if (i === at) a.setAttribute('aria-current', 'step');
+        else a.removeAttribute('aria-current');
+      });
+    };
+    // A thin band across the middle of the viewport decides which section is "current".
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach((e) => { if (e.isIntersecting) setActive(stageOf[e.target.id]); });
+    }, { rootMargin: '-45% 0px -50% 0px' });
+    Object.keys(stageOf).forEach((id) => {
+      const section = document.getElementById(id);
+      if (section) io.observe(section);
+    });
+  }
+
   bindMetrics();
   bindRoi();
   drawValueStream();
@@ -163,4 +196,5 @@
   drawRoiChart();
   C.wireTableToggles();
   renderSwimlanes();
+  initProgressRail();
 })();

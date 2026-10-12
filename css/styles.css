@@ -357,6 +357,29 @@ dfn[data-term] {
 .glossary-list dt { font-weight: 600; margin-bottom: 4px; }
 .glossary-list dd { margin: 0; font-size: 15px; color: var(--ink-2); }
 
+/* ---------- Progress rail (case study) ---------- */
+.progress-rail { border-top: 1px solid var(--line); }
+.progress-rail ol {
+  list-style: none; margin: 0 auto; padding: 0 var(--gutter); max-width: var(--max);
+  display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px;
+}
+.progress-rail a {
+  display: flex; align-items: center; gap: 8px; min-height: 44px;
+  font-size: 13px; font-weight: 500; color: var(--ink-2); text-decoration: none;
+}
+.progress-rail a::after { content: ""; flex: 1; height: 2px; border-radius: 1px; background: var(--line); }
+.progress-rail li:last-child a::after { display: none; }
+.progress-rail .dot {
+  display: grid; place-items: center; flex: none; width: 22px; height: 22px; border-radius: 50%;
+  font-family: var(--font-mono); font-size: 12px; background: var(--surface-2); color: var(--ink-2);
+}
+.progress-rail a.done { color: var(--ink); }
+.progress-rail a.done .dot { background: var(--brand); color: var(--brand-ink); }
+.progress-rail a.done::after { background: var(--brand); }
+.progress-rail a[aria-current="step"] { color: var(--brand); font-weight: 600; }
+.progress-rail a[aria-current="step"] .dot { background: var(--surface); color: var(--brand); box-shadow: 0 0 0 2px var(--brand); }
+:root:has(.progress-rail) { scroll-padding-top: 116px; }
+
 /* ---------- Responsive ---------- */
 @media (max-width: 960px) {
   .sipoc { grid-template-columns: repeat(2, minmax(0, 1fr)); }
@@ -376,6 +399,8 @@ dfn[data-term] {
   .kpi-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .kpi-value { font-size: 22px; }
   .brand small { display: none; }
+  .progress-rail a::after { display: none; }
+  .progress-rail a { font-size: 12px; gap: 6px; }
   .nav-links a { padding: 6px 8px; font-size: 13px; }
   select { min-width: 0; width: 100%; }
   .control { flex: 1 1 140px; }

@@ -105,3 +105,14 @@ def test_glossary_lists_every_term(open_page):
     for i in range(rows.count()):
         assert rows.nth(i).locator("dt").inner_text().strip()
         assert len(rows.nth(i).locator("dd").inner_text().split()) >= 5
+
+
+def test_progress_rail_tracks_the_story(open_page):
+    page = open_page("index.html")
+    texts = [re.sub(r"\s+", "", t) for t in page.locator(".progress-rail a[data-stage]").all_inner_texts()]
+    assert texts == ["1Problem", "2Cause", "3Fix", "4Result"]
+    page.evaluate("document.getElementById('levers').scrollIntoView({block: 'start'})")
+    page.wait_for_timeout(300)
+    assert page.locator('.progress-rail [aria-current="step"]').get_attribute("data-stage") == "fix"
+    assert page.locator(".progress-rail a.done").count() == 2
+    assert page.locator(".progress-rail").is_visible()  # sticky header keeps it on screen
