@@ -321,7 +321,7 @@ table.data tbody tr:hover { background: #fafaf7; }
 .pair-link, .lever .pair-link { margin: 0 0 10px; }
 .bottleneck .pair-link { margin: 14px 0 0; }
 .pair-link a {
-  display: inline-flex; align-items: center; min-height: 32px; padding: 4px 12px; border-radius: 999px;
+  display: inline-flex; align-items: center; min-height: 44px; padding: 4px 12px; border-radius: 999px;
   background: var(--brand-soft); color: var(--brand); font-size: 13px; font-weight: 500; text-decoration: none;
 }
 .pair-link a:hover { text-decoration: underline; }
