@@ -12,7 +12,7 @@ Sovereign Health System is a fictional organization. All data is synthetic and g
 | Page | What it shows |
 |---|---|
 | `index.html` | Case study: problem, SIPOC, As-Is and To-Be swimlanes, bottlenecks, value stream, levers, roadmap, impact and ROI |
-| `dashboard.html` | Interactive dashboard over 20,000 synthetic orders. Scenario toggle (As-Is / To-Be / Compare), filters for source, priority and facility, seven KPI tiles, six charts with table views, and path variants |
+| `dashboard.html` | Interactive dashboard over 20,000 synthetic orders, with a scenario toggle (As-Is, To-Be or Compare), filters for source, priority and facility, seven KPI tiles, six charts that each have a table view, and path variants |
 | `methods.html` | How the numbers were made: calibration results, Python mining excerpts, every SQL query beside its result, downloads |
 
 Every dashboard figure is computed in the browser from the filtered orders. Case-study figures are bound to `data/metrics.json`, so the page, dashboard and deck always agree.
@@ -26,9 +26,9 @@ analysis/run_sql.py                  SQL suite in DuckDB -> data/sql_results.jso
 deck/build_deck.js                   PptxGenJS        -> deck/sovereign-health-exec-briefing.pptx
 ```
 
-- **Event log.** Seed 42, 10,000 orders per scenario. Stage times are gamma-distributed with source, priority and arrival-hour effects, then calibrated to the plan's baseline (18.6 h TAT, 3.76% PCE, 38% STAT, 8.4% re-key errors and so on). Stage durations are mined from timestamps, not stored.
-- **SQL.** Written in PostgreSQL dialect (CTEs, `EXTRACT(EPOCH …)`, `PERCENTILE_CONT`, `RANK() OVER`, rolling `AVG() OVER`) and validated by running it in DuckDB. Results must match the Python metrics.
-- **Assumption.** The plan gives totals only, so the 1,116-minute As-Is cycle is allocated across stages (see `docs/superpowers/specs/`).
+- The event log uses seed 42 and 10,000 orders per scenario. Stage times are gamma-distributed with source, priority and arrival-hour effects, then calibrated to the plan's baseline (18.6 h TAT, 3.76% PCE, 38% STAT, 8.4% re-key errors and so on). Stage durations are not stored; the mining script derives them from the timestamps.
+- The SQL is written in PostgreSQL dialect (CTEs, `EXTRACT(EPOCH …)`, `PERCENTILE_CONT`, `RANK() OVER`, rolling `AVG() OVER`) and validated by running it in DuckDB. Results must match the Python metrics.
+- One assumption: the plan gives totals only, so the 1,116-minute As-Is cycle is allocated across stages (see `docs/superpowers/specs/`).
 
 ## Run locally
 

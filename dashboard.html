@@ -130,7 +130,7 @@
         <div class="chart-head">
           <div>
             <h2><dfn data-term="stat">STAT</dfn> <dfn data-term="priority-inversion">priority inversion</dfn></h2>
-            <p>Mean testing-queue wait (excluding analyzer time) by priority class.</p>
+            <p>Average wait in the testing queue for each priority class, not counting analyzer time.</p>
           </div>
           <button type="button" class="table-toggle" aria-pressed="false">Table</button>
         </div>
@@ -144,7 +144,7 @@
         <div class="chart-head">
           <div>
             <h2>Wasted minutes, biggest first</h2>
-            <p>Non-value-added minutes per stage, largest first. Hover for cumulative share.</p>
+            <p>Minutes of waiting and rework at each step. Hover a bar to see the running share of the total.</p>
           </div>
           <button type="button" class="table-toggle" aria-pressed="false">Table</button>
         </div>
@@ -157,7 +157,7 @@
         <div class="chart-head">
           <div>
             <h2>Errors and repeat work</h2>
-            <p>Share of orders needing re-keying, re-collection or manual exception handling.</p>
+            <p>Share of orders that needed re-keying, re-collection or manual exception handling.</p>
           </div>
           <button type="button" class="table-toggle" aria-pressed="false">Table</button>
         </div>
