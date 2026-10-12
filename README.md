@@ -2,6 +2,9 @@
 
 A portfolio case study on lab turnaround time. It shows how process mapping and event-log mining cut mean time-to-result from 18.6 hours to 4.6 hours without new analyzer hardware.
 
+- **Live site:** [https://diagnostic-pipeline-process-mapping.netlify.app](https://diagnostic-pipeline-process-mapping.netlify.app)
+- **GitHub:** [https://github.com/huezxiii/diagnostic-pipeline-process-mapping](https://github.com/huezxiii/diagnostic-pipeline-process-mapping)
+
 Sovereign Health System is a fictional organization. All data is synthetic and generated for portfolio demonstration.
 
 ## What's in the site

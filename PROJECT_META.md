@@ -4,7 +4,7 @@ primary_language: "HTML/JS"
 technologies: ["Chart.js", "Mermaid", "Prism", "Python", "pandas", "NumPy", "DuckDB", "PostgreSQL", "Playwright", "Node.js", "PptxGenJS", "Netlify"]
 type: "DASH-WEB"
 domain: "DATA-ANALYTICS"
-stage: "ACTIVE"
+stage: "PROD"
 stack: "JS-VANILLA"
 tags: ["process-mapping", "value-stream-mapping", "process-mining", "healthcare-operations", "lab-turnaround", "sipoc", "swimlane", "bottleneck-analysis", "roi", "synthetic-data", "netlify", "powerpoint"]
 run_command: "python -m http.server 8080"
@@ -12,7 +12,7 @@ launch_url: "http://localhost:8080"
 ---
 
 # Project Overview
-A three-page static site (case study, interactive dashboard, methods) for a fictional health system's lab diagnostic pipeline. Process mapping and event-log mining cut mean time-to-result from 18.6 h to 4.6 h. Not yet deployed: Netlify-ready, repository local only.
+A three-page static site (case study, interactive dashboard, methods) for a fictional health system's lab diagnostic pipeline. Process mapping and event-log mining cut mean time-to-result from 18.6 h to 4.6 h. Deployed on Netlify (https://diagnostic-pipeline-process-mapping.netlify.app) and version-controlled on GitHub.
 
 ## Technologies Used
 * **Languages:** HTML5, CSS3, JavaScript (ES2020), Python 3.12+, SQL (PostgreSQL dialect)
