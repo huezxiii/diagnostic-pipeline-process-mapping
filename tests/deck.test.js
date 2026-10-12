@@ -44,3 +44,40 @@ test('deck has 10 slides with figures from metrics.json', async () => {
   }
   fs.unlinkSync(out);
 });
+
+async function buildDeck() {
+  const out = path.join(os.tmpdir(), `deck-read-${process.pid}-${Date.now()}.pptx`);
+  execFileSync(process.execPath, [path.join(ROOT, 'deck', 'build_deck.js'), out], { stdio: 'pipe' });
+  const zip = await JSZip.loadAsync(fs.readFileSync(out));
+  fs.unlinkSync(out);
+  return zip;
+}
+
+const strip = (xml) => xml.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim();
+
+test('every slide has a takeaway title and a plain subtitle', async () => {
+  const zip = await buildDeck();
+  const files = Object.keys(zip.files).filter((f) => /^ppt\/slides\/slide\d+\.xml$/.test(f));
+  assert.equal(files.length, 10);
+  for (const f of files) {
+    const xml = await zip.file(f).async('string');
+    assert.ok(xml.includes('name="subtitle"'), `${f} has no subtitle`);
+    const shape = xml.split('<p:sp>').find((s) => s.includes('type="title"'));
+    const title = [...shape.matchAll(/<a:t>([^<]*)<\/a:t>/g)].map((m) => m[1]).join('');
+    assert.ok(title.split(/\s+/).length >= 5, `${f} title too short: "${title}"`);
+    assert.ok(!title.trim().endsWith(':'), `${f} title ends with a colon`);
+  }
+});
+
+test('every slide has a two-sentence talking point in its notes', async () => {
+  const zip = await buildDeck();
+  const files = Object.keys(zip.files).filter((f) => /^ppt\/notesSlides\/notesSlide\d+\.xml$/.test(f));
+  assert.equal(files.length, 10);
+  for (const f of files) {
+    const text = strip(await zip.file(f).async('string'));
+    const m = text.match(/Talking point: (.*?)(?: Detail: |$)/);
+    assert.ok(m, `${f} has no talking point`);
+    const sentences = (m[1].match(/[.!?](\s|$)/g) || []).length;
+    assert.ok(sentences >= 2, `${f} talking point has ${sentences} sentence(s)`);
+  }
+});

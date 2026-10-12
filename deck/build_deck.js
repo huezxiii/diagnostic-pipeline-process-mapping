@@ -64,7 +64,7 @@ pres.defineSlideMaster({
   margin: [0.5, 0.6, 0.6, 0.6],
   objects: [
     { placeholder: { options: { name: 'kicker', type: 'body', x: 0.6, y: 0.4, w: 9, h: 0.35, fontFace: BODY, fontSize: 12, bold: true, color: MUTED, charSpacing: 2, margin: 0 }, text: '' } },
-    { placeholder: { options: { name: 'title', type: 'title', x: 0.6, y: 0.8, w: 12.1, h: 0.9, fontFace: HEAD, fontSize: 30, bold: true, color: INK, valign: 'top', align: 'left', margin: 0 }, text: '' } },
+    { placeholder: { options: { name: 'title', type: 'title', x: 0.6, y: 0.8, w: 12.1, h: 0.6, fontFace: HEAD, fontSize: 28, bold: true, color: INK, valign: 'top', align: 'left', margin: 0 }, text: '' } },
     { text: { text: DISCLAIMER, options: { x: 0.6, y: 7.0, w: 10, h: 0.3, fontFace: BODY, fontSize: 9, color: MUTED, margin: 0 } } },
   ],
   slideNumber: { x: 12.2, y: 7.0, w: 0.5, h: 0.3, fontFace: BODY, fontSize: 9, color: MUTED, align: 'right' },
@@ -72,11 +72,18 @@ pres.defineSlideMaster({
 
 // ---------- Helpers ----------
 let section = '';
-function contentSlide(kicker, title, notes) {
+function notes(say, detail) {
+  return `Talking point: ${say}\n\nDetail: ${detail}`;
+}
+
+function contentSlide(kicker, title, subtitle, say, detail) {
   const s = pres.addSlide({ masterName: 'CONTENT', sectionTitle: section });
   s.addText(kicker.toUpperCase(), { placeholder: 'kicker' });
   s.addText(title, { placeholder: 'title' });
-  if (notes) s.addNotes(notes);
+  s.addText(subtitle, {
+    x: 0.6, y: 1.42, w: 12.1, h: 0.4, fontFace: BODY, fontSize: 16, color: MUTED, margin: 0, isTextBox: true, objectName: 'subtitle',
+  });
+  s.addNotes(notes(say, detail));
   return s;
 }
 
@@ -108,17 +115,19 @@ pres.addSection({ title: section });
 {
   const s = pres.addSlide({ masterName: 'DARK', sectionTitle: section });
   s.addText('SOVEREIGN HEALTH SYSTEM · EXECUTIVE BRIEFING', { placeholder: 'kicker' });
-  s.addText(`Lab turnaround: ${hoursNb(A.mean_tat)} to ${hoursNb(B.mean_tat)}`, { placeholder: 'title' });
-  s.addText('Process mapping, value stream analysis and a 16-week plan to remove the queues around a $6.5M analyzer investment', {
-    x: 0.8, y: 2.7, w: 10.5, h: 1.0, fontFace: BODY, fontSize: 20, color: ICE, valign: 'top', margin: 0, isTextBox: true,
+  s.addText(`Cutting lab result time from ${hoursNb(A.mean_tat)} to ${hoursNb(B.mean_tat)}`, { placeholder: 'title' });
+  s.addText('The fix uses the same analyzers and staff. It changes how samples and information move between teams.', {
+    x: 0.8, y: 2.7, w: 10.5, h: 1.0, fontFace: BODY, fontSize: 20, color: ICE, valign: 'top', margin: 0, isTextBox: true, objectName: 'subtitle',
   });
   s.addText(DISCLAIMER, { x: 0.8, y: 6.7, w: 11.7, h: 0.4, fontFace: BODY, fontSize: 11, color: ICE, margin: 0, isTextBox: true });
-  s.addNotes('Purpose: approve a $520K, 16-week program that cuts lab time-to-result by three quarters. Structure: what is happening, why it matters, what we do about it.');
+  s.addNotes(notes(`Lab results now take ${hours(A.mean_tat)} on average, up from 4.2 h. This briefing shows where the time goes and asks for ${money(F.CAPEX)} to bring it down to ${hours(B.mean_tat)}.`, 'Structure: what is happening, why it matters, what we do about it.'));
 }
 
 // ===================== Slide 2: situation =====================
 {
   const s = contentSlide('What? · Situation', `Testing takes 42 minutes of an ${hoursNb(A.mean_tat)} wait`,
+    'The new analyzers work. Samples spend the rest of the day waiting around them.',
+    `The analyzers work on each sample for ${mins(A.mean_va)}. The other ${hours(A.mean_tat - A.mean_va)} is spent waiting before and after.`,
     'The analyzer upgrade did its job. Everything around it did not scale: 96% of the cycle is queueing, transit, re-keying and exception handling.');
   const items = [
     [hours(A.mean_tat), 'Mean time-to-result today, up from 4.2 h before the expansion', AS_IS],
@@ -140,7 +149,9 @@ pres.addSection({ title: section });
 {
   const ranked = A.bottlenecks;
   const top = ranked[0];
-  const s = contentSlide('What? · Where the time goes', `Central accessioning holds ${pct(top.share_of_nva, 0)} of all waiting time`,
+  const s = contentSlide('What? · Where the time goes', `Sample intake holds ${pct(top.share_of_nva, 0)} of all waiting time`,
+    'Logging samples in when they arrive is the biggest single queue.',
+    `The biggest single wait is at sample intake, where tubes are logged in by hand. ${pct(A.outpatient_peak_arrival_share, 0)} of clinic samples arrive between 4 and 6 PM, just as evening staffing drops.`,
     'Minutes come from timestamps mined across 10,000 orders. Testing shows queue time only; the 42-minute analyzer run is excluded.');
   s.addChart(pres.charts.BAR, [{
     name: 'As-Is non-value-added minutes',
@@ -163,8 +174,10 @@ pres.addSection({ title: section });
 section = 'So What?';
 pres.addSection({ title: section });
 {
-  const s = contentSlide('So What? · Root causes', 'Four bottlenecks drive the delay',
-    'Each bottleneck maps to one lever on slide 8.');
+  const s = contentSlide('So What? · Root causes', 'Four problems cause most of the delay',
+    'Each problem has a matching fix on slide 8.',
+    `Four problems cause most of the delay, and each has a fix later in the deck. One is that ${pct(A.stat_ratio, 0)} of orders are marked urgent, so real emergencies get stuck behind routine work.`,
+    'Ranked by non-value-added minutes from the event log.');
   const p = A.priority;
   const cards = [
     [hours(A.stage_means.accessioning), 'Accessioning wave', `Batch arrivals meet manual rescans; ${pct(A.rekey_error_rate)} of entries need re-keying`],
@@ -184,24 +197,32 @@ pres.addSection({ title: section });
 
 // ===================== Slide 5: value stream =====================
 {
-  const s = contentSlide('So What? · Value stream', `Only ${pct(A.pce, 2)} of the cycle adds value`,
+  const s = contentSlide('So What? · Value stream', `Only ${pct(A.pce, 0)} of the ${hoursNb(A.mean_tat)} is real work`,
+    'The rest is samples waiting in queues between teams.',
+    'For every hour a sample spends in the system, less than three minutes is real work. The rest is waiting, transport and fixing mistakes.',
     'Process cycle efficiency = value-added time / total cycle time. The healthcare benchmark is above 15%.');
+  card(s, 0.6, 1.95, 4.2, 4.6, 'waiting-share');
+  s.addText(pct(1 - A.pce, 0), { x: 0.9, y: 2.2, w: 3.6, h: 1.3, fontFace: HEAD, fontSize: 72, bold: true, color: AS_IS, margin: 0, isTextBox: true });
+  s.addText(`of the ${hours(A.mean_tat)} is waiting, moving or rework`, { x: 0.9, y: 3.5, w: 3.6, h: 0.7, fontFace: BODY, fontSize: 16, color: INK, valign: 'top', margin: 0, isTextBox: true });
+  s.addText([
+    { text: `Process cycle efficiency: ${pct(A.pce, 2)} today`, options: { breakLine: true } },
+    { text: `${pct(B.pce, 2)} after the redesign (benchmark above 15%)` },
+  ], { x: 0.9, y: 4.6, w: 3.6, h: 1.0, fontFace: BODY, fontSize: 13, color: MUTED, valign: 'top', margin: 0, isTextBox: true });
   s.addChart(pres.charts.BAR, [
     { name: 'Value-added', labels: ['As-Is', 'To-Be'], values: [Math.round(A.mean_va), Math.round(B.mean_va)] },
     { name: 'Waiting, transit, rework', labels: ['As-Is', 'To-Be'], values: [Math.round(A.mean_tat - A.mean_va), Math.round(B.mean_tat - B.mean_va)] },
   ], Object.assign({}, CHART_BASE, {
-    x: 0.6, y: 1.9, w: 8.0, h: 4.6, barDir: 'bar', barGrouping: 'stacked', catAxisOrientation: 'maxMin',
+    x: 5.1, y: 1.95, w: 7.6, h: 4.6, barDir: 'bar', barGrouping: 'stacked', catAxisOrientation: 'maxMin',
     chartColors: [VA, 'B7BCC4'], dataLabelPosition: 'ctr', showLegend: true, legendPos: 'b', legendFontFace: BODY, legendFontSize: 12, legendColor: MUTED,
     showTitle: true, title: 'Minutes per order', titleFontFace: BODY, titleFontSize: 13, titleColor: MUTED, barGapWidthPct: 70,
   }));
-  card(s, 9.0, 1.9, 3.7, 4.6, 'pce-callout');
-  stat(s, 9.3, 2.2, 3.1, pct(A.pce, 2), 'As-Is process cycle efficiency', AS_IS, 40);
-  stat(s, 9.3, 4.2, 3.1, pct(B.pce, 2), 'To-Be, above the 15% benchmark', TO_BE, 40);
 }
 
 // ===================== Slide 6: impact =====================
 {
   const s = contentSlide('So What? · Business impact', 'The delay costs $6.0M a year before patient risk',
+    'Hospital penalties and overtime come straight out of the budget.',
+    `The delay costs about $6M a year in penalties and overtime. Doctors also wait ${mins(A.mean_critical_lag)} to hear about dangerous results.`,
     'Penalties and overtime are annual figures from finance. Patient risk shows up as ED length of stay and a 48-minute critical-value lag.');
   const items = [
     ['$4.8M', 'ED penalties, bed blockage and walk-outs (+3.4 h ED length of stay)'],
@@ -223,7 +244,9 @@ pres.addSection({ title: section });
 section = 'Now What?';
 pres.addSection({ title: section });
 {
-  const s = contentSlide('Now What? · To-Be design', 'Five lanes, 12 steps, no manual handoffs',
+  const s = contentSlide('Now What? · To-Be design', 'The new process has 12 steps and no retyping',
+    'Scans and automatic messages replace the steps where people retyped data.',
+    `The new process removes six steps and every point where people retype data. Logging samples in drops from ${hours(A.stage_means.accessioning)} to ${mins(B.stage_means.accessioning)}.`,
     'Steps fall from 18 to 12. Every remaining handoff is a scan or an API call.');
   const lanes = [
     ['Order entry', 'Auto-barcoded EHR orders and smart phlebotomy scans'],
@@ -250,6 +273,8 @@ pres.addSection({ title: section });
 // ===================== Slide 8: levers =====================
 {
   const s = contentSlide('Now What? · Levers', 'Four changes, each aimed at one queue',
+    'None of the fixes depend on staff working faster.',
+    'Each change targets one of the four problems from slide 4. The table shows the before and after for each one.',
     'Before/after values for accessioning, clinic hold and exceptions are mined means from the simulated To-Be scenario.');
   const head = ['Lever', 'Targets', 'Before', 'After'].map((t) => ({ text: t, options: { bold: true, color: 'FFFFFF', fill: { color: NAVY } } }));
   const rows = [
@@ -270,6 +295,8 @@ pres.addSection({ title: section });
 // ===================== Slide 9: impact & ROI =====================
 {
   const s = contentSlide('Now What? · Impact', `${CMP.tat_reduction_pct.toFixed(1)}% faster, ${money(F.totalSavings())} a year, paid back in ${F.paybackMonths().toFixed(1)} months`,
+    'The money comes back within two months, and every quality measure improves.',
+    `Results come back ${CMP.tat_reduction_pct.toFixed(1)}% faster and the program saves ${money(F.totalSavings())} a year. It pays for itself in ${F.paybackMonths().toFixed(1)} months.`,
     'ROI = (annual savings - capex) / capex. Savings categories: ED penalties $2.4M, overtime $850K, length of stay $680K, rework $420K.');
   const head = ['Metric', 'As-Is', 'To-Be'].map((t, i) => ({ text: t, options: { bold: true, color: 'FFFFFF', fill: { color: NAVY }, align: i ? 'right' : 'left' } }));
   const rows = [
@@ -302,7 +329,10 @@ pres.addSection({ title: section });
   const s = pres.addSlide({ masterName: 'DARK', sectionTitle: section });
   s.addText('NOW WHAT? · DECISION', { placeholder: 'kicker' });
   s.addText(`Approve ${money(F.CAPEX)} and a ${F.WEEKS}-week program`, { placeholder: 'title' });
-  s.addNotes('Ask: approve capital and name an executive sponsor for the central hub and ED deployment in weeks 11 to 13.');
+  s.addText('Starting needs two things: the capital and a named executive sponsor.', {
+    x: 0.8, y: 2.35, w: 11.7, h: 0.5, fontFace: BODY, fontSize: 18, color: ICE, margin: 0, isTextBox: true, objectName: 'subtitle',
+  });
+  s.addNotes(notes(`We need two things today: approval for ${money(F.CAPEX)} and an executive sponsor. The first results arrive with the central hub and ED rollout in weeks 11 to 13.`, 'Ask: approve capital and name an executive sponsor for the central hub and ED deployment in weeks 11 to 13.'));
   const x0 = 5.2;
   const span = 7.3;
   F.PHASES.forEach((p, i) => {
