@@ -56,3 +56,52 @@ def test_hero_figure_is_bound_to_metrics(open_page):
     assert page.inner_text(".hero-figure .to [data-metric]") == "4.6 h"
     assert page.inner_text("h1") == "Lab results took 18.6 hours. The fix got them to 4.6 hours without buying new machines."
     assert not page.js_errors
+
+
+PAGES = ["index.html", "dashboard.html", "methods.html"]
+TERMS = ["tat", "pce", "stat", "priority-inversion", "sipoc", "accessioning", "value-stream", "swimlane", "rekey"]
+
+
+@pytest.mark.parametrize("name", PAGES)
+def test_jargon_has_definitions(open_page, name):
+    page = open_page(name)
+    terms = page.locator("dfn[data-term]")
+    assert terms.count() >= 2, f"{name}: no defined terms"
+    defs = terms.evaluate_all("els => els.map(e => e.dataset.def || '')")
+    assert all(len(d.split()) >= 5 for d in defs), defs
+    assert not page.js_errors
+
+
+def test_index_defines_every_term():
+    keys = re.findall(r'<dfn data-term="([^"]+)"', read("index.html"))
+    assert sorted(set(keys)) == sorted(TERMS)
+
+
+def test_definition_shows_on_keyboard_focus(open_page):
+    page = open_page("index.html")
+    first = page.locator("dfn[data-term]").first
+    first.focus()
+    tip = page.locator("#dfn-tip")
+    assert tip.is_visible()
+    assert first.get_attribute("data-def") in tip.inner_text()
+    page.keyboard.press("Escape")
+    assert not tip.is_visible()
+
+
+@pytest.mark.parametrize("name", PAGES)
+def test_open_definition_never_scrolls_sideways(open_page, name):
+    page = open_page(name, width=375)
+    last = page.locator("dfn[data-term]").last
+    last.scroll_into_view_if_needed()
+    last.click()
+    assert page.locator("#dfn-tip").is_visible()
+    assert page.evaluate("document.documentElement.scrollWidth - window.innerWidth") <= 0
+
+
+def test_glossary_lists_every_term(open_page):
+    page = open_page("index.html")
+    rows = page.locator("#glossary-list > div")
+    assert rows.count() == len(TERMS)
+    for i in range(rows.count()):
+        assert rows.nth(i).locator("dt").inner_text().strip()
+        assert len(rows.nth(i).locator("dd").inner_text().split()) >= 5

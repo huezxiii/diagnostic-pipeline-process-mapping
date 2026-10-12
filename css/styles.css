@@ -337,6 +337,26 @@ code, pre { font-family: var(--font-mono); }
 .toc a { font-size: 13px; padding: 4px 10px; border-radius: 999px; background: var(--surface); border: 1px solid var(--line); text-decoration: none; color: var(--ink-2); }
 .assumption { background: var(--brand-soft); border-radius: var(--radius); padding: 14px 16px; font-size: 14px; color: var(--ink); margin: 16px 0; }
 
+/* ---------- Definitions & glossary ---------- */
+dfn[data-term] {
+  font-style: normal; cursor: help;
+  text-decoration: underline dotted; text-decoration-color: var(--ink-2); text-underline-offset: 3px;
+}
+.dfn-tip {
+  position: absolute; z-index: 60; max-width: min(320px, calc(100vw - 32px));
+  background: var(--surface); border: 1px solid var(--line-strong); border-radius: var(--radius-sm);
+  box-shadow: var(--shadow); padding: 10px 12px; font-size: 14px; line-height: 1.45; color: var(--ink);
+  font-family: var(--font-sans); font-weight: 400; letter-spacing: 0; text-transform: none;
+}
+.dfn-tip strong {
+  display: block; margin-bottom: 4px; font-family: var(--font-mono); font-size: 11px; font-weight: 500;
+  letter-spacing: 0.06em; text-transform: uppercase; color: var(--ink-2);
+}
+.glossary-list { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; margin: 16px 0 0; }
+.glossary-list > div { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 14px 16px; }
+.glossary-list dt { font-weight: 600; margin-bottom: 4px; }
+.glossary-list dd { margin: 0; font-size: 15px; color: var(--ink-2); }
+
 /* ---------- Responsive ---------- */
 @media (max-width: 960px) {
   .sipoc { grid-template-columns: repeat(2, minmax(0, 1fr)); }
@@ -344,7 +364,7 @@ code, pre { font-family: var(--font-mono); }
   .code-result { grid-template-columns: minmax(0, 1fr); }
 }
 @media (max-width: 760px) {
-  .chart-grid, .grid-2, .grid-3, .roi-figures, .boundary { grid-template-columns: minmax(0, 1fr); }
+  .chart-grid, .grid-2, .grid-3, .roi-figures, .boundary, .glossary-list { grid-template-columns: minmax(0, 1fr); }
   .roadmap-row, .roadmap-scale { grid-template-columns: 1fr; gap: 4px; }
   .roadmap-scale .label-col { display: none; }
   .chart-box, .chart-card.wide .chart-box { height: 260px; }

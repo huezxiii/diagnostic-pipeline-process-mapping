@@ -87,7 +87,7 @@
         <p class="section-num">02 · Scope</p>
         <h2>One pipeline, physician order to billed result</h2>
         <p class="in-short">Before mapping anything, the teams agreed where the process starts (the doctor's order) and where it ends (the bill).</p>
-        <p class="lede">A SIPOC outline fixed the boundaries first, so clinical, logistics and IT teams were arguing about the same process.</p>
+        <p class="lede">A <dfn data-term="sipoc">SIPOC</dfn> outline fixed the boundaries first, so clinical, logistics and IT teams were arguing about the same process.</p>
         <div class="boundary">
           <div><strong>Start point</strong>Physician submits a lab requisition in the EHR.</div>
           <div><strong>End point</strong>Verified result is written to the patient chart and billed to insurance.</div>
@@ -123,7 +123,7 @@
         <p class="section-num">03 · As-Is process map</p>
         <h2>18 steps across five teams, with four queues</h2>
         <p class="in-short">A sample passed through five teams and 18 steps, and it sat in a queue four times along the way.</p>
-        <p class="lede">Each row of this swimlane map is one team. The sample changes hands nine times and needs four manual sign-offs. Queue times are averages measured from the order timestamps.</p>
+        <p class="lede">Each row of this <dfn data-term="swimlane">swimlane map</dfn> is one team. The sample changes hands nine times and needs four manual sign-offs. Queue times are averages measured from the order timestamps.</p>
         <figure class="swimlane" id="as-is-map">
           <pre class="mermaid" aria-label="As-Is cross-functional swimlane diagram">
 flowchart TB
@@ -182,15 +182,15 @@ flowchart TB
         <p class="lede">Ranking every step by wasted minutes put these four at the top.</p>
         <div class="grid-2">
           <article class="card bottleneck">
-            <h3>1. Central accessioning (Queue 3)</h3>
+            <h3>1. Central <dfn data-term="accessioning">accessioning</dfn> (Queue 3)</h3>
             <p class="stat"><span data-metric="scenarios.as_is.stage_means.accessioning" data-fmt="hours">4.5 h</span> mean queue</p>
             <dl>
               <dt>Mechanism</dt><dd>60% of clinic specimens arrive in one wave between 4 and 6 PM. Staff rescan every tube and cross-check IDs in a legacy terminal while evening staffing drops 30%.</dd>
-              <dt>Impact</dt><dd>A 4.5-hour backlog and an 8.4% re-key error rate.</dd>
+              <dt>Impact</dt><dd>A 4.5-hour backlog and an 8.4% <dfn data-term="rekey">re-key error</dfn> rate.</dd>
             </dl>
           </article>
           <article class="card bottleneck">
-            <h3>2. STAT priority inversion</h3>
+            <h3>2. <dfn data-term="stat">STAT</dfn> <dfn data-term="priority-inversion">priority inversion</dfn></h3>
             <p class="stat"><span data-metric="scenarios.as_is.stat_ratio" data-fmt="pct0">38%</span> of orders tagged STAT</p>
             <dl>
               <dt>Mechanism</dt><dd>Clinicians tag routine work as STAT to jump slow queues, flooding the express centrifuges.</dd>
@@ -223,7 +223,7 @@ flowchart TB
         <p class="section-num">05 · Value stream</p>
         <h2>Only 42 minutes of 18.6 hours was real work</h2>
         <p class="in-short">Testing is the only step that changes the sample. Everything else, about 96% of the time, is waiting, moving or fixing mistakes.</p>
-        <p class="lede">Across the whole value stream, process cycle efficiency (the share of time spent on real work) was <span data-metric="scenarios.as_is.pce" data-fmt="pct">3.8%</span>. Hospitals aim for more than 15%.</p>
+        <p class="lede">Across the whole <dfn data-term="value-stream">value stream</dfn>, <dfn data-term="pce">process cycle efficiency</dfn> (the share of time spent on real work) was <span data-metric="scenarios.as_is.pce" data-fmt="pct">3.8%</span>. Hospitals aim for more than 15%.</p>
         <div id="vsm">
           <div class="vsm-row">
             <h3>As-Is <span><span data-metric="scenarios.as_is.mean_tat" data-fmt="min">1,116 min</span> total · PCE <span data-metric="scenarios.as_is.pce" data-fmt="pct2">3.76%</span></span></h3>
@@ -354,7 +354,7 @@ flowchart TB
           <table class="data" id="impact-table">
             <thead><tr><th>Metric</th><th class="num">As-Is</th><th class="num">To-Be</th><th class="num">Improvement</th></tr></thead>
             <tbody>
-              <tr><td>Mean time-to-result</td><td class="num" data-metric="scenarios.as_is.mean_tat" data-fmt="hours">18.6 h</td><td class="num" data-metric="scenarios.to_be.mean_tat" data-fmt="hours">4.6 h</td><td class="num" data-metric="comparison.tat_reduction_pct" data-fmt="pctPoints">75.3%</td></tr>
+              <tr><td>Mean <dfn data-term="tat">time-to-result</dfn></td><td class="num" data-metric="scenarios.as_is.mean_tat" data-fmt="hours">18.6 h</td><td class="num" data-metric="scenarios.to_be.mean_tat" data-fmt="hours">4.6 h</td><td class="num" data-metric="comparison.tat_reduction_pct" data-fmt="pctPoints">75.3%</td></tr>
               <tr><td>Process cycle efficiency</td><td class="num" data-metric="scenarios.as_is.pce" data-fmt="pct2">3.76%</td><td class="num" data-metric="scenarios.to_be.pce" data-fmt="pct2">15.22%</td><td class="num">+<span data-metric="comparison.pce_increase_pct" data-fmt="pctPoints">304.5%</span></td></tr>
               <tr><td>Accessioning re-key error rate</td><td class="num" data-metric="scenarios.as_is.rekey_error_rate" data-fmt="pct">8.4%</td><td class="num" data-metric="scenarios.to_be.rekey_error_rate" data-fmt="pct">0.1%</td><td class="num" data-metric="comparison.rekey_reduction_pct" data-fmt="pctPoints">98.8%</td></tr>
               <tr><td>Specimen rejection rate</td><td class="num" data-metric="scenarios.as_is.rejection_rate" data-fmt="pct">3.2%</td><td class="num" data-metric="scenarios.to_be.rejection_rate" data-fmt="pct">0.4%</td><td class="num" data-metric="comparison.rejection_reduction_pct" data-fmt="pctPoints">87.5%</td></tr>
@@ -405,6 +405,15 @@ flowchart TB
         </div>
       </div>
     </section>
+
+    <!-- Glossary -->
+    <section class="section" id="glossary">
+      <div class="container">
+        <p class="section-num">Glossary</p>
+        <h2>Terms used on this page</h2>
+        <dl class="glossary-list" id="glossary-list"></dl>
+      </div>
+    </section>
   </main>
 
   <footer class="site-footer">
@@ -419,6 +428,7 @@ flowchart TB
   <script src="js/data.js"></script>
   <script src="js/financials.js"></script>
   <script src="js/charts.js"></script>
+  <script src="js/glossary.js"></script>
   <script src="js/case-study.js"></script>
 </body>
 </html>

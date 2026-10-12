@@ -62,7 +62,7 @@
             <li><code>ts_drawn</code> to <code>ts_dispatched</code>: clinic holding bin</li>
             <li><code>ts_dispatched</code> to <code>ts_received</code>: courier transport</li>
             <li><code>ts_received</code> to <code>ts_exception_cleared</code>: exception hold</li>
-            <li><code>ts_exception_cleared</code> to <code>ts_accessioned</code>: accessioning</li>
+            <li><code>ts_exception_cleared</code> to <code>ts_accessioned</code>: <dfn data-term="accessioning">accessioning</dfn></li>
             <li><code>ts_accessioned</code> to <code>ts_resulted</code>: sort and testing</li>
             <li><code>ts_resulted</code> to <code>ts_verified</code>: verification and EHR sync</li>
           </ol>
@@ -73,8 +73,8 @@
         <table class="data" id="calibration-table">
           <thead><tr><th>Calibration target</th><th class="num">Plan As-Is</th><th class="num">Log As-Is</th><th class="num">Plan To-Be</th><th class="num">Log To-Be</th></tr></thead>
           <tbody>
-            <tr><td>Mean time-to-result</td><td class="num">18.6 h</td><td class="num" data-metric="scenarios.as_is.mean_tat" data-fmt="hours2">—</td><td class="num">4.6 h</td><td class="num" data-metric="scenarios.to_be.mean_tat" data-fmt="hours2">—</td></tr>
-            <tr><td>Process cycle efficiency</td><td class="num">3.76%</td><td class="num" data-metric="scenarios.as_is.pce" data-fmt="pct2">—</td><td class="num">15.2%</td><td class="num" data-metric="scenarios.to_be.pce" data-fmt="pct2">—</td></tr>
+            <tr><td>Mean <dfn data-term="tat">time-to-result</dfn></td><td class="num">18.6 h</td><td class="num" data-metric="scenarios.as_is.mean_tat" data-fmt="hours2">—</td><td class="num">4.6 h</td><td class="num" data-metric="scenarios.to_be.mean_tat" data-fmt="hours2">—</td></tr>
+            <tr><td><dfn data-term="pce">Process cycle efficiency</dfn></td><td class="num">3.76%</td><td class="num" data-metric="scenarios.as_is.pce" data-fmt="pct2">—</td><td class="num">15.2%</td><td class="num" data-metric="scenarios.to_be.pce" data-fmt="pct2">—</td></tr>
             <tr><td>STAT order share</td><td class="num">38%</td><td class="num" data-metric="scenarios.as_is.stat_ratio" data-fmt="pct">—</td><td class="num">8%</td><td class="num" data-metric="scenarios.to_be.stat_ratio" data-fmt="pct">—</td></tr>
             <tr><td>Re-key error rate</td><td class="num">8.4%</td><td class="num" data-metric="scenarios.as_is.rekey_error_rate" data-fmt="pct">—</td><td class="num">0.1%</td><td class="num" data-metric="scenarios.to_be.rekey_error_rate" data-fmt="pct">—</td></tr>
             <tr><td>Specimen rejection rate</td><td class="num">3.2%</td><td class="num" data-metric="scenarios.as_is.rejection_rate" data-fmt="pct">—</td><td class="num">0.4%</td><td class="num" data-metric="scenarios.to_be.rejection_rate" data-fmt="pct">—</td></tr>
@@ -183,6 +183,7 @@ python -m pytest -q &amp;&amp; npm test</code></pre>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js" integrity="sha384-WJdEkJKrbsqw0evQ4GB6mlsKe5cGTxBOw4KAEIa52ZLB7DDpliGkwdme/HMa5n1m" crossorigin="anonymous"></script>
   <script src="js/data.js"></script>
   <script src="js/sql-results.js"></script>
+  <script src="js/glossary.js"></script>
   <script src="js/methods.js"></script>
 </body>
 </html>
