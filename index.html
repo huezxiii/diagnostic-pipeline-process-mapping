@@ -52,12 +52,32 @@
         </div>
         <p class="hero-note"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="m8 12 3 3 5-6"/></svg><span><span data-metric="comparison.tat_reduction_pct" data-fmt="pctPoints">75.3%</span> faster with the same analyzers. The changes cost <span data-roi="capex">$520K</span>, save <span data-roi="savings">$4.35M</span> a year and pay for themselves in <span data-roi="payback">1.4 mo</span>.</span></p>
       </div>
-      <div class="kpi-grid">
-        <div class="kpi"><p class="kpi-label">Process cycle efficiency</p><p class="kpi-value"><span data-metric="scenarios.as_is.pce" data-fmt="pct">3.8%</span> to <span data-metric="scenarios.to_be.pce" data-fmt="pct">15.2%</span></p><p class="kpi-note">Benchmark above 15%</p></div>
-        <div class="kpi"><p class="kpi-label">STAT order share</p><p class="kpi-value"><span data-metric="scenarios.as_is.stat_ratio" data-fmt="pct0">38%</span> to <span data-metric="scenarios.to_be.stat_ratio" data-fmt="pct0">8%</span></p><p class="kpi-note">Priority inversion removed</p></div>
-        <div class="kpi"><p class="kpi-label">Annual operating savings</p><p class="kpi-value" data-roi="savings">$4.35M</p><p class="kpi-note">On $520K capital outlay</p></div>
-        <div class="kpi"><p class="kpi-label">Payback period</p><p class="kpi-value" data-roi="payback">1.4 mo</p><p class="kpi-note">First-year ROI <span data-roi="roi">736.5%</span></p></div>
+      <div class="kpi-grid" id="hero-kpis">
+        <div class="kpi" data-pair="pce">
+          <p class="kpi-label">Share of time doing real work</p>
+          <p class="kpi-pair-values"><s data-metric="scenarios.as_is.pce" data-fmt="pct">3.8%</s><span data-metric="scenarios.to_be.pce" data-fmt="pct">15.2%</span></p>
+          <p class="kpi-note">Hospitals aim for more than 15%</p>
+        </div>
+        <div class="kpi" data-pair="stat_ratio">
+          <p class="kpi-label">Orders marked urgent</p>
+          <p class="kpi-pair-values"><s data-metric="scenarios.as_is.stat_ratio" data-fmt="pct0">38%</s><span data-metric="scenarios.to_be.stat_ratio" data-fmt="pct0">8%</span></p>
+          <p class="kpi-note">Urgent means urgent again</p>
+        </div>
+        <div class="kpi" data-pair="rejection_rate">
+          <p class="kpi-label">Samples rejected</p>
+          <p class="kpi-pair-values"><s data-metric="scenarios.as_is.rejection_rate" data-fmt="pct">3.2%</s><span data-metric="scenarios.to_be.rejection_rate" data-fmt="pct">0.4%</span></p>
+          <p class="kpi-note">Fewer repeat blood draws</p>
+        </div>
+        <div class="kpi" data-pair="mean_critical_lag">
+          <p class="kpi-label">Delay on dangerous results</p>
+          <p class="kpi-pair-values"><s data-metric="scenarios.as_is.mean_critical_lag" data-fmt="min">48 min</s><span data-metric="scenarios.to_be.mean_critical_lag" data-fmt="min">4 min</span></p>
+          <p class="kpi-note">From lab flag to doctor alert</p>
+        </div>
       </div>
+      <ul class="legend" aria-hidden="true">
+        <li><span class="swatch" style="background:var(--series-as-is)"></span>Before (As-Is)</li>
+        <li><span class="swatch" style="background:var(--series-to-be)"></span>After (To-Be)</li>
+      </ul>
       <div class="cta-row">
         <a class="btn primary" href="dashboard.html">Explore the dashboard
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
@@ -234,11 +254,13 @@ flowchart TB
         <p class="lede">Across the whole <dfn data-term="value-stream">value stream</dfn>, <dfn data-term="pce">process cycle efficiency</dfn> (the share of time spent on real work) was <span data-metric="scenarios.as_is.pce" data-fmt="pct">3.8%</span>. Hospitals aim for more than 15%.</p>
         <div id="vsm">
           <div class="vsm-row">
-            <h3>As-Is <span><span data-metric="scenarios.as_is.mean_tat" data-fmt="min">1,116 min</span> total · PCE <span data-metric="scenarios.as_is.pce" data-fmt="pct2">3.76%</span></span></h3>
+            <h3>As-Is <span><span data-metric="scenarios.as_is.mean_tat" data-fmt="hours">18.6 h</span> in total</span></h3>
+            <p class="vsm-head"><span class="vsm-waiting" data-vsm-waiting="as_is">Waiting: 96.2% (17.9 h)</span><span class="vsm-work" data-vsm-work="as_is">Real work: 42 min (3.8%)</span></p>
             <div class="vsm-bar" data-vsm="as_is" role="img" aria-label="As-Is: 42 value-added minutes out of 1,116"></div>
           </div>
           <div class="vsm-row">
-            <h3>To-Be <span><span data-metric="scenarios.to_be.mean_tat" data-fmt="min">276 min</span> total · PCE <span data-metric="scenarios.to_be.pce" data-fmt="pct2">15.22%</span></span></h3>
+            <h3>To-Be <span><span data-metric="scenarios.to_be.mean_tat" data-fmt="hours">4.6 h</span> in total</span></h3>
+            <p class="vsm-head"><span class="vsm-waiting" data-vsm-waiting="to_be">Waiting: 84.8% (3.9 h)</span><span class="vsm-work" data-vsm-work="to_be">Real work: 42 min (15.2%)</span></p>
             <div class="vsm-bar" data-vsm="to_be" role="img" aria-label="To-Be: 42 value-added minutes out of 276"></div>
           </div>
           <div class="vsm-legend">
@@ -247,6 +269,7 @@ flowchart TB
             <span><span class="swatch" style="display:inline-block;background:var(--series-to-be)"></span> To-Be waiting, transit, rework</span>
           </div>
           <p class="kpi-note">Bars share one scale: To-Be is drawn at its true length relative to As-Is.</p>
+          <p class="takeaway">A faster analyzer could only shrink the 42 minutes of testing. The 17.9 hours of waiting would stay.</p>
         </div>
       </div>
     </section>

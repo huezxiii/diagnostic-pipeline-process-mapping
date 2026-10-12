@@ -116,3 +116,28 @@ def test_progress_rail_tracks_the_story(open_page):
     assert page.locator('.progress-rail [aria-current="step"]').get_attribute("data-stage") == "fix"
     assert page.locator(".progress-rail a.done").count() == 2
     assert page.locator(".progress-rail").is_visible()  # sticky header keeps it on screen
+
+
+def test_hero_kpis_show_before_after_bars(open_page):
+    page = open_page("index.html")
+    tiles = page.locator("#hero-kpis .kpi")
+    assert tiles.count() == 4
+    for i in range(4):
+        bars = tiles.nth(i).locator(".pair .pair-bar")
+        assert bars.count() == 2
+        assert "100%" in bars.evaluate_all("els => els.map(e => e.style.width)")
+
+
+def test_value_stream_labels_waiting_share(open_page):
+    page = open_page("index.html")
+    assert page.inner_text('[data-vsm-waiting="as_is"]') == "Waiting: 96.2% (17.9 h)"
+    assert page.inner_text('[data-vsm-work="as_is"]') == "Real work: 42 min (3.8%)"
+    assert page.inner_text('[data-vsm-waiting="to_be"]') == "Waiting: 84.8% (3.9 h)"
+
+
+def test_dashboard_kpis_pair_only_when_comparing(open_page):
+    page = open_page("dashboard.html")
+    assert page.locator("#kpis .pair").count() == 0
+    page.click("[data-view=to_be]")
+    assert page.locator("#kpis .pair").count() == 7
+    assert page.locator("#kpis .kpi-was").first.inner_text().startswith("was ")

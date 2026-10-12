@@ -23,6 +23,7 @@
   --series-as-is: #eb6834;
   --series-va: #1baf7a;
   --series-neutral: #8a8f98;
+  --series-va-text: #0b7a54;
 
   /* Status (reserved; always paired with icon + label) */
   --good: #0ca30c;
@@ -292,6 +293,26 @@ table.data tbody tr:hover { background: #fafaf7; }
 .vsm-row { margin-bottom: 28px; }
 .vsm-row h3 { font-size: 15px; margin-bottom: 0; display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
 .vsm-row h3 span { font-weight: 500; color: var(--ink-2); }
+
+/* ---------- Before/after pairs ---------- */
+.kpi-pair-values { display: flex; align-items: baseline; flex-wrap: wrap; gap: 4px 10px; margin: 0; font-size: 26px; font-weight: 600; line-height: 1.1; }
+.kpi-pair-values s { font-size: 17px; font-weight: 500; color: var(--ink-2); text-decoration-color: var(--series-as-is); text-decoration-thickness: 2px; }
+.kpi-was { font-size: 12px; color: var(--ink-2); margin: 2px 0 0; }
+.pair { display: grid; gap: 4px; margin: 10px 0 0; }
+.pair-track { display: block; height: 6px; border-radius: 3px; background: var(--surface-2); overflow: hidden; }
+.pair-bar { display: block; height: 100%; border-radius: 3px; }
+.pair-bar.as-is { background: var(--series-as-is); }
+.pair-bar.to-be { background: var(--series-to-be); }
+#hero-kpis + .legend { margin-top: 10px; }
+
+.vsm-head {
+  display: flex; justify-content: space-between; flex-wrap: wrap; gap: 4px 16px;
+  margin: 6px 0 0; font-family: var(--font-mono); font-size: 13px;
+}
+.vsm-waiting { color: var(--ink-2); }
+.vsm-work { color: var(--series-va-text); }
+.vsm-row .vsm-bar { margin-top: 8px; }
+.takeaway { margin: 16px 0 0; padding: 12px 16px; max-width: 68ch; border-radius: var(--radius); background: var(--surface-2); font-size: 15px; }
 
 .lever .before-after { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin-top: 12px; font-size: 15px; }
 .lever .before { color: var(--muted); text-decoration: line-through; }

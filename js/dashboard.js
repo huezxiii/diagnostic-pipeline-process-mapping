@@ -63,7 +63,9 @@
           const d = ((value - before) / before) * 100;
           const better = k.good === 'down' ? d < 0 : d > 0;
           const sign = d > 0 ? '+' : '−';
-          foot = `<p class="kpi-delta ${better ? 'good' : 'bad'}">${d < 0 ? ARROW_DOWN : ARROW_UP}
+          foot = `<p class="kpi-was">was ${k.fmt(before)}</p>
+            ${C.pairBars(before, value, `Before ${k.fmt(before)}, after ${k.fmt(value)}`).outerHTML}
+            <p class="kpi-delta ${better ? 'good' : 'bad'}">${d < 0 ? ARROW_DOWN : ARROW_UP}
             ${sign}${Math.abs(d).toFixed(1)}% vs As-Is <span class="visually-hidden">(${better ? 'improvement' : 'worse'})</span></p>`;
         } else {
           foot = '<p class="kpi-note">No As-Is baseline for this filter</p>';

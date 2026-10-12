@@ -212,7 +212,26 @@
     });
   }
 
+  /** Before/after mini bars scaled to the larger value. `label` is read by screen readers. */
+  function pairBars(before, after, label) {
+    const wrap = document.createElement('div');
+    wrap.className = 'pair';
+    wrap.setAttribute('role', 'img');
+    wrap.setAttribute('aria-label', label);
+    const max = Math.max(before, after) || 1;
+    for (const [cls, value] of [['as-is', before], ['to-be', after]]) {
+      const track = document.createElement('span');
+      track.className = 'pair-track';
+      const bar = document.createElement('span');
+      bar.className = `pair-bar ${cls}`;
+      bar.style.width = `${Math.max((value / max) * 100, 2)}%`;
+      track.appendChild(bar);
+      wrap.appendChild(track);
+    }
+    return wrap;
+  }
+
   applyDefaults();
 
-  root.PipelineCharts = { COLORS, SCENARIO, fmt, available, axes, render, setEmpty, wireTableToggles };
+  root.PipelineCharts = { COLORS, SCENARIO, fmt, available, axes, render, setEmpty, wireTableToggles, pairBars };
 })(window);

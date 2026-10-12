@@ -52,6 +52,17 @@
     document.querySelectorAll('[data-roi]').forEach((el) => { el.textContent = values[el.dataset.roi]; });
   }
 
+  function drawPairs() {
+    if (!metrics) return;
+    document.querySelectorAll('.kpi[data-pair]').forEach((tile) => {
+      const key = tile.dataset.pair;
+      const values = tile.querySelector('.kpi-pair-values');
+      const label = `Before ${values.children[0].textContent}, after ${values.children[1].textContent}`;
+      tile.querySelector('.pair')?.remove();
+      values.after(C.pairBars(metrics.scenarios.as_is[key], metrics.scenarios.to_be[key], label));
+    });
+  }
+
   function drawValueStream() {
     if (!metrics) return;
     const scale = metrics.scenarios.as_is.mean_tat;
@@ -73,6 +84,11 @@
         return span;
       }));
       bar.setAttribute('aria-label', `${bar.dataset.vsm === 'as_is' ? 'As-Is' : 'To-Be'}: ${Math.round(sc.mean_va)} value-added minutes out of ${Math.round(sc.mean_tat).toLocaleString('en-US')}`);
+      const key = bar.dataset.vsm;
+      const waiting = document.querySelector(`[data-vsm-waiting="${key}"]`);
+      if (waiting) waiting.textContent = `Waiting: ${((1 - sc.pce) * 100).toFixed(1)}% (${((sc.mean_tat - sc.mean_va) / 60).toFixed(1)} h)`;
+      const work = document.querySelector(`[data-vsm-work="${key}"]`);
+      if (work) work.textContent = `Real work: ${Math.round(sc.mean_va)} min (${(sc.pce * 100).toFixed(1)}%)`;
     });
   }
 
@@ -191,6 +207,7 @@
 
   bindMetrics();
   bindRoi();
+  drawPairs();
   drawValueStream();
   drawRoadmap();
   drawRoiChart();
