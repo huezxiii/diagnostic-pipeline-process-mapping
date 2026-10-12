@@ -64,9 +64,16 @@
       ctx.font = '600 12px "IBM Plex Sans", system-ui, sans-serif';
       ctx.fillStyle = COLORS.ink;
       if (horizontal) {
-        ctx.textAlign = 'left';
         ctx.textBaseline = 'middle';
-        ctx.fillText(opts.text, x + 8, y);
+        if (x + 8 + ctx.measureText(opts.text).width > chart.chartArea.right) {
+          // No room beside the bar end: write it inside the bar instead.
+          ctx.textAlign = 'right';
+          ctx.fillStyle = '#ffffff';
+          ctx.fillText(opts.text, x - 8, y);
+        } else {
+          ctx.textAlign = 'left';
+          ctx.fillText(opts.text, x + 8, y);
+        }
       } else {
         ctx.textAlign = 'center';
         ctx.textBaseline = 'bottom';

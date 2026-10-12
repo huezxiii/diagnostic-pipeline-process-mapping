@@ -208,7 +208,7 @@ table.data tbody tr:hover { background: #fafaf7; }
 [hidden] { display: none !important; }
 
 /* ---------- Editorial (case study) ---------- */
-.hero { padding: 56px 0 40px; }
+.hero { padding-top: 56px; padding-bottom: 40px; }
 .hero h1 { font-family: var(--font-serif); font-weight: 500; font-size: clamp(32px, 5.5vw, 56px); letter-spacing: -0.015em; max-width: 24ch; }
 .hero .lede { font-size: clamp(17px, 2vw, 20px); color: var(--ink-2); max-width: 62ch; }
 .hero-card {
@@ -425,7 +425,7 @@ dfn[data-term] {
 .progress-rail a.done::after { background: var(--brand); }
 .progress-rail a[aria-current="step"] { color: var(--brand); font-weight: 600; }
 .progress-rail a[aria-current="step"] .dot { background: var(--surface); color: var(--brand); box-shadow: 0 0 0 2px var(--brand); }
-:root:has(.progress-rail) { scroll-padding-top: 116px; }
+:root:has(.progress-rail) { scroll-padding-top: 150px; }
 
 /* ---------- Responsive ---------- */
 @media (max-width: 960px) {
