@@ -141,3 +141,14 @@ def test_dashboard_kpis_pair_only_when_comparing(open_page):
     page.click("[data-view=to_be]")
     assert page.locator("#kpis .pair").count() == 7
     assert page.locator("#kpis .kpi-was").first.inner_text().startswith("was ")
+
+
+def test_every_fix_links_to_its_problem():
+    html = read("index.html")
+    fixes = dict(re.findall(r'<article class="card lever" id="([^"]+)">.*?<a class="fixes" href="#([^"]+)"', html, re.S))
+    fixed_by = dict(re.findall(r'<article class="card bottleneck" id="([^"]+)">.*?<a class="fixed-by" href="#([^"]+)"', html, re.S))
+    assert len(fixes) == 4 and len(fixed_by) == 4
+    for lever, problem in fixes.items():
+        assert fixed_by[problem] == lever, f"{lever} and {problem} do not point at each other"
+    lever_order = re.findall(r'<article class="card lever" id="([^"]+)"', html)
+    assert lever_order == ["l-sorters", "l-stat", "l-dispatch", "l-portal"]

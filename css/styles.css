@@ -314,12 +314,19 @@ table.data tbody tr:hover { background: #fafaf7; }
 .vsm-row .vsm-bar { margin-top: 8px; }
 .takeaway { margin: 16px 0 0; padding: 12px 16px; max-width: 68ch; border-radius: var(--radius); background: var(--surface-2); font-size: 15px; }
 
-.lever .before-after { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin-top: 12px; font-size: 15px; }
-.lever .before { color: var(--muted); text-decoration: line-through; }
-.lever .after { font-weight: 600; font-size: 20px; }
+.lever .before-after { display: flex; align-items: flex-end; gap: 24px; flex-wrap: wrap; margin-top: 12px; }
+.lever .before-after small { display: block; font-size: 11px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: var(--ink-2); }
+.lever .before s { font-size: 16px; color: var(--ink-2); text-decoration-color: var(--series-as-is); }
+.lever .after > span { font-weight: 600; font-size: 22px; }
+.pair-link, .lever .pair-link { margin: 0 0 10px; }
+.bottleneck .pair-link { margin: 14px 0 0; }
+.pair-link a {
+  display: inline-flex; align-items: center; min-height: 32px; padding: 4px 12px; border-radius: 999px;
+  background: var(--brand-soft); color: var(--brand); font-size: 13px; font-weight: 500; text-decoration: none;
+}
+.pair-link a:hover { text-decoration: underline; }
 .lever h3 { font-size: 17px; }
 .lever p { font-size: 14px; color: var(--ink-2); margin: 0; }
-.lever .tag { font-size: 12px; font-family: var(--font-mono); color: var(--muted); margin: 0 0 6px; }
 
 .roadmap { margin-top: 24px; display: grid; gap: 6px; }
 .roadmap-row { display: grid; grid-template-columns: 220px 1fr; gap: 12px; align-items: center; font-size: 14px; }
