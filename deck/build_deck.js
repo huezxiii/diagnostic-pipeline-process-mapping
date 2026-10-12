@@ -287,7 +287,7 @@ pres.addSection({ title: section });
     x: 0.6, y: 2.0, w: 12.1, colW: [4.6, 3.5, 2.0, 2.0], rowH: 0.7, fontFace: BODY, fontSize: 16,
     border: { type: 'solid', pt: 0.75, color: LINE }, valign: 'middle', margin: [0, 0.15, 0, 0.15],
   });
-  s.addText('Each lever removes a queue, so the before and after columns show waiting time that disappears.', {
+  s.addText('Each lever removes a queue, so most of the before and after gap is waiting time that disappears.', {
     x: 0.6, y: 5.9, w: 12.1, h: 0.6, fontFace: BODY, fontSize: 16, italic: true, color: INK, margin: 0, isTextBox: true,
   });
 }

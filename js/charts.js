@@ -65,10 +65,19 @@
       ctx.fillStyle = COLORS.ink;
       if (horizontal) {
         ctx.textBaseline = 'middle';
-        if (x + 8 + ctx.measureText(opts.text).width > chart.chartArea.right) {
-          // No room beside the bar end: write it inside the bar instead.
+        const textW = ctx.measureText(opts.text).width;
+        if (x + 8 + textW > chart.chartArea.right) {
+          // No room beside the bar end: write it inside the bar on a light pill.
+          const padX = 4, padY = 3, h = 12 + padY * 2;
+          const left = x - 8 - textW - padX;
+          if (left < chart.chartArea.left) { ctx.restore(); return; }
+          ctx.fillStyle = COLORS.surface;
+          ctx.beginPath();
+          if (ctx.roundRect) ctx.roundRect(left, y - h / 2, textW + padX * 2, h, 4);
+          else ctx.rect(left, y - h / 2, textW + padX * 2, h);
+          ctx.fill();
+          ctx.fillStyle = COLORS.ink;
           ctx.textAlign = 'right';
-          ctx.fillStyle = '#ffffff';
           ctx.fillText(opts.text, x - 8, y);
         } else {
           ctx.textAlign = 'left';
