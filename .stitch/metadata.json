@@ -1,0 +1,13 @@
+{
+  "projectId": "7221245060446990275",
+  "title": "Sovereign Health Diagnostic Pipeline",
+  "designSystem": "assets/d5eba60ae1594eb9a4b367ef38ad4200",
+  "designMd": ".stitch/DESIGN.md",
+  "screens": {
+    "case_study": "projects/7221245060446990275/screens/3544e86a7b2f4096b7980ae9cc2b97de",
+    "dashboard": "projects/7221245060446990275/screens/36c7fc4ace6a4905a76b2a7d8757ff05",
+    "methods": "projects/7221245060446990275/screens/f368c3243f48434887a98bd4435ee61b",
+    "slide": "projects/7221245060446990275/screens/c7ad5ea783bb4144ad77aacabd4c5474"
+  },
+  "note": "Screens are layout references only. Their numbers are Stitch placeholders; the site's figures come from data/metrics.json."
+}

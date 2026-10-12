@@ -19,6 +19,7 @@
 
   const FORMATS = {
     hours: (x) => `${(x / 60).toFixed(1)} h`,
+    hoursNum: (x) => (x / 60).toFixed(1),
     min: (x) => `${Math.round(x).toLocaleString('en-US')} min`,
     pct: (x) => `${(x * 100).toFixed(1)}%`,
     pct0: (x) => `${Math.round(x * 100)}%`,

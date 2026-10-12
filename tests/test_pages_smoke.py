@@ -4,10 +4,7 @@ Serves the repo on a local port and drives Chromium via Playwright at desktop
 and phone widths. Needs network access for the pinned CDN scripts.
 Set SCREENSHOT_DIR to save full-page screenshots for visual review.
 """
-import functools
-import http.server
 import os
-import threading
 from pathlib import Path
 
 import pytest
@@ -21,27 +18,6 @@ PAGES = {
     "methods.html": ["#sql-blocks .method-block", "#mining-table table"],
 }
 WIDTHS = [1280, 375]
-
-
-@pytest.fixture(scope="module")
-def base_url():
-    handler = functools.partial(http.server.SimpleHTTPRequestHandler, directory=str(ROOT))
-    server = http.server.ThreadingHTTPServer(("127.0.0.1", 0), handler)
-    thread = threading.Thread(target=server.serve_forever, daemon=True)
-    thread.start()
-    yield f"http://127.0.0.1:{server.server_address[1]}"
-    server.shutdown()
-
-
-@pytest.fixture(scope="module")
-def browser():
-    with sync_api.sync_playwright() as p:
-        try:
-            b = p.chromium.launch()
-        except Exception:
-            b = p.chromium.launch(channel="chrome")
-        yield b
-        b.close()
 
 
 @pytest.mark.parametrize("width", WIDTHS)

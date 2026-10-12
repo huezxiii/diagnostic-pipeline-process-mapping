@@ -206,10 +206,35 @@ table.data tbody tr:hover { background: #fafaf7; }
 .hero { padding: 56px 0 40px; }
 .hero h1 { font-family: var(--font-serif); font-weight: 500; font-size: clamp(32px, 5.5vw, 56px); letter-spacing: -0.015em; max-width: 18ch; }
 .hero .lede { font-size: clamp(17px, 2vw, 20px); color: var(--ink-2); max-width: 62ch; }
-.hero-figure { display: flex; align-items: baseline; flex-wrap: wrap; gap: 4px 16px; margin: 28px 0 24px; }
-.hero-figure .from { font-size: clamp(32px, 6vw, 56px); font-weight: 600; color: var(--muted); text-decoration: line-through; text-decoration-thickness: 3px; text-decoration-color: var(--series-as-is); }
-.hero-figure .to { font-size: clamp(48px, 9vw, 88px); font-weight: 600; line-height: 1; letter-spacing: -0.02em; }
-.hero-figure .caption { flex-basis: 100%; color: var(--ink-2); font-size: 15px; }
+.hero-card {
+  display: inline-flex; flex-direction: column; gap: 14px; max-width: 100%;
+  margin: 28px 0 24px; padding: 20px 24px;
+  background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); box-shadow: var(--shadow);
+}
+.hero-figure { display: flex; align-items: flex-end; flex-wrap: wrap; gap: 8px 24px; }
+.hero-figure p { margin: 0; display: flex; flex-direction: column; gap: 2px; }
+.hero-label { font-size: 12px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+.hero-figure .to .hero-label { color: var(--series-to-be); }
+.hero-figure .from s {
+  font-size: clamp(28px, 5vw, 44px); font-weight: 600; color: var(--muted);
+  text-decoration-thickness: 3px; text-decoration-color: var(--series-as-is);
+}
+.hero-figure .to [data-metric] { font-size: clamp(48px, 9vw, 80px); font-weight: 600; line-height: 1; letter-spacing: -0.02em; }
+.hero-arrow { width: 28px; height: 28px; color: var(--muted); margin-bottom: 10px; }
+.hero-note {
+  display: flex; gap: 8px; align-items: flex-start; margin: 0; padding-top: 12px;
+  border-top: 1px solid var(--line); font-size: 15px; color: var(--ink-2); max-width: 56ch;
+}
+.hero-note svg { width: 18px; height: 18px; flex: none; margin-top: 3px; color: var(--good-text); }
+
+.in-short {
+  max-width: 68ch; margin: 4px 0 20px; padding: 14px 18px; border-radius: var(--radius);
+  background: var(--brand-soft); color: var(--ink); font-size: 17px; font-weight: 500;
+}
+.in-short::before {
+  content: "In short"; display: block; margin-bottom: 4px;
+  font-size: 12px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--brand);
+}
 .cta-row { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 28px; }
 .btn {
   display: inline-flex; align-items: center; gap: 8px; text-decoration: none; font-weight: 500; font-size: 15px;

@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Diagnostic Pipeline Case Study | Process Mapping & Throughput Optimization</title>
-  <meta name="description" content="Process mapping and value stream case study: cutting lab time-to-result from 18.6 to 4.6 hours by removing queues, not buying hardware. Synthetic data, fictional organization.">
+  <meta name="description" content="Process mapping case study: lab results went from 18.6 hours to 4.6 by removing queues, with the same analyzers. Synthetic data, fictional organization.">
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%2314365d'/%3E%3Cpath d='M8 22h4l3-10 3 14 3-8h3' fill='none' stroke='white' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -33,17 +33,20 @@
   <main id="main">
     <!-- Hero -->
     <section class="hero container">
-      <p class="eyebrow">Process mapping &amp; throughput optimization · Sovereign Health System</p>
-      <h1>A $6.5M analyzer couldn't fix a queueing problem</h1>
-      <p class="lede">Sovereign Health's 12 hospitals and 45 diagnostic hubs process 1.2 million lab orders a year. After a hardware upgrade, average time-to-result rose from 4.2 to 18.6 hours. The analyzer itself accounted for 42 minutes of that.</p>
-      <div class="hero-figure">
-        <span class="from" data-metric="scenarios.as_is.mean_tat" data-fmt="hours">18.6 h</span>
-        <span class="to" data-metric="scenarios.to_be.mean_tat" data-fmt="hours">4.6 h</span>
-        <span class="caption">Mean time-to-result, As-Is vs redesigned process: <strong><span data-metric="comparison.tat_reduction_pct" data-fmt="pctPoints">75.3%</span> faster</strong>, with the same analyzers.</span>
+      <p class="eyebrow">Process mapping case study · Sovereign Health System</p>
+      <h1>Lab results took <span data-metric="scenarios.as_is.mean_tat" data-fmt="hoursNum">18.6</span> hours. The fix got them to <span data-metric="scenarios.to_be.mean_tat" data-fmt="hoursNum">4.6</span> hours without buying new machines.</h1>
+      <p class="lede">Sovereign Health's 12 hospitals and 45 testing hubs handle 1.2 million lab orders a year. After a $6.5M analyzer upgrade, the average wait for a result rose from 4.2 to 18.6 hours. The analyzer itself accounted for 42 minutes of that.</p>
+      <div class="hero-card">
+        <div class="hero-figure">
+          <p class="from"><span class="hero-label">Before</span><s data-metric="scenarios.as_is.mean_tat" data-fmt="hours">18.6 h</s></p>
+          <svg class="hero-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          <p class="to"><span class="hero-label">After</span><span data-metric="scenarios.to_be.mean_tat" data-fmt="hours">4.6 h</span></p>
+        </div>
+        <p class="hero-note"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="m8 12 3 3 5-6"/></svg><span><span data-metric="comparison.tat_reduction_pct" data-fmt="pctPoints">75.3%</span> faster with the same analyzers. The changes cost <span data-roi="capex">$520K</span>, save <span data-roi="savings">$4.35M</span> a year and pay for themselves in <span data-roi="payback">1.4 mo</span>.</span></p>
       </div>
       <div class="kpi-grid">
-        <div class="kpi"><p class="kpi-label">Process cycle efficiency</p><p class="kpi-value"><span data-metric="scenarios.as_is.pce" data-fmt="pct">3.8%</span> → <span data-metric="scenarios.to_be.pce" data-fmt="pct">15.2%</span></p><p class="kpi-note">Benchmark above 15%</p></div>
-        <div class="kpi"><p class="kpi-label">STAT order share</p><p class="kpi-value"><span data-metric="scenarios.as_is.stat_ratio" data-fmt="pct0">38%</span> → <span data-metric="scenarios.to_be.stat_ratio" data-fmt="pct0">8%</span></p><p class="kpi-note">Priority inversion removed</p></div>
+        <div class="kpi"><p class="kpi-label">Process cycle efficiency</p><p class="kpi-value"><span data-metric="scenarios.as_is.pce" data-fmt="pct">3.8%</span> to <span data-metric="scenarios.to_be.pce" data-fmt="pct">15.2%</span></p><p class="kpi-note">Benchmark above 15%</p></div>
+        <div class="kpi"><p class="kpi-label">STAT order share</p><p class="kpi-value"><span data-metric="scenarios.as_is.stat_ratio" data-fmt="pct0">38%</span> to <span data-metric="scenarios.to_be.stat_ratio" data-fmt="pct0">8%</span></p><p class="kpi-note">Priority inversion removed</p></div>
         <div class="kpi"><p class="kpi-label">Annual operating savings</p><p class="kpi-value" data-roi="savings">$4.35M</p><p class="kpi-note">On $520K capital outlay</p></div>
         <div class="kpi"><p class="kpi-label">Payback period</p><p class="kpi-value" data-roi="payback">1.4 mo</p><p class="kpi-note">First-year ROI <span data-roi="roi">736.5%</span></p></div>
       </div>
@@ -58,8 +61,9 @@
     <section class="section" id="problem">
       <div class="container">
         <p class="section-num">01 · The problem</p>
-        <h2>17.9 hours of every result was waiting, not testing</h2>
-        <p class="lede">Queues, manual re-keying, batch courier runs and paper exception handling across five departments made up 96% of the cycle. That cost the network in three places.</p>
+        <h2>17.9 of the 18.6 hours was waiting</h2>
+        <p class="in-short">Samples spent almost all of that time sitting in bins, vans and queues. The test itself took 42 minutes.</p>
+        <p class="lede">Queues, retyping, fixed courier runs and paper tickets across five departments made up 96% of the cycle. The network paid for it in three ways.</p>
         <div class="grid-3">
           <div class="card impact-card">
             <p class="figure">$4.8M</p>
@@ -82,7 +86,8 @@
       <div class="container">
         <p class="section-num">02 · Scope</p>
         <h2>One pipeline, physician order to billed result</h2>
-        <p class="lede">A SIPOC frame fixed the boundaries before any mapping started, so clinical, logistics and IT teams argued about the same process.</p>
+        <p class="in-short">Before mapping anything, the teams agreed where the process starts (the doctor's order) and where it ends (the bill).</p>
+        <p class="lede">A SIPOC outline fixed the boundaries first, so clinical, logistics and IT teams were arguing about the same process.</p>
         <div class="boundary">
           <div><strong>Start point</strong>Physician submits a lab requisition in the EHR.</div>
           <div><strong>End point</strong>Verified result is written to the patient chart and billed to insurance.</div>
@@ -116,8 +121,9 @@
     <section class="section" id="as-is">
       <div class="container">
         <p class="section-num">03 · As-Is process map</p>
-        <h2>Five lanes, 18 steps, four queues</h2>
-        <p class="lede">The current pipeline crosses 5 functional lanes with 18 mapped steps, 9 departmental handoffs and 4 manual approval checkpoints. Queue times are mined means from the event log.</p>
+        <h2>18 steps across five teams, with four queues</h2>
+        <p class="in-short">A sample passed through five teams and 18 steps, and it sat in a queue four times along the way.</p>
+        <p class="lede">Each row of this swimlane map is one team. The sample changes hands nine times and needs four manual sign-offs. Queue times are averages measured from the order timestamps.</p>
         <figure class="swimlane" id="as-is-map">
           <pre class="mermaid" aria-label="As-Is cross-functional swimlane diagram">
 flowchart TB
@@ -171,8 +177,9 @@ flowchart TB
     <section class="section" id="bottlenecks">
       <div class="container">
         <p class="section-num">04 · Root causes</p>
-        <h2>Four bottlenecks did most of the damage</h2>
-        <p class="lede">Event-log mining ranked every stage by non-value-added minutes. Central accessioning alone held a quarter of the waste.</p>
+        <h2>Four problems caused most of the delay</h2>
+        <p class="in-short">Sample intake was the worst: a quarter of all the waiting happened at the desk where tubes are logged in by hand.</p>
+        <p class="lede">Ranking every step by wasted minutes put these four at the top.</p>
         <div class="grid-2">
           <article class="card bottleneck">
             <h3>1. Central accessioning (Queue 3)</h3>
@@ -214,8 +221,9 @@ flowchart TB
     <section class="section" id="value-stream">
       <div class="container">
         <p class="section-num">05 · Value stream</p>
-        <h2>3.8% of the cycle added value</h2>
-        <p class="lede">Process cycle efficiency is value-added time divided by total cycle time. The healthcare benchmark is above 15%.</p>
+        <h2>Only 42 minutes of 18.6 hours was real work</h2>
+        <p class="in-short">Testing is the only step that changes the sample. Everything else, about 96% of the time, is waiting, moving or fixing mistakes.</p>
+        <p class="lede">Across the whole value stream, process cycle efficiency (the share of time spent on real work) was <span data-metric="scenarios.as_is.pce" data-fmt="pct">3.8%</span>. Hospitals aim for more than 15%.</p>
         <div id="vsm">
           <div class="vsm-row">
             <h3>As-Is <span><span data-metric="scenarios.as_is.mean_tat" data-fmt="min">1,116 min</span> total · PCE <span data-metric="scenarios.as_is.pce" data-fmt="pct2">3.76%</span></span></h3>
@@ -239,8 +247,9 @@ flowchart TB
     <section class="section" id="to-be">
       <div class="container">
         <p class="section-num">06 · To-Be process map</p>
-        <h2>12 steps, automated handoffs</h2>
-        <p class="lede">The redesign removes manual re-keying and batch logistics. Routing is dynamic and exceptions resolve digitally.</p>
+        <h2>12 steps, with scans in place of retyping</h2>
+        <p class="in-short">The new process drops six steps. Scans and automatic messages replace the points where people retyped information.</p>
+        <p class="lede">Couriers now leave as soon as a box holds 25 tubes, and label problems go to the clinic's tablet for a photo check.</p>
         <figure class="swimlane" id="to-be-map">
           <pre class="mermaid" aria-label="To-Be cross-functional swimlane diagram">
 flowchart TB
@@ -294,30 +303,31 @@ flowchart TB
       <div class="container">
         <p class="section-num">07 · Re-engineering levers</p>
         <h2>Four changes, each aimed at one queue</h2>
+        <p class="in-short">Each change targets one of the four problems above, so every fix traces back to a cause.</p>
         <div class="grid-2">
           <article class="card lever">
             <p class="tag">Queue 3 · Accessioning</p>
             <h3>Optical accessioning sorters</h3>
             <p>Robotic sorters scan, uncap and centrifuge 1,200 tubes an hour with no manual re-keying.</p>
-            <p class="before-after"><span class="before">4.5 h</span> → <span class="after" data-metric="scenarios.to_be.stage_means.accessioning" data-fmt="min">12 min</span></p>
+            <p class="before-after"><span class="before">4.5 h</span> to <span class="after" data-metric="scenarios.to_be.stage_means.accessioning" data-fmt="min">12 min</span></p>
           </article>
           <article class="card lever">
             <p class="tag">Queue 1 · Clinic hold</p>
             <h3>Volume-triggered dispatch</h3>
             <p>When 25 tubes are scanned into a smart box, the nearest courier is dispatched through a logistics API.</p>
-            <p class="before-after"><span class="before">2.8 h</span> → <span class="after" data-metric="scenarios.to_be.stage_means.clinic_hold" data-fmt="min">35 min</span></p>
+            <p class="before-after"><span class="before">2.8 h</span> to <span class="after" data-metric="scenarios.to_be.stage_means.clinic_hold" data-fmt="min">35 min</span></p>
           </article>
           <article class="card lever">
             <p class="tag">Queue 4 · Priority</p>
             <h3>STAT governance in the EHR</h3>
             <p>STAT needs an objective trigger such as active ED status or acute vitals. Overrides need medical-director approval.</p>
-            <p class="before-after"><span class="before">38% STAT</span> → <span class="after"><span data-metric="scenarios.to_be.stat_ratio" data-fmt="pct0">8%</span> STAT</span></p>
+            <p class="before-after"><span class="before">38% STAT</span> to <span class="after"><span data-metric="scenarios.to_be.stat_ratio" data-fmt="pct0">8%</span> STAT</span></p>
           </article>
           <article class="card lever">
             <p class="tag">Exceptions</p>
             <h3>Digital exception portal</h3>
             <p>Label mismatches push a notification to the drawing clinic's tablet for photo verification instead of a paper ticket.</p>
-            <p class="before-after"><span class="before">18 h</span> → <span class="after" data-metric="scenarios.to_be.mean_exception_resolution" data-fmt="min">22 min</span></p>
+            <p class="before-after"><span class="before">18 h</span> to <span class="after" data-metric="scenarios.to_be.mean_exception_resolution" data-fmt="min">22 min</span></p>
           </article>
         </div>
       </div>
@@ -327,7 +337,8 @@ flowchart TB
     <section class="section" id="roadmap">
       <div class="container">
         <p class="section-num">08 · Roadmap</p>
-        <h2>16 weeks from charter to control plan</h2>
+        <h2>A 16-week plan in seven phases</h2>
+        <p class="in-short">Seven phases over 16 weeks: measure first, test the new design in a pilot, then roll it out to every site.</p>
         <div class="roadmap" id="roadmap-chart" role="list"></div>
       </div>
     </section>
@@ -336,8 +347,9 @@ flowchart TB
     <section class="section" id="impact">
       <div class="container">
         <p class="section-num">09 · Projected impact</p>
-        <h2>Every quality metric moves, not just speed</h2>
-        <p class="lede">Values below are recomputed from the synthetic event log, calibrated to the project's baseline study of 10,000 historical orders.</p>
+        <h2>Quality improves along with speed</h2>
+        <p class="in-short">Results arrive faster and with fewer errors: less retyping, fewer rejected samples and quicker alerts for dangerous values.</p>
+        <p class="lede">Each figure is recalculated from the synthetic order log, which is tuned to match the project's study of 10,000 past orders.</p>
         <div class="card table-wrap">
           <table class="data" id="impact-table">
             <thead><tr><th>Metric</th><th class="num">As-Is</th><th class="num">To-Be</th><th class="num">Improvement</th></tr></thead>
@@ -359,6 +371,7 @@ flowchart TB
       <div class="container">
         <p class="section-num">10 · Return on investment</p>
         <h2>$520K in, $4.35M a year back</h2>
+        <p class="in-short">The changes cost <span data-roi="capex">$520K</span> once and save <span data-roi="savings">$4.35M</span> every year, so they pay for themselves in under two months.</p>
         <div class="roi-figures">
           <div class="kpi"><p class="kpi-label">Capital expenditure</p><p class="kpi-value" data-roi="capex">$520K</p><p class="kpi-note">Software, optical sorters, implementation</p></div>
           <div class="kpi"><p class="kpi-label">First-year net ROI</p><p class="kpi-value" data-roi="roi">736.5%</p><p class="kpi-note">(Savings − capex) ÷ capex</p></div>
@@ -382,8 +395,9 @@ flowchart TB
     <section class="section" id="conclusion">
       <div class="container">
         <p class="section-num">11 · Takeaway</p>
-        <h2>Throughput is a flow problem before it is a hardware problem</h2>
-        <p class="lede">The analyzer was never the constraint. Mapping the full pipeline, measuring every queue from event timestamps and governing order priority turned a $6.5M hardware disappointment into a 75% faster service and $4.35M a year in recovered value.</p>
+        <h2>Fixing the flow of work beat buying more hardware</h2>
+        <p class="in-short">The expensive analyzer was never the bottleneck. The delays came from how samples and information moved between teams.</p>
+        <p class="lede">Mapping the whole pipeline, timing every queue from the order records and putting rules on what counts as urgent turned a disappointing $6.5M purchase into a service that is 75% faster and recovers $4.35M a year.</p>
         <div class="cta-row">
           <a class="btn primary" href="dashboard.html">Explore the dashboard
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>

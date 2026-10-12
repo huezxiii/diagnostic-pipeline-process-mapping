@@ -58,13 +58,13 @@
         <div class="card">
           <h3>Timestamps per order</h3>
           <ol>
-            <li><code>ts_ordered</code> → <code>ts_drawn</code>: order to draw</li>
-            <li><code>ts_drawn</code> → <code>ts_dispatched</code>: clinic holding bin</li>
-            <li><code>ts_dispatched</code> → <code>ts_received</code>: courier transport</li>
-            <li><code>ts_received</code> → <code>ts_exception_cleared</code>: exception hold</li>
-            <li><code>ts_exception_cleared</code> → <code>ts_accessioned</code>: accessioning</li>
-            <li><code>ts_accessioned</code> → <code>ts_resulted</code>: sort and testing</li>
-            <li><code>ts_resulted</code> → <code>ts_verified</code>: verification and EHR sync</li>
+            <li><code>ts_ordered</code> to <code>ts_drawn</code>: order to draw</li>
+            <li><code>ts_drawn</code> to <code>ts_dispatched</code>: clinic holding bin</li>
+            <li><code>ts_dispatched</code> to <code>ts_received</code>: courier transport</li>
+            <li><code>ts_received</code> to <code>ts_exception_cleared</code>: exception hold</li>
+            <li><code>ts_exception_cleared</code> to <code>ts_accessioned</code>: accessioning</li>
+            <li><code>ts_accessioned</code> to <code>ts_resulted</code>: sort and testing</li>
+            <li><code>ts_resulted</code> to <code>ts_verified</code>: verification and EHR sync</li>
           </ol>
         </div>
       </div>
@@ -79,8 +79,8 @@
             <tr><td>Re-key error rate</td><td class="num">8.4%</td><td class="num" data-metric="scenarios.as_is.rekey_error_rate" data-fmt="pct">—</td><td class="num">0.1%</td><td class="num" data-metric="scenarios.to_be.rekey_error_rate" data-fmt="pct">—</td></tr>
             <tr><td>Specimen rejection rate</td><td class="num">3.2%</td><td class="num" data-metric="scenarios.as_is.rejection_rate" data-fmt="pct">—</td><td class="num">0.4%</td><td class="num" data-metric="scenarios.to_be.rejection_rate" data-fmt="pct">—</td></tr>
             <tr><td>Critical-value lag</td><td class="num">48 min</td><td class="num" data-metric="scenarios.as_is.mean_critical_lag" data-fmt="min1">—</td><td class="num">4 min</td><td class="num" data-metric="scenarios.to_be.mean_critical_lag" data-fmt="min1">—</td></tr>
-            <tr><td>Exception resolution</td><td class="num">12–24 h</td><td class="num" data-metric="scenarios.as_is.mean_exception_resolution" data-fmt="hours2">—</td><td class="num">22 min</td><td class="num" data-metric="scenarios.to_be.mean_exception_resolution" data-fmt="min1">—</td></tr>
-            <tr><td>Clinic arrivals 16:00–17:59</td><td class="num">60%</td><td class="num" data-metric="scenarios.as_is.outpatient_peak_arrival_share" data-fmt="pct">—</td><td class="num">spread</td><td class="num" data-metric="scenarios.to_be.outpatient_peak_arrival_share" data-fmt="pct">—</td></tr>
+            <tr><td>Exception resolution</td><td class="num">12 to 24 h</td><td class="num" data-metric="scenarios.as_is.mean_exception_resolution" data-fmt="hours2">—</td><td class="num">22 min</td><td class="num" data-metric="scenarios.to_be.mean_exception_resolution" data-fmt="min1">—</td></tr>
+            <tr><td>Clinic arrivals 16:00 to 17:59</td><td class="num">60%</td><td class="num" data-metric="scenarios.as_is.outpatient_peak_arrival_share" data-fmt="pct">—</td><td class="num">spread</td><td class="num" data-metric="scenarios.to_be.outpatient_peak_arrival_share" data-fmt="pct">—</td></tr>
           </tbody>
         </table>
       </div>
