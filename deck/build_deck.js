@@ -150,7 +150,7 @@ pres.addSection({ title: section });
   const ranked = A.bottlenecks;
   const top = ranked[0];
   const s = contentSlide('What? · Where the time goes', `Sample intake holds ${pct(top.share_of_nva, 0)} of all waiting time`,
-    'Logging samples in when they arrive is the biggest single queue.',
+    'Logging samples in on arrival (accessioning) is the biggest single queue.',
     `The biggest single wait is at sample intake, where tubes are logged in by hand. ${pct(A.outpatient_peak_arrival_share, 0)} of clinic samples arrive between 4 and 6 PM, just as evening staffing drops.`,
     'Minutes come from timestamps mined across 10,000 orders. Testing shows queue time only; the 42-minute analyzer run is excluded.');
   s.addChart(pres.charts.BAR, [{
@@ -287,7 +287,7 @@ pres.addSection({ title: section });
     x: 0.6, y: 2.0, w: 12.1, colW: [4.6, 3.5, 2.0, 2.0], rowH: 0.7, fontFace: BODY, fontSize: 16,
     border: { type: 'solid', pt: 0.75, color: LINE }, valign: 'middle', margin: [0, 0.15, 0, 0.15],
   });
-  s.addText('Each lever removes a queue rather than speeding up a step, so the gains do not depend on staff working faster.', {
+  s.addText('Each lever removes a queue, so the before and after columns show waiting time that disappears.', {
     x: 0.6, y: 5.9, w: 12.1, h: 0.6, fontFace: BODY, fontSize: 16, italic: true, color: INK, margin: 0, isTextBox: true,
   });
 }
@@ -295,7 +295,7 @@ pres.addSection({ title: section });
 // ===================== Slide 9: impact & ROI =====================
 {
   const s = contentSlide('Now What? · Impact', `${CMP.tat_reduction_pct.toFixed(1)}% faster, ${money(F.totalSavings())} a year, paid back in ${F.paybackMonths().toFixed(1)} months`,
-    'The money comes back within two months, and every quality measure improves.',
+    `The money comes back in ${F.paybackMonths().toFixed(1)} months, and every quality measure improves.`,
     `Results come back ${CMP.tat_reduction_pct.toFixed(1)}% faster and the program saves ${money(F.totalSavings())} a year. It pays for itself in ${F.paybackMonths().toFixed(1)} months.`,
     'ROI = (annual savings - capex) / capex. Savings categories: ED penalties $2.4M, overtime $850K, length of stay $680K, rework $420K.');
   const head = ['Metric', 'As-Is', 'To-Be'].map((t, i) => ({ text: t, options: { bold: true, color: 'FFFFFF', fill: { color: NAVY }, align: i ? 'right' : 'left' } }));
@@ -330,13 +330,13 @@ pres.addSection({ title: section });
   s.addText('NOW WHAT? · DECISION', { placeholder: 'kicker' });
   s.addText(`Approve ${money(F.CAPEX)} and a ${F.WEEKS}-week program`, { placeholder: 'title' });
   s.addText('Starting needs two things: the capital and a named executive sponsor.', {
-    x: 0.8, y: 2.35, w: 11.7, h: 0.5, fontFace: BODY, fontSize: 18, color: ICE, margin: 0, isTextBox: true, objectName: 'subtitle',
+    x: 0.8, y: 3.1, w: 11.7, h: 0.5, fontFace: BODY, fontSize: 18, color: ICE, margin: 0, isTextBox: true, objectName: 'subtitle',
   });
   s.addNotes(notes(`We need two things today: approval for ${money(F.CAPEX)} and an executive sponsor. The first results arrive with the central hub and ED rollout in weeks 11 to 13.`, 'Ask: approve capital and name an executive sponsor for the central hub and ED deployment in weeks 11 to 13.'));
   const x0 = 5.2;
   const span = 7.3;
   F.PHASES.forEach((p, i) => {
-    const y = 3.0 + i * 0.48;
+    const y = 3.7 + i * 0.42;
     s.addText(`${i + 1}. ${p.name}`, { x: 0.8, y, w: 4.2, h: 0.4, fontFace: BODY, fontSize: 14, color: 'FFFFFF', valign: 'middle', margin: 0, isTextBox: true });
     s.addShape(pres.shapes.RECTANGLE, { x: x0, y: y + 0.06, w: span, h: 0.28, fill: { color: '1F4673' }, line: { color: '1F4673' } });
     s.addShape(pres.shapes.ROUNDED_RECTANGLE, {
@@ -344,8 +344,8 @@ pres.addSection({ title: section });
       fill: { color: ICE }, line: { color: ICE }, rectRadius: 0.05, objectName: `phase-${i + 1}`,
     });
   });
-  s.addText('Week 1', { x: x0, y: 6.4, w: 1.2, h: 0.3, fontFace: BODY, fontSize: 11, color: ICE, margin: 0, isTextBox: true });
-  s.addText(`Week ${F.WEEKS}`, { x: x0 + span - 1.2, y: 6.4, w: 1.2, h: 0.3, fontFace: BODY, fontSize: 11, color: ICE, align: 'right', margin: 0, isTextBox: true });
+  s.addText('Week 1', { x: x0, y: 6.62, w: 1.2, h: 0.3, fontFace: BODY, fontSize: 11, color: ICE, margin: 0, isTextBox: true });
+  s.addText(`Week ${F.WEEKS}`, { x: x0 + span - 1.2, y: 6.62, w: 1.2, h: 0.3, fontFace: BODY, fontSize: 11, color: ICE, align: 'right', margin: 0, isTextBox: true });
   s.addText(DISCLAIMER, { x: 0.8, y: 6.95, w: 11.7, h: 0.3, fontFace: BODY, fontSize: 9, color: ICE, margin: 0, isTextBox: true });
 }
 
