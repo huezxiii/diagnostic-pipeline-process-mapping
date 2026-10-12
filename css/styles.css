@@ -242,13 +242,13 @@ table.data tbody tr:hover { background: #fafaf7; }
 }
 .pipeline-strip {
   list-style: none; margin: 24px 0 0; padding: 0;
-  display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; counter-reset: none;
+  display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px;
 }
 .pipeline-strip .step {
   display: flex; flex-direction: column; gap: 6px; padding: 16px;
   background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius);
 }
-.pipeline-strip .step-num { margin: 0; font-family: var(--font-mono); font-size: 12px; color: var(--ink-2); }
+.pipeline-strip .step-num { margin: 0; flex: none; font-family: var(--font-mono); font-size: 12px; color: var(--brand); }
 .pipeline-strip h3 { margin: 0; font-size: 15px; }
 .pipeline-strip p { margin: 0; font-size: 14px; color: var(--ink-2); flex: 1; }
 .pipeline-strip code {
