@@ -43,7 +43,7 @@
         <li class="step"><p class="step-num">01</p><h3>Generate 20,000 orders</h3><p>A seeded script makes realistic lab orders with eight timestamps each.</p><code>data/generate_event_log.py</code></li>
         <li class="step"><p class="step-num">02</p><h3>Measure each step in Python</h3><p>pandas works out how long every order waited at each step.</p><code>analysis/process_mining_analysis.py</code></li>
         <li class="step"><p class="step-num">03</p><h3>Check every figure in SQL</h3><p>Separate SQL queries recompute the numbers, and a test fails if the two disagree.</p><code>sql/diagnostic_pipeline_analytics.sql</code></li>
-        <li class="step"><p class="step-num">04</p><h3>Build the site and deck</h3><p>The case study, dashboard and slides all read one results file.</p><code>data/metrics.json</code></li>
+        <li class="step"><p class="step-num">04</p><h3>Build the site and deck</h3><p>The case study and slides read the mined results, and the dashboard recomputes them from the orders.</p><code>data/metrics.json</code></li>
       </ol>
     </section>
 
@@ -51,7 +51,7 @@
     <section class="section" id="data">
       <p class="section-num">01 · Synthetic event log</p>
       <h2>20,000 orders, eight timestamps each</h2>
-      <p class="in-short">The orders are synthetic, but tuned to match the real project's numbers, and tests check every target.</p>
+      <p class="in-short">The orders are synthetic, but tuned to match the project plan's baseline numbers, and tests check every target.</p>
       <p class="lede">Each row is one lab order in one scenario. Stage durations are not stored. They are mined from the timestamps, as they would be from a real LIS export.</p>
       <div class="grid-2">
         <div class="card">

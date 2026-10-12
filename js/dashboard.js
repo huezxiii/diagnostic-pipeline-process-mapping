@@ -247,7 +247,7 @@
     const waitsBy = S.PRIORITIES.map((p) => pb[p].meanTestingWait);
     const trueWait = pb.stat_true.meanTestingWait;
     const flagged = pb.stat_flagged.meanTestingWait;
-    const inverted = trueWait != null && waitsBy.every((w) => w == null || w <= trueWait);
+    const inverted = trueWait != null && flagged != null && waitsBy.every((w) => w == null || w <= trueWait);
     if (trueWait == null || flagged == null) $('#priority-takeaway').textContent = '';
     else if (inverted) $('#priority-takeaway').textContent = `Priority is upside down: real emergencies wait ${fmtMin(trueWait)} for testing, longer than routine orders tagged urgent (${fmtMin(flagged)}).`;
     else $('#priority-takeaway').textContent = `Real emergencies wait ${fmtMin(trueWait)} for testing; routine orders tagged urgent wait ${fmtMin(flagged)}.`;

@@ -46,6 +46,7 @@
     el.setAttribute('aria-describedby', 'dfn-tip');
     const r = el.getBoundingClientRect();
     const pageWidth = document.documentElement.clientWidth;
+    t.style.left = '0px';
     const left = Math.min(Math.max(r.left, GAP), pageWidth - GAP - t.offsetWidth);
     t.style.left = `${left + window.scrollX}px`;
     t.style.top = `${r.bottom + window.scrollY + 6}px`;

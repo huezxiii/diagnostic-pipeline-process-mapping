@@ -141,7 +141,7 @@ pres.addSection({ title: section });
   });
   s.addText([
     { text: '12 hospitals and 45 diagnostic hubs', options: { bold: true } },
-    { text: ' send 1.2 million lab orders a year through one central lab. The bottleneck is not the analyzer; it is how specimens and data reach it.' },
+    { text: ' send 1.2 million lab orders a year through one central lab. The bottleneck is how specimens and data reach the analyzer.' },
   ], { x: 0.6, y: 5.2, w: 12.1, h: 1.0, fontFace: BODY, fontSize: 16, color: INK, valign: 'top', margin: 0, isTextBox: true });
 }
 
@@ -332,7 +332,7 @@ pres.addSection({ title: section });
   s.addText('Starting needs two things: the capital and a named executive sponsor.', {
     x: 0.8, y: 3.1, w: 11.7, h: 0.5, fontFace: BODY, fontSize: 18, color: ICE, margin: 0, isTextBox: true, objectName: 'subtitle',
   });
-  s.addNotes(notes(`We need two things today: approval for ${money(F.CAPEX)} and an executive sponsor. The first results arrive with the central hub and ED rollout in weeks 11 to 13.`, 'Ask: approve capital and name an executive sponsor for the central hub and ED deployment in weeks 11 to 13.'));
+  s.addNotes(notes(`We need two things today: approval for ${money(F.CAPEX)} and an executive sponsor. The central hub and ED go live in weeks 11 to 13.`, 'Ask: approve capital and name an executive sponsor for the central hub and ED deployment in weeks 11 to 13.'));
   const x0 = 5.2;
   const span = 7.3;
   F.PHASES.forEach((p, i) => {
