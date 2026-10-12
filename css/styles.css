@@ -204,7 +204,7 @@ table.data tbody tr:hover { background: #fafaf7; }
 
 /* ---------- Editorial (case study) ---------- */
 .hero { padding: 56px 0 40px; }
-.hero h1 { font-family: var(--font-serif); font-weight: 500; font-size: clamp(32px, 5.5vw, 56px); letter-spacing: -0.015em; max-width: 18ch; }
+.hero h1 { font-family: var(--font-serif); font-weight: 500; font-size: clamp(32px, 5.5vw, 56px); letter-spacing: -0.015em; max-width: 24ch; }
 .hero .lede { font-size: clamp(17px, 2vw, 20px); color: var(--ink-2); max-width: 62ch; }
 .hero-card {
   display: inline-flex; flex-direction: column; gap: 14px; max-width: 100%;
@@ -213,8 +213,8 @@ table.data tbody tr:hover { background: #fafaf7; }
 }
 .hero-figure { display: flex; align-items: flex-end; flex-wrap: wrap; gap: 8px 24px; }
 .hero-figure p { margin: 0; display: flex; flex-direction: column; gap: 2px; }
-.hero-label { font-size: 12px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
-.hero-figure .to .hero-label { color: var(--series-to-be); }
+.hero-label { font-size: 12px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-2); }
+.hero-figure .to .hero-label { color: var(--brand); }
 .hero-figure .from s {
   font-size: clamp(28px, 5vw, 44px); font-weight: 600; color: var(--muted);
   text-decoration-thickness: 3px; text-decoration-color: var(--series-as-is);
