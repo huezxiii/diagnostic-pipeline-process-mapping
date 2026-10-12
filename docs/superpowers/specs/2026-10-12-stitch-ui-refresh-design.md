@@ -94,7 +94,7 @@ Accessibility rules carry over: status color always paired with icon and label, 
 - Every title is the takeaway as a full sentence. Most already are; slide 1 and the "Four bottlenecks" and "Five lanes" slides get rewritten.
 - One headline number per slide, shown large.
 - A plain subtitle under each title saying what the slide means for the business.
-- Every slide has speaker notes in plain words. Today only slides 1 and 10 have notes.
+- Every slide has speaker notes in plain words: what to say first, then the method detail. Today every slide has notes, but most are methodology footnotes (formulas, data sources) with no talking point.
 - Visual style matches the refreshed site: same spacing and tile treatment, same data colors.
 
 ### 4. Copy
@@ -114,8 +114,9 @@ New tests:
   - the progress rail exists and marks one stage active after scrolling to `#levers`
   - each dashboard chart card has a "How to read this" caption
 - `tests/deck.test.js`:
-  - every slide has non-empty speaker notes
-  - every content slide title ends without a trailing colon and is at least five words
+  - every slide's speaker notes open with a plain talking point of at least two sentences
+  - every slide has a plain subtitle text box (`objectName: 'subtitle'`)
+  - every slide title is at least five words and ends without a trailing colon
 
 Existing tests must still pass: `python -m pytest -q` and `npm test`, including the Playwright smoke test at 1280 and 375 px (no console errors, no horizontal scroll) and deck figure parity with `metrics.json`.
 
