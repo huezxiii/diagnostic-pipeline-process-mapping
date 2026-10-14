@@ -187,7 +187,7 @@
   }
 
   /** Toggle the empty state for a chart (no orders match the filters). */
-  function setEmpty(canvasId, isEmpty, message = 'No orders match these filters.') {
+  function setEmpty(canvasId, isEmpty, message = 'No orders match these filters. Select a different source, priority, or facility, or click "Reset filters" above.') {
     const box = boxFor(canvasId);
     if (!box) return;
     let es = box.querySelector('.empty-state');
@@ -249,7 +249,7 @@
     holder.replaceChildren();
     const entry = registry.get(canvasId);
     if (on && entry) holder.appendChild(buildTable(entry));
-    if (on && !entry) holder.textContent = 'No data for the current filters.';
+    if (on && !entry) holder.textContent = 'No orders match these filters. Select a different source, priority, or facility, or click "Reset filters" above.';
     holder.hidden = !on;
     boxFor(canvasId).hidden = on;
   }
