@@ -39,6 +39,7 @@
       <nav class="toc" aria-label="On this page">
         <a href="#data">Event log</a><a href="#mining">Process mining</a><a href="#sql">SQL suite</a><a href="#diagrams">Swimlanes</a><a href="#downloads">Downloads</a>
       </nav>
+      <h2 class="sr-only">Pipeline workflow</h2>
       <ol class="pipeline-strip" aria-label="How the numbers flow">
         <li class="step"><p class="step-num">01</p><h3>Generate 20,000 orders</h3><p>A seeded script makes realistic lab orders with eight timestamps each.</p><code>data/generate_event_log.py</code></li>
         <li class="step"><p class="step-num">02</p><h3>Measure each step in Python</h3><p>pandas works out how long every order waited at each step.</p><code>analysis/process_mining_analysis.py</code></li>
@@ -49,7 +50,6 @@
 
     <!-- Event log -->
     <section class="section" id="data">
-      <p class="section-num">01 · Synthetic event log</p>
       <h2>20,000 orders, eight timestamps each</h2>
       <p class="in-short">The orders are synthetic, but tuned to match the project plan's baseline numbers, and tests check every target.</p>
       <p class="lede">Each row is one lab order in one scenario. Stage durations are not stored. They are mined from the timestamps, as they would be from a real LIS export.</p>
@@ -80,14 +80,14 @@
         <table class="data" id="calibration-table">
           <thead><tr><th>Calibration target</th><th class="num">Plan As-Is</th><th class="num">Log As-Is</th><th class="num">Plan To-Be</th><th class="num">Log To-Be</th></tr></thead>
           <tbody>
-            <tr><td>Mean <dfn data-term="tat">time-to-result</dfn></td><td class="num">18.6 h</td><td class="num" data-metric="scenarios.as_is.mean_tat" data-fmt="hours2">—</td><td class="num">4.6 h</td><td class="num" data-metric="scenarios.to_be.mean_tat" data-fmt="hours2">—</td></tr>
-            <tr><td><dfn data-term="pce">Process cycle efficiency</dfn></td><td class="num">3.76%</td><td class="num" data-metric="scenarios.as_is.pce" data-fmt="pct2">—</td><td class="num">15.2%</td><td class="num" data-metric="scenarios.to_be.pce" data-fmt="pct2">—</td></tr>
-            <tr><td>STAT order share</td><td class="num">38%</td><td class="num" data-metric="scenarios.as_is.stat_ratio" data-fmt="pct">—</td><td class="num">8%</td><td class="num" data-metric="scenarios.to_be.stat_ratio" data-fmt="pct">—</td></tr>
-            <tr><td>Re-key error rate</td><td class="num">8.4%</td><td class="num" data-metric="scenarios.as_is.rekey_error_rate" data-fmt="pct">—</td><td class="num">0.1%</td><td class="num" data-metric="scenarios.to_be.rekey_error_rate" data-fmt="pct">—</td></tr>
-            <tr><td>Specimen rejection rate</td><td class="num">3.2%</td><td class="num" data-metric="scenarios.as_is.rejection_rate" data-fmt="pct">—</td><td class="num">0.4%</td><td class="num" data-metric="scenarios.to_be.rejection_rate" data-fmt="pct">—</td></tr>
-            <tr><td>Critical-value lag</td><td class="num">48 min</td><td class="num" data-metric="scenarios.as_is.mean_critical_lag" data-fmt="min1">—</td><td class="num">4 min</td><td class="num" data-metric="scenarios.to_be.mean_critical_lag" data-fmt="min1">—</td></tr>
-            <tr><td>Exception resolution</td><td class="num">12 to 24 h</td><td class="num" data-metric="scenarios.as_is.mean_exception_resolution" data-fmt="hours2">—</td><td class="num">22 min</td><td class="num" data-metric="scenarios.to_be.mean_exception_resolution" data-fmt="min1">—</td></tr>
-            <tr><td>Clinic arrivals 16:00 to 17:59</td><td class="num">60%</td><td class="num" data-metric="scenarios.as_is.outpatient_peak_arrival_share" data-fmt="pct">—</td><td class="num">spread</td><td class="num" data-metric="scenarios.to_be.outpatient_peak_arrival_share" data-fmt="pct">—</td></tr>
+            <tr><td>Mean <dfn data-term="tat">time-to-result</dfn></td><td class="num">18.6 h</td><td class="num" data-metric="scenarios.as_is.mean_tat" data-fmt="hours2">-</td><td class="num">4.6 h</td><td class="num" data-metric="scenarios.to_be.mean_tat" data-fmt="hours2">-</td></tr>
+            <tr><td><dfn data-term="pce">Process cycle efficiency</dfn></td><td class="num">3.76%</td><td class="num" data-metric="scenarios.as_is.pce" data-fmt="pct2">-</td><td class="num">15.2%</td><td class="num" data-metric="scenarios.to_be.pce" data-fmt="pct2">-</td></tr>
+            <tr><td>STAT order share</td><td class="num">38%</td><td class="num" data-metric="scenarios.as_is.stat_ratio" data-fmt="pct">-</td><td class="num">8%</td><td class="num" data-metric="scenarios.to_be.stat_ratio" data-fmt="pct">-</td></tr>
+            <tr><td>Re-key error rate</td><td class="num">8.4%</td><td class="num" data-metric="scenarios.as_is.rekey_error_rate" data-fmt="pct">-</td><td class="num">0.1%</td><td class="num" data-metric="scenarios.to_be.rekey_error_rate" data-fmt="pct">-</td></tr>
+            <tr><td>Specimen rejection rate</td><td class="num">3.2%</td><td class="num" data-metric="scenarios.as_is.rejection_rate" data-fmt="pct">-</td><td class="num">0.4%</td><td class="num" data-metric="scenarios.to_be.rejection_rate" data-fmt="pct">-</td></tr>
+            <tr><td>Critical-value lag</td><td class="num">48 min</td><td class="num" data-metric="scenarios.as_is.mean_critical_lag" data-fmt="min1">-</td><td class="num">4 min</td><td class="num" data-metric="scenarios.to_be.mean_critical_lag" data-fmt="min1">-</td></tr>
+            <tr><td>Exception resolution</td><td class="num">12 to 24 h</td><td class="num" data-metric="scenarios.as_is.mean_exception_resolution" data-fmt="hours2">-</td><td class="num">22 min</td><td class="num" data-metric="scenarios.to_be.mean_exception_resolution" data-fmt="min1">-</td></tr>
+            <tr><td>Clinic arrivals 16:00 to 17:59</td><td class="num">60%</td><td class="num" data-metric="scenarios.as_is.outpatient_peak_arrival_share" data-fmt="pct">-</td><td class="num">spread</td><td class="num" data-metric="scenarios.to_be.outpatient_peak_arrival_share" data-fmt="pct">-</td></tr>
           </tbody>
         </table>
       </div>
@@ -96,7 +96,6 @@
 
     <!-- Mining -->
     <section class="section" id="mining">
-      <p class="section-num">02 · Process mining</p>
       <h2>How long each step took, measured from timestamps</h2>
       <p class="in-short">A Python script works out how long each order spent at every step and ranks the steps by wasted time.</p>
       <p class="lede"><code>analysis/process_mining_analysis.py</code> derives every stage duration from consecutive events, ranks stages by non-value-added minutes and classifies path variants. Its output, <code>metrics.json</code>, feeds the case study and the deck.</p>
@@ -138,7 +137,6 @@ bottlenecks = [
 
     <!-- SQL -->
     <section class="section" id="sql">
-      <p class="section-num">03 · SQL suite</p>
       <h2>The same answers, in PostgreSQL</h2>
       <p class="in-short">The same numbers are worked out a second time in SQL, and a test checks that both answers match.</p>
       <p class="lede"><code>sql/diagnostic_pipeline_analytics.sql</code> re-derives the metrics with CTEs, <code>EXTRACT(EPOCH …)</code> interval math, <code>PERCENTILE_CONT</code>, <code>RANK() OVER</code> and a rolling <code>AVG() OVER</code>. Results below were captured by running the file; <code>tests/test_sql.py</code> checks they match the Python output.</p>
@@ -148,7 +146,6 @@ bottlenecks = [
 
     <!-- Diagrams -->
     <section class="section" id="diagrams">
-      <p class="section-num">04 · Swimlanes</p>
       <h2>Process maps as code</h2>
       <p class="in-short">The process maps are written as code, so a test can check the site shows exactly the same steps.</p>
       <p class="lede">The As-Is (18 steps) and To-Be (12 steps) cross-functional maps are Mermaid flowcharts with one subgraph per lane, kept in <code>diagrams/</code> and embedded in the case study.</p>
@@ -160,7 +157,6 @@ bottlenecks = [
 
     <!-- Downloads -->
     <section class="section" id="downloads">
-      <p class="section-num">05 · Deliverables</p>
       <h2>Downloads</h2>
       <p class="in-short">Everything used to build the site is here: the deck, the data and the scripts.</p>
       <ul class="download-list">

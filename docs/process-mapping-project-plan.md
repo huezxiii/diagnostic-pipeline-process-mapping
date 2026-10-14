@@ -258,6 +258,6 @@ The proposed **To-Be Process State** eliminates non-value-added queues through d
 
 ## 8. Conclusion & Portfolio Presentation Narrative
 
-This process mapping project illustrates that **operational throughput in complex organizations is rarely solved by hardware alone**. By systematically identifying non-value-added queues, establishing data governance around order priorities, and automating cross-departmental handoffs, Sovereign Health achieved a **75% reduction in diagnostic turnaround time** while unlocking **$4.35M in annual operational value**.
+This process mapping project illustrates that **operational throughput in complex organizations is rarely solved by hardware alone**. By systematically identifying non-value-added queues, establishing data governance around order priorities, and automating cross-departmental handoffs, Sovereign Health achieved a **75% reduction in diagnostic turnaround time** while generating **$4.35M in annual operational value**.
 
 For a data analytics and operations portfolio, this project demonstrates senior-level capability in **end-to-end problem framing, quantitative process mining, cross-functional stakeholder alignment, and executive narrative delivery**.

@@ -88,7 +88,6 @@
     <!-- 01 Problem -->
     <section class="section" id="problem">
       <div class="container">
-        <p class="section-num">01 · The problem</p>
         <h2>17.9 of the 18.6 hours was waiting</h2>
         <p class="in-short">Samples spent almost all of that time sitting in bins, vans and queues. The test itself took 42 minutes.</p>
         <p class="lede">Queues, retyping, fixed courier runs and paper tickets across five departments made up 96% of the cycle. The network paid for it in three ways.</p>
@@ -112,7 +111,6 @@
     <!-- 02 SIPOC -->
     <section class="section" id="scope">
       <div class="container">
-        <p class="section-num">02 · Scope</p>
         <h2>One pipeline, physician order to billed result</h2>
         <p class="in-short">Before mapping anything, the teams agreed where the process starts (the doctor's order) and where it ends (the bill).</p>
         <p class="lede">A <dfn data-term="sipoc">SIPOC</dfn> outline fixed the boundaries first, so clinical, logistics and IT teams were arguing about the same process.</p>
@@ -148,7 +146,6 @@
     <!-- 03 As-Is map -->
     <section class="section" id="as-is">
       <div class="container">
-        <p class="section-num">03 · As-Is process map</p>
         <h2>18 steps across five teams, with four queues</h2>
         <p class="in-short">A sample passed through five teams and 18 steps, and it sat in a queue four times along the way.</p>
         <p class="lede">Each row of this <dfn data-term="swimlane">swimlane map</dfn> is one team. The sample changes hands nine times and needs four manual sign-offs. Queue times are averages measured from the order timestamps.</p>
@@ -157,26 +154,26 @@
 flowchart TB
   subgraph L1["Lane 1 · Order &amp; Phlebotomy"]
     direction LR
-    A1["1 · Order entered in EHR"] --&gt; A2["2 · Print paper label"] --&gt; A3["3 · Draw specimen"] --&gt; A4["4 · Stage in holding bin&lt;br/&gt;Q1 · 2.8 h"]
+    A1["1 · Order entered in EHR"] ==&gt; A2["2 · Print paper label"] ==&gt; A3["3 · Draw specimen"] ==&gt; A4["4 · Stage in holding bin&lt;br/&gt;Q1 · 2.8 h"]
   end
   subgraph L2["Lane 2 · Logistics &amp; Dispatch"]
     direction LR
-    A5["5 · Fixed courier pickup&lt;br/&gt;every 3 h"] --&gt; A6["6 · Transit to hub"] --&gt; A7["7 · Unload at dock&lt;br/&gt;Q2 · 1.8 h"]
+    A5["5 · Fixed courier pickup&lt;br/&gt;every 3 h"] ==&gt; A6["6 · Transit to hub"] ==&gt; A7["7 · Unload at dock&lt;br/&gt;Q2 · 1.8 h"]
   end
   subgraph L3["Lane 3 · Central Accessioning"]
     direction LR
-    A8["8 · Unpack coolers"] --&gt; A9["9 · Manual barcode rescan"] --&gt; A10["10 · Re-key missing EHR data"] --&gt; A11["11 · Sort tubes&lt;br/&gt;Q3 · 4.5 h"]
-    A10 -. "label mismatch" .-&gt; X["Paper rejection ticket&lt;br/&gt;12–24 h"]
+    A8["8 · Unpack coolers"] ==&gt; A9["9 · Manual barcode rescan"] ==&gt; A10["10 · Re-key missing EHR data"] ==&gt; A11["11 · Sort tubes&lt;br/&gt;Q3 · 4.5 h"]
+    A10 -. "label mismatch" .-&gt; X["Paper rejection ticket&lt;br/&gt;12 to 24 h"]
   end
   subgraph L4["Lane 4 · Testing &amp; Pathology"]
     direction LR
-    A12["12 · Load centrifuge"] --&gt; A13["13 · Analyzer run&lt;br/&gt;42 min value-added"] --&gt; A14["14 · Manual outlier review&lt;br/&gt;Q4 · 2.0 h"]
+    A12["12 · Load centrifuge"] ==&gt; A13["13 · Analyzer run&lt;br/&gt;42 min value-added"] ==&gt; A14["14 · Manual outlier review&lt;br/&gt;Q4 · 2.0 h"]
   end
   subgraph L5["Lane 5 · EHR Sync &amp; Billing"]
     direction LR
-    A15["15 · Manual result validation"] --&gt; A16["16 · Batch file export"] --&gt; A17["17 · EHR chart sync"] --&gt; A18["18 · Billing trigger"]
+    A15["15 · Manual result validation"] ==&gt; A16["16 · Batch file export"] ==&gt; A17["17 · EHR chart sync"] ==&gt; A18["18 · Billing trigger"]
   end
-  L1 --&gt; L2 --&gt; L3 --&gt; L4 --&gt; L5
+  L1 ==&gt; L2 ==&gt; L3 ==&gt; L4 ==&gt; L5
   classDef queue fill:#fde9df,stroke:#eb6834,stroke-width:2px,color:#0f1d30
   classDef va fill:#dcf5ea,stroke:#1baf7a,stroke-width:2px,color:#0f1d30
   classDef exc fill:#fdf1f0,stroke:#d03b3b,stroke-width:1.5px,stroke-dasharray:4 3,color:#0f1d30
@@ -185,11 +182,11 @@ flowchart TB
   class X exc
 </pre>
           <div class="lane-fallback" hidden>
-            <h4>Lane 1 · Order &amp; Phlebotomy</h4><ol><li>Order entered in EHR</li><li>Print paper label</li><li>Draw specimen</li><li>Stage in holding bin (Q1, 2.8 h)</li></ol>
-            <h4>Lane 2 · Logistics &amp; Dispatch</h4><ol start="5"><li>Fixed courier pickup every 3 h</li><li>Transit to hub</li><li>Unload at dock (Q2, 1.8 h)</li></ol>
-            <h4>Lane 3 · Central Accessioning</h4><ol start="8"><li>Unpack coolers</li><li>Manual barcode rescan</li><li>Re-key missing EHR data</li><li>Sort tubes (Q3, 4.5 h)</li></ol>
-            <h4>Lane 4 · Testing &amp; Pathology</h4><ol start="12"><li>Load centrifuge</li><li>Analyzer run (42 min value-added)</li><li>Manual outlier review (Q4, 2.0 h)</li></ol>
-            <h4>Lane 5 · EHR Sync &amp; Billing</h4><ol start="15"><li>Manual result validation</li><li>Batch file export</li><li>EHR chart sync</li><li>Billing trigger</li></ol>
+            <h3>Lane 1 · Order &amp; Phlebotomy</h3><ol><li>Order entered in EHR</li><li>Print paper label</li><li>Draw specimen</li><li>Stage in holding bin (Q1, 2.8 h)</li></ol>
+            <h3>Lane 2 · Logistics &amp; Dispatch</h3><ol start="5"><li>Fixed courier pickup every 3 h</li><li>Transit to hub</li><li>Unload at dock (Q2, 1.8 h)</li></ol>
+            <h3>Lane 3 · Central Accessioning</h3><ol start="8"><li>Unpack coolers</li><li>Manual barcode rescan</li><li>Re-key missing EHR data</li><li>Sort tubes (Q3, 4.5 h)</li></ol>
+            <h3>Lane 4 · Testing &amp; Pathology</h3><ol start="12"><li>Load centrifuge</li><li>Analyzer run (42 min value-added)</li><li>Manual outlier review (Q4, 2.0 h)</li></ol>
+            <h3>Lane 5 · EHR Sync &amp; Billing</h3><ol start="15"><li>Manual result validation</li><li>Batch file export</li><li>EHR chart sync</li><li>Billing trigger</li></ol>
           </div>
           <figcaption class="swimlane-meta">
             <span><span class="swatch" style="display:inline-block;background:#fde9df;border:2px solid var(--series-as-is)"></span> Queue</span>
@@ -204,7 +201,6 @@ flowchart TB
     <!-- 04 Bottlenecks -->
     <section class="section" id="bottlenecks">
       <div class="container">
-        <p class="section-num">04 · Root causes</p>
         <h2>Four problems caused most of the delay</h2>
         <p class="in-short">Sample intake was the worst: a quarter of all the waiting happened at the desk where tubes are logged in by hand.</p>
         <p class="lede">Ranking every step by wasted minutes put these four at the top.</p>
@@ -252,7 +248,6 @@ flowchart TB
     <!-- 05 Value stream -->
     <section class="section" id="value-stream">
       <div class="container">
-        <p class="section-num">05 · Value stream</p>
         <h2>Only 42 minutes of 18.6 hours was real work</h2>
         <p class="in-short">Testing is the only step that changes the sample. Everything else, about 96% of the time, is waiting, moving or fixing mistakes.</p>
         <p class="lede">Across the whole <dfn data-term="value-stream">value stream</dfn>, <dfn data-term="pce">process cycle efficiency</dfn> (the share of time spent on real work) was <span data-metric="scenarios.as_is.pce" data-fmt="pct">3.8%</span>. Hospitals aim for more than 15%.</p>
@@ -281,7 +276,6 @@ flowchart TB
     <!-- 06 To-Be map -->
     <section class="section" id="to-be">
       <div class="container">
-        <p class="section-num">06 · To-Be process map</p>
         <h2>12 steps, with scans in place of retyping</h2>
         <p class="in-short">The new process drops six steps. Scans and automatic messages replace the points where people retyped information.</p>
         <p class="lede">Couriers now leave as soon as a box holds 25 tubes, and label problems go to the clinic's tablet for a photo check.</p>
@@ -290,26 +284,26 @@ flowchart TB
 flowchart TB
   subgraph L1["Lane 1 · Clinical Order Entry"]
     direction LR
-    B1["1 · EHR order with auto-barcoding"] --&gt; B2["2 · Smart phlebotomy scan"] --&gt; B3["3 · Scan into smart courier bag&lt;br/&gt;hold · 35 min"]
+    B1["1 · EHR order with auto-barcoding"] ==&gt; B2["2 · Smart phlebotomy scan"] ==&gt; B3["3 · Scan into smart courier bag&lt;br/&gt;hold · 35 min"]
   end
   subgraph L2["Lane 2 · Dynamic Logistics"]
     direction LR
-    B4["4 · Volume-triggered pickup&lt;br/&gt;at 25 tubes"] --&gt; B5["5 · Direct transit to hub"]
+    B4["4 · Volume-triggered pickup&lt;br/&gt;at 25 tubes"] ==&gt; B5["5 · Direct transit to hub"]
   end
   subgraph L3["Lane 3 · Robotic Accessioning"]
     direction LR
-    B6["6 · Robotic cooler unloading"] --&gt; B7["7 · Optical accessioning sorter&lt;br/&gt;queue · 12 min"]
+    B6["6 · Robotic cooler unloading"] ==&gt; B7["7 · Optical accessioning sorter&lt;br/&gt;queue · 12 min"]
     B7 -. "label mismatch" .-&gt; Y["Digital exception portal&lt;br/&gt;22 min"]
   end
   subgraph L4["Lane 4 · Optimized Analytics"]
     direction LR
-    B8["8 · Rule-engine auto-triage"] --&gt; B9["9 · Analyzer run&lt;br/&gt;42 min value-added"] --&gt; B10["10 · Auto-verification · 92%"]
+    B8["8 · Rule-engine auto-triage"] ==&gt; B9["9 · Analyzer run&lt;br/&gt;42 min value-added"] ==&gt; B10["10 · Auto-verification · 92%"]
   end
   subgraph L5["Lane 5 · EHR Instant Sync"]
     direction LR
-    B11["11 · FHIR API writeback to EHR"] --&gt; B12["12 · Critical-value push alert&lt;br/&gt;4 min"]
+    B11["11 · FHIR API writeback to EHR"] ==&gt; B12["12 · Critical-value push alert&lt;br/&gt;4 min"]
   end
-  L1 --&gt; L2 --&gt; L3 --&gt; L4 --&gt; L5
+  L1 ==&gt; L2 ==&gt; L3 ==&gt; L4 ==&gt; L5
   classDef queue fill:#e3eefb,stroke:#2a78d6,stroke-width:2px,color:#0f1d30
   classDef va fill:#dcf5ea,stroke:#1baf7a,stroke-width:2px,color:#0f1d30
   classDef exc fill:#f1f0eb,stroke:#7a7e86,stroke-width:1.5px,stroke-dasharray:4 3,color:#0f1d30
@@ -318,11 +312,11 @@ flowchart TB
   class Y exc
 </pre>
           <div class="lane-fallback" hidden>
-            <h4>Lane 1 · Clinical Order Entry</h4><ol><li>EHR order with auto-barcoding</li><li>Smart phlebotomy scan</li><li>Scan into smart courier bag (35 min hold)</li></ol>
-            <h4>Lane 2 · Dynamic Logistics</h4><ol start="4"><li>Volume-triggered pickup at 25 tubes</li><li>Direct transit to hub</li></ol>
-            <h4>Lane 3 · Robotic Accessioning</h4><ol start="6"><li>Robotic cooler unloading</li><li>Optical accessioning sorter (12 min queue)</li></ol>
-            <h4>Lane 4 · Optimized Analytics</h4><ol start="8"><li>Rule-engine auto-triage</li><li>Analyzer run (42 min value-added)</li><li>Auto-verification (92%)</li></ol>
-            <h4>Lane 5 · EHR Instant Sync</h4><ol start="11"><li>FHIR API writeback to EHR</li><li>Critical-value push alert (4 min)</li></ol>
+            <h3>Lane 1 · Clinical Order Entry</h3><ol><li>EHR order with auto-barcoding</li><li>Smart phlebotomy scan</li><li>Scan into smart courier bag (35 min hold)</li></ol>
+            <h3>Lane 2 · Dynamic Logistics</h3><ol start="4"><li>Volume-triggered pickup at 25 tubes</li><li>Direct transit to hub</li></ol>
+            <h3>Lane 3 · Robotic Accessioning</h3><ol start="6"><li>Robotic cooler unloading</li><li>Optical accessioning sorter (12 min queue)</li></ol>
+            <h3>Lane 4 · Optimized Analytics</h3><ol start="8"><li>Rule-engine auto-triage</li><li>Analyzer run (42 min value-added)</li><li>Auto-verification (92%)</li></ol>
+            <h3>Lane 5 · EHR Instant Sync</h3><ol start="11"><li>FHIR API writeback to EHR</li><li>Critical-value push alert (4 min)</li></ol>
           </div>
           <figcaption class="swimlane-meta">
             <span><span class="swatch" style="display:inline-block;background:#e3eefb;border:2px solid var(--series-to-be)"></span> Residual queue</span>
@@ -336,7 +330,6 @@ flowchart TB
     <!-- 07 Levers -->
     <section class="section" id="levers">
       <div class="container">
-        <p class="section-num">07 · Re-engineering levers</p>
         <h2>Four changes, each aimed at one queue</h2>
         <p class="in-short">Each change targets one of the four problems above, so every fix traces back to a cause.</p>
         <div class="grid-2">
@@ -371,7 +364,6 @@ flowchart TB
     <!-- 08 Roadmap -->
     <section class="section" id="roadmap">
       <div class="container">
-        <p class="section-num">08 · Roadmap</p>
         <h2>A 16-week plan in seven phases</h2>
         <p class="in-short">Seven phases over 16 weeks: measure first, test the new design in a pilot, then roll it out to every site.</p>
         <div class="roadmap" id="roadmap-chart" role="list"></div>
@@ -381,7 +373,6 @@ flowchart TB
     <!-- 09 Impact -->
     <section class="section" id="impact">
       <div class="container">
-        <p class="section-num">09 · Projected impact</p>
         <h2>Quality improves along with speed</h2>
         <p class="in-short">Results arrive faster and with fewer errors: less retyping, fewer rejected samples and quicker alerts for dangerous values.</p>
         <p class="lede">Each figure is recalculated from the synthetic order log, which is tuned to match the project's study of 10,000 past orders.</p>
@@ -404,7 +395,6 @@ flowchart TB
     <!-- 10 ROI -->
     <section class="section" id="roi">
       <div class="container">
-        <p class="section-num">10 · Return on investment</p>
         <h2>$520K in, $4.35M a year back</h2>
         <p class="in-short">The changes cost <span data-roi="capex">$520K</span> once and save <span data-roi="savings">$4.35M</span> every year, so they pay for themselves in under two months.</p>
         <div class="roi-figures">
@@ -429,7 +419,6 @@ flowchart TB
     <!-- 11 Conclusion -->
     <section class="section" id="conclusion">
       <div class="container">
-        <p class="section-num">11 · Takeaway</p>
         <h2>Fixing the flow of work beat buying more hardware</h2>
         <p class="in-short">The expensive analyzer was never the bottleneck. The delays came from how samples and information moved between teams.</p>
         <p class="lede">Mapping the whole pipeline, timing every queue from the order records and putting rules on what counts as urgent turned a disappointing $6.5M purchase into a service that is 75% faster and recovers $4.35M a year.</p>
@@ -444,7 +433,6 @@ flowchart TB
     <!-- Glossary -->
     <section class="section" id="glossary">
       <div class="container">
-        <p class="section-num">Glossary</p>
         <h2>Terms used on this page</h2>
         <dl class="glossary-list" id="glossary-list"></dl>
       </div>

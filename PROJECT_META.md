@@ -28,5 +28,6 @@ A three-page static site (case study, interactive dashboard, methods) for a fict
 * **Methods pipeline strip:** a four-step strip (generate, measure, check in SQL, build) at the top of `methods.html` names the file behind each step.
 * **Deck copy:** the 10 slides have takeaway titles, plain subtitles and talking-point speaker notes. Slide figures come from `js/financials.js` and `data/metrics.json`.
 * **Design record:** `.stitch/` holds `DESIGN.md` and `metadata.json` for the Google Stitch project (Sovereign Health Diagnostic Pipeline). The Stitch screens are layout references only; their numbers are placeholders and every figure on the site comes from `data/metrics.json`.
+* **Anti-Slop & Quality Standards:** Zero mechanical detector anti-patterns across all pages (`impeccable detect`), flattened layout hierarchy, calibrated typography scale, accessible heading hierarchy without skipped levels, and elimination of AI copy tropes and em-dash saturation.
 * **Entry points:** `index.html`, `dashboard.html`, `methods.html`. Serve with `python -m http.server 8080`.
 * **Tests:** `python -m pytest -q` (generator, mining, SQL, diagrams, excerpts, Playwright page smoke) and `npm test` (stats engine, deck).
